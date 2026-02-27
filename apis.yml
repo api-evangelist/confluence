@@ -1,0 +1,92 @@
+name: Confluence API
+description: APIs for Atlassian Confluence - team collaboration and knowledge management software
+image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+tags:
+- collaboration
+- wiki
+- documentation
+- knowledge base
+- content management
+created: '2024'
+modified: '2024'
+url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
+apis:
+- name: Confluence Cloud REST API v1
+  description: Primary REST API for Confluence Cloud for content, spaces, and user management
+  image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
+  baseURL: https://your-domain.atlassian.net/wiki/rest/api
+  tags:
+  - rest
+  - cloud
+  - content
+  - spaces
+  properties:
+  - type: Documentation
+    url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
+  - type: OpenAPI
+    url: https://dac-static.atlassian.com/cloud/confluence/swagger.v3.json
+  - type: Authentication
+    url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/#auth
+- name: Confluence Cloud REST API v2
+  description: Next generation Confluence Cloud REST API with improved performance and new features
+  image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+  baseURL: https://your-domain.atlassian.net/wiki/api/v2
+  tags:
+  - rest
+  - cloud
+  - v2
+  - pages
+  properties:
+  - type: Documentation
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+  - type: OpenAPI
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-spec/
+  - type: Authentication
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/#authentication
+- name: Confluence Content Properties API
+  description: Store and retrieve custom data against Confluence content
+  image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
+  baseURL: https://your-domain.atlassian.net/wiki/rest/api
+  tags:
+  - properties
+  - metadata
+  - custom data
+  properties:
+  - type: Documentation
+    url: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
+- name: Confluence Search API
+  description: Search for content in Confluence using CQL (Confluence Query Language)
+  image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-search/
+  baseURL: https://your-domain.atlassian.net/wiki/rest/api
+  tags:
+  - search
+  - cql
+  - query
+  properties:
+  - type: Documentation
+    url: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-search/
+  - type: CQL Guide
+    url: https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/
+maintainers:
+- name: Atlassian
+  email: support@atlassian.com
+  url: https://www.atlassian.com
+common:
+- type: Getting Started
+  url: https://developer.atlassian.com/cloud/confluence/getting-started/
+- type: Developer Portal
+  url: https://developer.atlassian.com/cloud/confluence/
+- type: Rate Limits
+  url: https://developer.atlassian.com/cloud/confluence/rate-limiting/
+- type: Changelog
+  url: https://developer.atlassian.com/cloud/confluence/changelog/
+- type: Support
+  url: https://support.atlassian.com/
+- type: Community
+  url: https://community.atlassian.com/
+- type: Status
+  url: https://status.atlassian.com/
