@@ -1,0 +1,892 @@
+asyncapi: 3.0.0
+info:
+  title: Confluence Cloud Webhooks
+  version: 1.0.0
+  description: >-
+    Asynchronous event notifications from Confluence Cloud. Webhooks allow
+    applications to receive real-time notifications when content, spaces, or
+    other entities are created, updated, or deleted in Confluence. Webhooks
+    can be registered through the Confluence UI, REST API, or via Atlassian
+    Connect app descriptors.
+  contact:
+    name: Atlassian
+    url: https://developer.atlassian.com/cloud/confluence/
+    email: ecosystem@atlassian.com
+  license:
+    name: Atlassian Developer Terms
+    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  externalDocs:
+    description: Confluence Webhooks Documentation
+    url: https://developer.atlassian.com/cloud/confluence/using-webhooks/
+  tags:
+    - name: content
+      description: Events related to Confluence content (pages, blog posts)
+    - name: space
+      description: Events related to Confluence spaces
+    - name: comment
+      description: Events related to comments on content
+    - name: attachment
+      description: Events related to file attachments
+    - name: label
+      description: Events related to labels
+    - name: user
+      description: Events related to user actions
+servers:
+  webhookReceiver:
+    host: your-app.example.com
+    protocol: https
+    description: >-
+      Your application endpoint that receives webhook callbacks from
+      Confluence Cloud. This URL is configured when registering the webhook.
+    security:
+      - $ref: '#/components/securitySchemes/webhookSecret'
+channels:
+  pageCreated:
+    address: /webhooks/confluence
+    description: Channel for page_created events
+    messages:
+      pageCreated:
+        $ref: '#/components/messages/PageCreated'
+  pageUpdated:
+    address: /webhooks/confluence
+    description: Channel for page_updated events
+    messages:
+      pageUpdated:
+        $ref: '#/components/messages/PageUpdated'
+  pageRemoved:
+    address: /webhooks/confluence
+    description: Channel for page_removed events
+    messages:
+      pageRemoved:
+        $ref: '#/components/messages/PageRemoved'
+  pageTrashed:
+    address: /webhooks/confluence
+    description: Channel for page_trashed events
+    messages:
+      pageTrashed:
+        $ref: '#/components/messages/PageTrashed'
+  pageRestored:
+    address: /webhooks/confluence
+    description: Channel for page_restored events
+    messages:
+      pageRestored:
+        $ref: '#/components/messages/PageRestored'
+  spaceCreated:
+    address: /webhooks/confluence
+    description: Channel for space_created events
+    messages:
+      spaceCreated:
+        $ref: '#/components/messages/SpaceCreated'
+  spaceUpdated:
+    address: /webhooks/confluence
+    description: Channel for space_updated events
+    messages:
+      spaceUpdated:
+        $ref: '#/components/messages/SpaceUpdated'
+  spaceRemoved:
+    address: /webhooks/confluence
+    description: Channel for space_removed events
+    messages:
+      spaceRemoved:
+        $ref: '#/components/messages/SpaceRemoved'
+  commentCreated:
+    address: /webhooks/confluence
+    description: Channel for comment_created events
+    messages:
+      commentCreated:
+        $ref: '#/components/messages/CommentCreated'
+  commentUpdated:
+    address: /webhooks/confluence
+    description: Channel for comment_updated events
+    messages:
+      commentUpdated:
+        $ref: '#/components/messages/CommentUpdated'
+  commentRemoved:
+    address: /webhooks/confluence
+    description: Channel for comment_removed events
+    messages:
+      commentRemoved:
+        $ref: '#/components/messages/CommentRemoved'
+  attachmentCreated:
+    address: /webhooks/confluence
+    description: Channel for attachment_created events
+    messages:
+      attachmentCreated:
+        $ref: '#/components/messages/AttachmentCreated'
+  attachmentUpdated:
+    address: /webhooks/confluence
+    description: Channel for attachment_updated events
+    messages:
+      attachmentUpdated:
+        $ref: '#/components/messages/AttachmentUpdated'
+  attachmentRemoved:
+    address: /webhooks/confluence
+    description: Channel for attachment_removed events
+    messages:
+      attachmentRemoved:
+        $ref: '#/components/messages/AttachmentRemoved'
+  labelCreated:
+    address: /webhooks/confluence
+    description: Channel for label_created events
+    messages:
+      labelCreated:
+        $ref: '#/components/messages/LabelCreated'
+  labelRemoved:
+    address: /webhooks/confluence
+    description: Channel for label_removed events
+    messages:
+      labelRemoved:
+        $ref: '#/components/messages/LabelRemoved'
+  blogCreated:
+    address: /webhooks/confluence
+    description: Channel for blog_created events
+    messages:
+      blogCreated:
+        $ref: '#/components/messages/BlogCreated'
+  blogUpdated:
+    address: /webhooks/confluence
+    description: Channel for blog_updated events
+    messages:
+      blogUpdated:
+        $ref: '#/components/messages/BlogUpdated'
+  blogRemoved:
+    address: /webhooks/confluence
+    description: Channel for blog_removed events
+    messages:
+      blogRemoved:
+        $ref: '#/components/messages/BlogRemoved'
+operations:
+  onPageCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/pageCreated'
+    title: Page created
+    summary: Triggered when a new page is created in Confluence.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/pageCreated/messages/pageCreated'
+  onPageUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/pageUpdated'
+    title: Page updated
+    summary: Triggered when an existing page is updated in Confluence.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/pageUpdated/messages/pageUpdated'
+  onPageRemoved:
+    action: receive
+    channel:
+      $ref: '#/channels/pageRemoved'
+    title: Page removed
+    summary: Triggered when a page is permanently removed from Confluence.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/pageRemoved/messages/pageRemoved'
+  onPageTrashed:
+    action: receive
+    channel:
+      $ref: '#/channels/pageTrashed'
+    title: Page trashed
+    summary: Triggered when a page is moved to the trash.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/pageTrashed/messages/pageTrashed'
+  onPageRestored:
+    action: receive
+    channel:
+      $ref: '#/channels/pageRestored'
+    title: Page restored
+    summary: Triggered when a page is restored from the trash.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/pageRestored/messages/pageRestored'
+  onSpaceCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/spaceCreated'
+    title: Space created
+    summary: Triggered when a new space is created in Confluence.
+    tags:
+      - $ref: '#/components/tags/space'
+    messages:
+      - $ref: '#/channels/spaceCreated/messages/spaceCreated'
+  onSpaceUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/spaceUpdated'
+    title: Space updated
+    summary: Triggered when a space is updated in Confluence.
+    tags:
+      - $ref: '#/components/tags/space'
+    messages:
+      - $ref: '#/channels/spaceUpdated/messages/spaceUpdated'
+  onSpaceRemoved:
+    action: receive
+    channel:
+      $ref: '#/channels/spaceRemoved'
+    title: Space removed
+    summary: Triggered when a space is removed from Confluence.
+    tags:
+      - $ref: '#/components/tags/space'
+    messages:
+      - $ref: '#/channels/spaceRemoved/messages/spaceRemoved'
+  onCommentCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/commentCreated'
+    title: Comment created
+    summary: Triggered when a new comment is added to a page or blog post.
+    tags:
+      - $ref: '#/components/tags/comment'
+    messages:
+      - $ref: '#/channels/commentCreated/messages/commentCreated'
+  onCommentUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/commentUpdated'
+    title: Comment updated
+    summary: Triggered when a comment is updated.
+    tags:
+      - $ref: '#/components/tags/comment'
+    messages:
+      - $ref: '#/channels/commentUpdated/messages/commentUpdated'
+  onCommentRemoved:
+    action: receive
+    channel:
+      $ref: '#/channels/commentRemoved'
+    title: Comment removed
+    summary: Triggered when a comment is removed.
+    tags:
+      - $ref: '#/components/tags/comment'
+    messages:
+      - $ref: '#/channels/commentRemoved/messages/commentRemoved'
+  onAttachmentCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/attachmentCreated'
+    title: Attachment created
+    summary: Triggered when a file is attached to a page or blog post.
+    tags:
+      - $ref: '#/components/tags/attachment'
+    messages:
+      - $ref: '#/channels/attachmentCreated/messages/attachmentCreated'
+  onAttachmentUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/attachmentUpdated'
+    title: Attachment updated
+    summary: Triggered when an attachment is updated with a new version.
+    tags:
+      - $ref: '#/components/tags/attachment'
+    messages:
+      - $ref: '#/channels/attachmentUpdated/messages/attachmentUpdated'
+  onAttachmentRemoved:
+    action: receive
+    channel:
+      $ref: '#/channels/attachmentRemoved'
+    title: Attachment removed
+    summary: Triggered when an attachment is removed from content.
+    tags:
+      - $ref: '#/components/tags/attachment'
+    messages:
+      - $ref: '#/channels/attachmentRemoved/messages/attachmentRemoved'
+  onLabelCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/labelCreated'
+    title: Label created
+    summary: Triggered when a label is added to content.
+    tags:
+      - $ref: '#/components/tags/label'
+    messages:
+      - $ref: '#/channels/labelCreated/messages/labelCreated'
+  onLabelRemoved:
+    action: receive
+    channel:
+      $ref: '#/channels/labelRemoved'
+    title: Label removed
+    summary: Triggered when a label is removed from content.
+    tags:
+      - $ref: '#/components/tags/label'
+    messages:
+      - $ref: '#/channels/labelRemoved/messages/labelRemoved'
+  onBlogCreated:
+    action: receive
+    channel:
+      $ref: '#/channels/blogCreated'
+    title: Blog post created
+    summary: Triggered when a new blog post is created.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/blogCreated/messages/blogCreated'
+  onBlogUpdated:
+    action: receive
+    channel:
+      $ref: '#/channels/blogUpdated'
+    title: Blog post updated
+    summary: Triggered when a blog post is updated.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/blogUpdated/messages/blogUpdated'
+  onBlogRemoved:
+    action: receive
+    channel:
+      $ref: '#/channels/blogRemoved'
+    title: Blog post removed
+    summary: Triggered when a blog post is removed.
+    tags:
+      - $ref: '#/components/tags/content'
+    messages:
+      - $ref: '#/channels/blogRemoved/messages/blogRemoved'
+components:
+  tags:
+    content:
+      name: content
+      description: Events related to Confluence content
+    space:
+      name: space
+      description: Events related to Confluence spaces
+    comment:
+      name: comment
+      description: Events related to comments
+    attachment:
+      name: attachment
+      description: Events related to attachments
+    label:
+      name: label
+      description: Events related to labels
+  securitySchemes:
+    webhookSecret:
+      type: httpApiKey
+      name: X-Hub-Signature
+      in: header
+      description: >-
+        HMAC-SHA256 signature of the webhook payload, computed using
+        the shared secret configured when registering the webhook.
+  messages:
+    PageCreated:
+      name: page_created
+      title: Page Created
+      summary: A new page has been created in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/PageEvent'
+    PageUpdated:
+      name: page_updated
+      title: Page Updated
+      summary: An existing page has been updated in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/PageEvent'
+    PageRemoved:
+      name: page_removed
+      title: Page Removed
+      summary: A page has been permanently removed from Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/PageEvent'
+    PageTrashed:
+      name: page_trashed
+      title: Page Trashed
+      summary: A page has been moved to the trash in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/PageEvent'
+    PageRestored:
+      name: page_restored
+      title: Page Restored
+      summary: A page has been restored from the trash in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/PageEvent'
+    SpaceCreated:
+      name: space_created
+      title: Space Created
+      summary: A new space has been created in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/SpaceEvent'
+    SpaceUpdated:
+      name: space_updated
+      title: Space Updated
+      summary: A space has been updated in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/SpaceEvent'
+    SpaceRemoved:
+      name: space_removed
+      title: Space Removed
+      summary: A space has been removed from Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/SpaceEvent'
+    CommentCreated:
+      name: comment_created
+      title: Comment Created
+      summary: A new comment has been added to a page or blog post.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/CommentEvent'
+    CommentUpdated:
+      name: comment_updated
+      title: Comment Updated
+      summary: A comment has been updated on a page or blog post.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/CommentEvent'
+    CommentRemoved:
+      name: comment_removed
+      title: Comment Removed
+      summary: A comment has been removed from a page or blog post.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/CommentEvent'
+    AttachmentCreated:
+      name: attachment_created
+      title: Attachment Created
+      summary: A file has been attached to a page or blog post.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/AttachmentEvent'
+    AttachmentUpdated:
+      name: attachment_updated
+      title: Attachment Updated
+      summary: An attachment has been updated with a new version.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/AttachmentEvent'
+    AttachmentRemoved:
+      name: attachment_removed
+      title: Attachment Removed
+      summary: An attachment has been removed from content.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/AttachmentEvent'
+    LabelCreated:
+      name: label_created
+      title: Label Created
+      summary: A label has been added to content.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/LabelEvent'
+    LabelRemoved:
+      name: label_removed
+      title: Label Removed
+      summary: A label has been removed from content.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/LabelEvent'
+    BlogCreated:
+      name: blog_created
+      title: Blog Post Created
+      summary: A new blog post has been created in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/BlogPostEvent'
+    BlogUpdated:
+      name: blog_updated
+      title: Blog Post Updated
+      summary: A blog post has been updated in Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/BlogPostEvent'
+    BlogRemoved:
+      name: blog_removed
+      title: Blog Post Removed
+      summary: A blog post has been removed from Confluence.
+      contentType: application/json
+      headers:
+        $ref: '#/components/schemas/WebhookHeaders'
+      payload:
+        $ref: '#/components/schemas/BlogPostEvent'
+  schemas:
+    WebhookHeaders:
+      type: object
+      properties:
+        X-Atlassian-Webhook-Identifier:
+          type: string
+          description: Unique identifier for this webhook registration.
+        X-Hub-Signature:
+          type: string
+          description: HMAC-SHA256 signature of the request body.
+        Content-Type:
+          type: string
+          enum:
+            - application/json
+    WebhookBase:
+      type: object
+      description: Common fields present in all Confluence webhook payloads.
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds when the event occurred.
+        event:
+          type: string
+          description: The event type identifier.
+        userAccountId:
+          type: string
+          description: The Atlassian account ID of the user who triggered the event.
+    PageEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookBase'
+        - type: object
+          properties:
+            event:
+              type: string
+              enum:
+                - page_created
+                - page_updated
+                - page_removed
+                - page_trashed
+                - page_restored
+            page:
+              $ref: '#/components/schemas/PagePayload'
+    PagePayload:
+      type: object
+      description: Page data included in webhook payloads.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the page.
+        type:
+          type: string
+          description: The content type, always "page" for pages.
+          enum:
+            - page
+        status:
+          type: string
+          description: The status of the page.
+          enum:
+            - current
+            - draft
+            - trashed
+        title:
+          type: string
+          description: The title of the page.
+        spaceKey:
+          type: string
+          description: The key of the space the page belongs to.
+        version:
+          type: object
+          properties:
+            number:
+              type: integer
+              description: The version number.
+            when:
+              type: string
+              format: date-time
+              description: Timestamp of this version.
+            message:
+              type: string
+              description: Version message.
+            minorEdit:
+              type: boolean
+              description: Whether this was a minor edit.
+        creatorAccountId:
+          type: string
+          description: Atlassian account ID of the page creator.
+        lastModifierAccountId:
+          type: string
+          description: Atlassian account ID of the last modifier.
+        self:
+          type: string
+          format: uri
+          description: The REST API URL for this page.
+    SpaceEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookBase'
+        - type: object
+          properties:
+            event:
+              type: string
+              enum:
+                - space_created
+                - space_updated
+                - space_removed
+            space:
+              $ref: '#/components/schemas/SpacePayload'
+    SpacePayload:
+      type: object
+      description: Space data included in webhook payloads.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier of the space.
+        key:
+          type: string
+          description: The key of the space.
+        name:
+          type: string
+          description: The name of the space.
+        type:
+          type: string
+          description: The type of space.
+          enum:
+            - global
+            - personal
+        status:
+          type: string
+          description: The status of the space.
+          enum:
+            - current
+            - archived
+        creatorAccountId:
+          type: string
+          description: Atlassian account ID of the space creator.
+        self:
+          type: string
+          format: uri
+          description: The REST API URL for this space.
+    CommentEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookBase'
+        - type: object
+          properties:
+            event:
+              type: string
+              enum:
+                - comment_created
+                - comment_updated
+                - comment_removed
+            comment:
+              $ref: '#/components/schemas/CommentPayload'
+    CommentPayload:
+      type: object
+      description: Comment data included in webhook payloads.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the comment.
+        type:
+          type: string
+          description: The content type.
+          enum:
+            - comment
+        status:
+          type: string
+          description: The status of the comment.
+          enum:
+            - current
+            - trashed
+        title:
+          type: string
+          description: The title of the comment.
+        version:
+          type: object
+          properties:
+            number:
+              type: integer
+            when:
+              type: string
+              format: date-time
+        container:
+          type: object
+          description: The content the comment is on.
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+                - page
+                - blogpost
+                - comment
+            title:
+              type: string
+        creatorAccountId:
+          type: string
+          description: Atlassian account ID of the comment creator.
+        self:
+          type: string
+          format: uri
+          description: The REST API URL for this comment.
+    AttachmentEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookBase'
+        - type: object
+          properties:
+            event:
+              type: string
+              enum:
+                - attachment_created
+                - attachment_updated
+                - attachment_removed
+            attachment:
+              $ref: '#/components/schemas/AttachmentPayload'
+    AttachmentPayload:
+      type: object
+      description: Attachment data included in webhook payloads.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the attachment.
+        type:
+          type: string
+          enum:
+            - attachment
+        status:
+          type: string
+          enum:
+            - current
+            - trashed
+        title:
+          type: string
+          description: The filename of the attachment.
+        mediaType:
+          type: string
+          description: The MIME type of the attachment.
+        fileSize:
+          type: integer
+          format: int64
+          description: The file size in bytes.
+        container:
+          type: object
+          description: The content the attachment is on.
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+              enum:
+                - page
+                - blogpost
+            title:
+              type: string
+        creatorAccountId:
+          type: string
+        self:
+          type: string
+          format: uri
+    LabelEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookBase'
+        - type: object
+          properties:
+            event:
+              type: string
+              enum:
+                - label_created
+                - label_removed
+            label:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the label.
+                prefix:
+                  type: string
+                  description: The prefix of the label.
+            associatedContent:
+              type: object
+              description: The content the label was added to or removed from.
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                  enum:
+                    - page
+                    - blogpost
+                title:
+                  type: string
+    BlogPostEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookBase'
+        - type: object
+          properties:
+            event:
+              type: string
+              enum:
+                - blog_created
+                - blog_updated
+                - blog_removed
+            blogPost:
+              $ref: '#/components/schemas/BlogPostPayload'
+    BlogPostPayload:
+      type: object
+      description: Blog post data included in webhook payloads.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the blog post.
+        type:
+          type: string
+          enum:
+            - blogpost
+        status:
+          type: string
+          enum:
+            - current
+            - draft
+            - trashed
+        title:
+          type: string
+          description: The title of the blog post.
+        spaceKey:
+          type: string
+          description: The key of the space the blog post belongs to.
+        version:
+          type: object
+          properties:
+            number:
+              type: integer
+            when:
+              type: string
+              format: date-time
+            message:
+              type: string
+            minorEdit:
+              type: boolean
+        creatorAccountId:
+          type: string
+        lastModifierAccountId:
+          type: string
+        self:
+          type: string
+          format: uri

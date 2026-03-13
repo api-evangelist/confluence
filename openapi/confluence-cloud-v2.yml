@@ -1,0 +1,1690 @@
+openapi: 3.1.0
+info:
+  title: Confluence Cloud REST API v2
+  description: >-
+    Next generation REST API for Confluence Cloud providing access to pages,
+    spaces, comments, blog posts, attachments, labels, and other content
+    management operations. This API offers improved performance, consistent
+    pagination, and new features compared to the v1 API.
+  version: 2.0.0
+  contact:
+    name: Atlassian
+    url: https://developer.atlassian.com/cloud/confluence/
+    email: ecosystem@atlassian.com
+  license:
+    name: Atlassian Developer Terms
+    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
+  x-logo:
+    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+servers:
+  - url: https://{domain}.atlassian.net/wiki/api/v2
+    description: Confluence Cloud
+    variables:
+      domain:
+        default: your-domain
+        description: Your Atlassian Cloud site domain
+security:
+  - basicAuth: []
+  - oAuth2: []
+  - bearerAuth: []
+tags:
+  - name: Page
+    description: Create, retrieve, update, and delete pages
+    externalDocs:
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/
+  - name: Space
+    description: Retrieve and manage Confluence spaces
+    externalDocs:
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
+  - name: Comment
+    description: Create, retrieve, update, and delete comments on pages and blog posts
+    externalDocs:
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-comment/
+  - name: Blog Post
+    description: Create, retrieve, update, and delete blog posts
+    externalDocs:
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-blog-post/
+  - name: Attachment
+    description: Manage file attachments on content
+    externalDocs:
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-attachment/
+  - name: Label
+    description: Manage labels on content
+    externalDocs:
+      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-label/
+paths:
+  /pages:
+    get:
+      operationId: getPages
+      summary: Get pages
+      description: >-
+        Returns all pages. The number of results is limited by the limit
+        parameter and additional results can be retrieved via the next cursor.
+        Results can be filtered by space, status, title, and body format.
+      tags:
+        - Page
+      parameters:
+        - $ref: '#/components/parameters/PageIdParam'
+        - $ref: '#/components/parameters/SpaceIdFilter'
+        - $ref: '#/components/parameters/StatusFilter'
+        - $ref: '#/components/parameters/TitleFilter'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/SortParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the requested pages are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageBulk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createPage
+      summary: Create page
+      description: >-
+        Creates a page in the space. Pages can be created as a child of another
+        page by specifying the parentId. Pages are created in the current
+        status (draft or current).
+      tags:
+        - Page
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageCreateRequest'
+      responses:
+        '200':
+          description: Returned if the page was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pages/{id}:
+    get:
+      operationId: getPageById
+      summary: Get page by id
+      description: >-
+        Returns a specific page. The response includes the page body in the
+        requested format, version information, and links.
+      tags:
+        - Page
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/GetDraftParam'
+        - $ref: '#/components/parameters/VersionParam'
+      responses:
+        '200':
+          description: Returned if the requested page is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updatePage
+      summary: Update page
+      description: >-
+        Updates a page by id. The request body must include the current version
+        number, the new title, the space id, the status, and the body in the
+        specified representation.
+      tags:
+        - Page
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageUpdateRequest'
+      responses:
+        '200':
+          description: Returned if the page was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      operationId: deletePage
+      summary: Delete page
+      description: >-
+        Deletes a page by id. By default pages are moved to trash. To purge a
+        page permanently, set the purge parameter to true.
+      tags:
+        - Page
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - name: purge
+          in: query
+          description: If true, the page is permanently deleted instead of moved to trash.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '204':
+          description: Returned if the page was deleted successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pages/{id}/children:
+    get:
+      operationId: getChildPages
+      summary: Get child pages
+      description: Returns the child pages of a specific page, ordered by position in the page tree.
+      tags:
+        - Page
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/SortParam'
+      responses:
+        '200':
+          description: Returned if the child pages are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageBulk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pages/{id}/labels:
+    get:
+      operationId: getPageLabels
+      summary: Get labels for page
+      description: Returns the labels associated with a specific page.
+      tags:
+        - Label
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/LabelPrefixParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the labels are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelArray'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /spaces:
+    get:
+      operationId: getSpaces
+      summary: Get spaces
+      description: >-
+        Returns all spaces. The results can be filtered by space type, status,
+        and labels. Pagination is cursor-based.
+      tags:
+        - Space
+      parameters:
+        - name: ids
+          in: query
+          description: Filter by space IDs. Multiple IDs can be specified as comma-separated values.
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: keys
+          in: query
+          description: Filter by space keys. Multiple keys can be specified as comma-separated values.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: type
+          in: query
+          description: Filter by space type.
+          schema:
+            type: string
+            enum:
+              - global
+              - personal
+        - name: status
+          in: query
+          description: Filter by space status.
+          schema:
+            type: string
+            enum:
+              - current
+              - archived
+        - name: labels
+          in: query
+          description: Filter by space labels. Multiple labels can be specified.
+          schema:
+            type: array
+            items:
+              type: string
+        - $ref: '#/components/parameters/SortParam'
+        - $ref: '#/components/parameters/DescriptionFormatParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the requested spaces are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceBulk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /spaces/{id}:
+    get:
+      operationId: getSpaceById
+      summary: Get space by id
+      description: Returns a specific space by its id.
+      tags:
+        - Space
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the space.
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/DescriptionFormatParam'
+      responses:
+        '200':
+          description: Returned if the requested space is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /spaces/{id}/pages:
+    get:
+      operationId: getPagesInSpace
+      summary: Get pages in space
+      description: Returns all pages in a specific space. Supports filtering by status and depth.
+      tags:
+        - Page
+        - Space
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the space.
+          schema:
+            type: integer
+            format: int64
+        - name: depth
+          in: query
+          description: Filter by depth in the page tree. Use root to get only top-level pages.
+          schema:
+            type: string
+            enum:
+              - all
+              - root
+        - $ref: '#/components/parameters/StatusFilter'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/SortParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the pages in the space are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageBulk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pages/{id}/footer-comments:
+    get:
+      operationId: getFooterComments
+      summary: Get footer comments for page
+      description: Returns the footer comments of a specific page.
+      tags:
+        - Comment
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the footer comments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentBulk'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pages/{id}/inline-comments:
+    get:
+      operationId: getInlineComments
+      summary: Get inline comments for page
+      description: Returns the inline comments of a specific page.
+      tags:
+        - Comment
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the inline comments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentBulk'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /footer-comments:
+    post:
+      operationId: createFooterComment
+      summary: Create footer comment
+      description: Creates a footer comment on a page or blog post.
+      tags:
+        - Comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+      responses:
+        '200':
+          description: Returned if the comment was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /inline-comments:
+    post:
+      operationId: createInlineComment
+      summary: Create inline comment
+      description: Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection.
+      tags:
+        - Comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InlineCommentCreateRequest'
+      responses:
+        '200':
+          description: Returned if the inline comment was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /comments/{id}:
+    get:
+      operationId: getCommentById
+      summary: Get comment by id
+      description: Returns a specific comment by id.
+      tags:
+        - Comment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the comment.
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/VersionParam'
+      responses:
+        '200':
+          description: Returned if the comment is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateComment
+      summary: Update comment
+      description: Updates a comment by id. The version number must be incremented.
+      tags:
+        - Comment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the comment.
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentUpdateRequest'
+      responses:
+        '200':
+          description: Returned if the comment was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteComment
+      summary: Delete comment
+      description: Deletes a comment by id.
+      tags:
+        - Comment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the comment.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Returned if the comment was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /comments/{id}/children:
+    get:
+      operationId: getChildComments
+      summary: Get child comments
+      description: Returns the child (reply) comments of a specific comment.
+      tags:
+        - Comment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the parent comment.
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the child comments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentBulk'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /blogposts:
+    get:
+      operationId: getBlogPosts
+      summary: Get blog posts
+      description: Returns all blog posts. Results can be filtered by space, status, and title.
+      tags:
+        - Blog Post
+      parameters:
+        - $ref: '#/components/parameters/SpaceIdFilter'
+        - $ref: '#/components/parameters/StatusFilter'
+        - $ref: '#/components/parameters/TitleFilter'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/SortParam'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the blog posts are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPostBulk'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createBlogPost
+      summary: Create blog post
+      description: Creates a blog post in the specified space.
+      tags:
+        - Blog Post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPostCreateRequest'
+      responses:
+        '200':
+          description: Returned if the blog post was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /blogposts/{id}:
+    get:
+      operationId: getBlogPostById
+      summary: Get blog post by id
+      description: Returns a specific blog post by id.
+      tags:
+        - Blog Post
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/BodyFormatParam'
+        - $ref: '#/components/parameters/VersionParam'
+      responses:
+        '200':
+          description: Returned if the blog post is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateBlogPost
+      summary: Update blog post
+      description: Updates a blog post by id.
+      tags:
+        - Blog Post
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPostUpdateRequest'
+      responses:
+        '200':
+          description: Returned if the blog post was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteBlogPost
+      summary: Delete blog post
+      description: Deletes a blog post by id.
+      tags:
+        - Blog Post
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+      responses:
+        '204':
+          description: Returned if the blog post was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /attachments/{id}:
+    get:
+      operationId: getAttachmentById
+      summary: Get attachment by id
+      description: Returns a specific attachment by id.
+      tags:
+        - Attachment
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+      responses:
+        '200':
+          description: Returned if the attachment is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteAttachment
+      summary: Delete attachment
+      description: Deletes an attachment by id.
+      tags:
+        - Attachment
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+      responses:
+        '204':
+          description: Returned if the attachment was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pages/{id}/attachments:
+    get:
+      operationId: getPageAttachments
+      summary: Get attachments for page
+      description: Returns the attachments of a specific page.
+      tags:
+        - Attachment
+      parameters:
+        - $ref: '#/components/parameters/ContentIdPath'
+        - $ref: '#/components/parameters/CursorParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the attachments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentBulk'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /labels/{id}:
+    get:
+      operationId: getLabelById
+      summary: Get label by id
+      description: Returns a specific label by id.
+      tags:
+        - Label
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the label.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Returned if the label is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >-
+        Basic authentication using email and API token. Provide your Atlassian
+        account email as the username and an API token as the password.
+    oAuth2:
+      type: oauth2
+      description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read Confluence content
+            read:confluence-content.summary: Read Confluence content summaries
+            write:confluence-content: Create and update Confluence content
+            read:confluence-space.summary: Read Confluence space summaries
+            write:confluence-space: Create and update Confluence spaces
+            read:confluence-user: Read Confluence user information
+            read:confluence-groups: Read Confluence groups
+            write:confluence-file: Upload attachments to Confluence
+            delete:confluence-content: Delete Confluence content
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token or OAuth 2.0 Bearer token.
+  parameters:
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    PageIdParam:
+      name: id
+      in: query
+      description: Filter by page IDs. Multiple IDs can be specified as comma-separated values.
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int64
+    SpaceIdFilter:
+      name: space-id
+      in: query
+      description: Filter by space ID. Multiple IDs can be specified.
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int64
+    StatusFilter:
+      name: status
+      in: query
+      description: Filter by content status.
+      schema:
+        type: string
+        enum:
+          - current
+          - archived
+          - draft
+          - trashed
+    TitleFilter:
+      name: title
+      in: query
+      description: Filter by content title. Supports exact match.
+      schema:
+        type: string
+    BodyFormatParam:
+      name: body-format
+      in: query
+      description: The representation format for the content body.
+      schema:
+        type: string
+        enum:
+          - storage
+          - atlas_doc_format
+          - view
+          - export_view
+          - anonymous_export_view
+          - editor
+    DescriptionFormatParam:
+      name: description-format
+      in: query
+      description: The format of the space description in the response.
+      schema:
+        type: string
+        enum:
+          - plain
+          - view
+    SortParam:
+      name: sort
+      in: query
+      description: >-
+        Sort order for results. Prefix with - for descending order.
+        Supported fields include id, title, created-date, and modified-date.
+      schema:
+        type: string
+        enum:
+          - id
+          - -id
+          - title
+          - -title
+          - created-date
+          - -created-date
+          - modified-date
+          - -modified-date
+    CursorParam:
+      name: cursor
+      in: query
+      description: >-
+        Used for pagination. The cursor value is returned in the response
+        _links.next when there are more results.
+      schema:
+        type: string
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    GetDraftParam:
+      name: get-draft
+      in: query
+      description: If true, returns the draft version of the page.
+      schema:
+        type: boolean
+        default: false
+    VersionParam:
+      name: version
+      in: query
+      description: The version number of the content to retrieve.
+      schema:
+        type: integer
+        format: int32
+    LabelPrefixParam:
+      name: prefix
+      in: query
+      description: Filter labels by prefix (global, my, team).
+      schema:
+        type: string
+        enum:
+          - global
+          - my
+          - team
+  schemas:
+    Page:
+      type: object
+      description: Represents a Confluence page.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the page.
+        status:
+          type: string
+          description: The current status of the page.
+          enum:
+            - current
+            - draft
+            - archived
+            - trashed
+        title:
+          type: string
+          description: The title of the page.
+        spaceId:
+          type: string
+          description: The ID of the space this page belongs to.
+        parentId:
+          type: string
+          description: The ID of the parent page, if the page is nested.
+        parentType:
+          type: string
+          description: The type of the parent (page or space).
+          enum:
+            - page
+            - space
+        position:
+          type: integer
+          description: The position of this page in the page tree relative to siblings.
+        authorId:
+          type: string
+          description: The Atlassian account ID of the page author.
+        ownerId:
+          type: string
+          description: The Atlassian account ID of the page owner.
+        lastOwnerId:
+          type: string
+          description: The Atlassian account ID of the previous owner.
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the page was created.
+        version:
+          $ref: '#/components/schemas/Version'
+        body:
+          $ref: '#/components/schemas/Body'
+        labels:
+          $ref: '#/components/schemas/LabelArray'
+        properties:
+          $ref: '#/components/schemas/ContentPropertyArray'
+        operations:
+          $ref: '#/components/schemas/OperationArray'
+        likes:
+          $ref: '#/components/schemas/LikeArray'
+        versions:
+          $ref: '#/components/schemas/VersionArray'
+        _links:
+          $ref: '#/components/schemas/PageLinks'
+    PageBulk:
+      type: object
+      description: A paginated list of pages.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    PageCreateRequest:
+      type: object
+      required:
+        - spaceId
+        - status
+        - title
+        - body
+      properties:
+        spaceId:
+          type: string
+          description: The ID of the space to create the page in.
+        status:
+          type: string
+          description: The status of the page.
+          enum:
+            - current
+            - draft
+        title:
+          type: string
+          description: The title of the page.
+        parentId:
+          type: string
+          description: The ID of the parent page. If omitted, the page will be a root-level page.
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+    PageUpdateRequest:
+      type: object
+      required:
+        - id
+        - status
+        - title
+        - body
+        - version
+      properties:
+        id:
+          type: string
+          description: The ID of the page being updated.
+        status:
+          type: string
+          description: The status of the page.
+          enum:
+            - current
+            - draft
+            - archived
+        title:
+          type: string
+          description: The new title of the page.
+        spaceId:
+          type: string
+          description: The ID of the space the page belongs to.
+        parentId:
+          type: string
+          description: The ID of the new parent page.
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        version:
+          $ref: '#/components/schemas/VersionWrite'
+    Space:
+      type: object
+      description: Represents a Confluence space.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the space.
+        key:
+          type: string
+          description: The key of the space, used in URLs.
+        name:
+          type: string
+          description: The name of the space.
+        type:
+          type: string
+          description: The type of space.
+          enum:
+            - global
+            - personal
+        status:
+          type: string
+          description: The status of the space.
+          enum:
+            - current
+            - archived
+        authorId:
+          type: string
+          description: The Atlassian account ID of the space creator.
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the space was created.
+        homepageId:
+          type: string
+          description: The ID of the space homepage.
+        description:
+          $ref: '#/components/schemas/SpaceDescription'
+        icon:
+          $ref: '#/components/schemas/SpaceIcon'
+        labels:
+          $ref: '#/components/schemas/LabelArray'
+        properties:
+          $ref: '#/components/schemas/SpacePropertyArray'
+        operations:
+          $ref: '#/components/schemas/OperationArray'
+        permissions:
+          $ref: '#/components/schemas/SpacePermissionArray'
+        _links:
+          $ref: '#/components/schemas/SpaceLinks'
+    SpaceBulk:
+      type: object
+      description: A paginated list of spaces.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Space'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Comment:
+      type: object
+      description: Represents a comment on a Confluence page or blog post.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the comment.
+        status:
+          type: string
+          description: The current status of the comment.
+          enum:
+            - current
+            - draft
+            - trashed
+        title:
+          type: string
+          description: The title of the comment (typically auto-generated).
+        blogPostId:
+          type: string
+          description: The ID of the blog post the comment is on, if applicable.
+        pageId:
+          type: string
+          description: The ID of the page the comment is on, if applicable.
+        parentCommentId:
+          type: string
+          description: The ID of the parent comment, if this is a reply.
+        authorId:
+          type: string
+          description: The Atlassian account ID of the comment author.
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the comment was created.
+        version:
+          $ref: '#/components/schemas/Version'
+        body:
+          $ref: '#/components/schemas/Body'
+        resolutionStatus:
+          type: string
+          description: Resolution status for inline comments.
+          enum:
+            - open
+            - resolved
+            - reopened
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties'
+        _links:
+          $ref: '#/components/schemas/CommentLinks'
+    CommentBulk:
+      type: object
+      description: A paginated list of comments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    CommentCreateRequest:
+      type: object
+      required:
+        - body
+      properties:
+        blogPostId:
+          type: string
+          description: The ID of the blog post to comment on.
+        pageId:
+          type: string
+          description: The ID of the page to comment on.
+        parentCommentId:
+          type: string
+          description: The ID of the parent comment for replies.
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+    InlineCommentCreateRequest:
+      type: object
+      required:
+        - body
+        - inlineCommentProperties
+      properties:
+        blogPostId:
+          type: string
+          description: The ID of the blog post to add an inline comment on.
+        pageId:
+          type: string
+          description: The ID of the page to add an inline comment on.
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        inlineCommentProperties:
+          $ref: '#/components/schemas/InlineCommentProperties'
+    CommentUpdateRequest:
+      type: object
+      required:
+        - body
+        - version
+      properties:
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        version:
+          $ref: '#/components/schemas/VersionWrite'
+    BlogPost:
+      type: object
+      description: Represents a Confluence blog post.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the blog post.
+        status:
+          type: string
+          description: The current status of the blog post.
+          enum:
+            - current
+            - draft
+            - trashed
+        title:
+          type: string
+          description: The title of the blog post.
+        spaceId:
+          type: string
+          description: The ID of the space this blog post belongs to.
+        authorId:
+          type: string
+          description: The Atlassian account ID of the blog post author.
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the blog post was created.
+        version:
+          $ref: '#/components/schemas/Version'
+        body:
+          $ref: '#/components/schemas/Body'
+        labels:
+          $ref: '#/components/schemas/LabelArray'
+        _links:
+          $ref: '#/components/schemas/ContentLinks'
+    BlogPostBulk:
+      type: object
+      description: A paginated list of blog posts.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogPost'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    BlogPostCreateRequest:
+      type: object
+      required:
+        - spaceId
+        - status
+        - title
+        - body
+      properties:
+        spaceId:
+          type: string
+          description: The ID of the space to create the blog post in.
+        status:
+          type: string
+          description: The status of the blog post.
+          enum:
+            - current
+            - draft
+        title:
+          type: string
+          description: The title of the blog post.
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+    BlogPostUpdateRequest:
+      type: object
+      required:
+        - id
+        - status
+        - title
+        - body
+        - version
+      properties:
+        id:
+          type: string
+          description: The ID of the blog post being updated.
+        status:
+          type: string
+          description: The status of the blog post.
+          enum:
+            - current
+            - draft
+        title:
+          type: string
+          description: The new title of the blog post.
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        version:
+          $ref: '#/components/schemas/VersionWrite'
+    Attachment:
+      type: object
+      description: Represents a file attachment on Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the attachment.
+        status:
+          type: string
+          description: The status of the attachment.
+          enum:
+            - current
+            - trashed
+        title:
+          type: string
+          description: The filename of the attachment.
+        mediaType:
+          type: string
+          description: The MIME type of the attachment.
+        mediaTypeDescription:
+          type: string
+          description: Human-readable description of the media type.
+        comment:
+          type: string
+          description: Comment associated with the attachment upload.
+        fileSize:
+          type: integer
+          format: int64
+          description: File size in bytes.
+        webuiLink:
+          type: string
+          description: The web UI link for viewing the attachment.
+        downloadLink:
+          type: string
+          description: The download link for the attachment.
+        pageId:
+          type: string
+          description: The ID of the page this attachment belongs to.
+        blogPostId:
+          type: string
+          description: The ID of the blog post this attachment belongs to.
+        version:
+          $ref: '#/components/schemas/Version'
+        _links:
+          $ref: '#/components/schemas/ContentLinks'
+    AttachmentBulk:
+      type: object
+      description: A paginated list of attachments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Label:
+      type: object
+      description: Represents a label applied to Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the label.
+        name:
+          type: string
+          description: The name of the label.
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+    LabelArray:
+      type: object
+      description: A list of labels.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Version:
+      type: object
+      description: Version information for content.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+        message:
+          type: string
+          description: The message associated with this version.
+        number:
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+        authorId:
+          type: string
+          description: The Atlassian account ID of the version author.
+    VersionWrite:
+      type: object
+      required:
+        - number
+      properties:
+        number:
+          type: integer
+          description: The new version number. Must be incremented by 1.
+        message:
+          type: string
+          description: An optional message associated with this version.
+    VersionArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Body:
+      type: object
+      description: The body content in various representations.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    BodyWrite:
+      type: object
+      required:
+        - representation
+        - value
+      properties:
+        representation:
+          type: string
+          description: The representation format of the body content.
+          enum:
+            - storage
+            - atlas_doc_format
+            - wiki
+            - editor
+        value:
+          type: string
+          description: The body content in the specified representation.
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+        value:
+          type: string
+          description: The body content in this representation.
+    InlineCommentProperties:
+      type: object
+      description: Properties specific to inline comments.
+      properties:
+        textSelection:
+          type: string
+          description: The selected text that this inline comment is anchored to.
+        textSelectionMatchCount:
+          type: integer
+          description: The match index of the text selection, if the same text appears multiple times.
+    ContentPropertyArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentProperty'
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        value: {}
+        version:
+          $ref: '#/components/schemas/Version'
+    OperationArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+    Operation:
+      type: object
+      properties:
+        operation:
+          type: string
+          description: The operation type.
+          enum:
+            - create
+            - read
+            - update
+            - delete
+            - administer
+        targetType:
+          type: string
+          description: The target type for the operation.
+    LikeArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Like'
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The Atlassian account ID of the user who liked the content.
+    SpaceDescription:
+      type: object
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    SpaceIcon:
+      type: object
+      properties:
+        path:
+          type: string
+          description: The relative path to the space icon.
+        apiDownloadLink:
+          type: string
+          description: The API download link for the space icon.
+    SpacePropertyArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentProperty'
+    SpacePermissionArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpacePermission'
+    SpacePermission:
+      type: object
+      properties:
+        id:
+          type: string
+        principal:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - user
+                - group
+                - role
+            id:
+              type: string
+        operation:
+          $ref: '#/components/schemas/Operation'
+    PageLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the page.
+        editui:
+          type: string
+          description: Edit UI link for the page.
+        tinyui:
+          type: string
+          description: Shortened link for the page.
+    SpaceLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the space.
+    CommentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the comment.
+    ContentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the content.
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+        message:
+          type: string
+          description: A human-readable error message.
+  responses:
+    BadRequest:
+      description: Returned if the request is malformed or contains invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Returned if there is a version conflict during an update.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+externalDocs:
+  description: Confluence Cloud REST API v2 Documentation
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/

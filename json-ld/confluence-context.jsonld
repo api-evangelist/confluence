@@ -1,0 +1,310 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://developer.atlassian.com/cloud/confluence/vocab#",
+    "confluence": "https://developer.atlassian.com/cloud/confluence/vocab#",
+    "schema": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "sioc": "http://rdfs.org/sioc/ns#",
+    "as": "https://www.w3.org/ns/activitystreams#",
+
+    "Page": {
+      "@id": "confluence:Page",
+      "@context": {
+        "id": {
+          "@id": "confluence:pageId",
+          "@type": "xsd:string"
+        },
+        "title": {
+          "@id": "dcterms:title",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "confluence:status",
+          "@type": "xsd:string"
+        },
+        "spaceId": {
+          "@id": "confluence:spaceId",
+          "@type": "xsd:string"
+        },
+        "parentId": {
+          "@id": "confluence:parentId",
+          "@type": "xsd:string"
+        },
+        "parentType": {
+          "@id": "confluence:parentType",
+          "@type": "xsd:string"
+        },
+        "position": {
+          "@id": "confluence:position",
+          "@type": "xsd:integer"
+        },
+        "authorId": {
+          "@id": "dcterms:creator",
+          "@type": "xsd:string"
+        },
+        "ownerId": {
+          "@id": "confluence:ownerId",
+          "@type": "xsd:string"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "body": {
+          "@id": "sioc:content"
+        },
+        "version": {
+          "@id": "confluence:version"
+        },
+        "labels": {
+          "@id": "confluence:labels",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "Space": {
+      "@id": "confluence:Space",
+      "@context": {
+        "id": {
+          "@id": "confluence:spaceId",
+          "@type": "xsd:string"
+        },
+        "key": {
+          "@id": "confluence:spaceKey",
+          "@type": "xsd:string"
+        },
+        "name": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "type": {
+          "@id": "confluence:spaceType",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "confluence:status",
+          "@type": "xsd:string"
+        },
+        "authorId": {
+          "@id": "dcterms:creator",
+          "@type": "xsd:string"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "homepageId": {
+          "@id": "confluence:homepageId",
+          "@type": "xsd:string"
+        },
+        "description": {
+          "@id": "dcterms:description"
+        },
+        "icon": {
+          "@id": "schema:image"
+        },
+        "labels": {
+          "@id": "confluence:labels",
+          "@container": "@set"
+        },
+        "permissions": {
+          "@id": "confluence:permissions",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "Comment": {
+      "@id": "confluence:Comment",
+      "@context": {
+        "id": {
+          "@id": "confluence:commentId",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "confluence:status",
+          "@type": "xsd:string"
+        },
+        "title": {
+          "@id": "dcterms:title",
+          "@type": "xsd:string"
+        },
+        "pageId": {
+          "@id": "confluence:pageId",
+          "@type": "xsd:string"
+        },
+        "blogPostId": {
+          "@id": "confluence:blogPostId",
+          "@type": "xsd:string"
+        },
+        "parentCommentId": {
+          "@id": "confluence:parentCommentId",
+          "@type": "xsd:string"
+        },
+        "authorId": {
+          "@id": "dcterms:creator",
+          "@type": "xsd:string"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "body": {
+          "@id": "sioc:content"
+        },
+        "resolutionStatus": {
+          "@id": "confluence:resolutionStatus",
+          "@type": "xsd:string"
+        },
+        "version": {
+          "@id": "confluence:version"
+        }
+      }
+    },
+
+    "BlogPost": {
+      "@id": "confluence:BlogPost",
+      "@context": {
+        "id": {
+          "@id": "confluence:blogPostId",
+          "@type": "xsd:string"
+        },
+        "title": {
+          "@id": "dcterms:title",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "confluence:status",
+          "@type": "xsd:string"
+        },
+        "spaceId": {
+          "@id": "confluence:spaceId",
+          "@type": "xsd:string"
+        },
+        "authorId": {
+          "@id": "dcterms:creator",
+          "@type": "xsd:string"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "body": {
+          "@id": "sioc:content"
+        },
+        "labels": {
+          "@id": "confluence:labels",
+          "@container": "@set"
+        },
+        "version": {
+          "@id": "confluence:version"
+        }
+      }
+    },
+
+    "Attachment": {
+      "@id": "confluence:Attachment",
+      "@context": {
+        "id": {
+          "@id": "confluence:attachmentId",
+          "@type": "xsd:string"
+        },
+        "title": {
+          "@id": "dcterms:title",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "confluence:status",
+          "@type": "xsd:string"
+        },
+        "mediaType": {
+          "@id": "dcterms:format",
+          "@type": "xsd:string"
+        },
+        "fileSize": {
+          "@id": "confluence:fileSize",
+          "@type": "xsd:integer"
+        },
+        "pageId": {
+          "@id": "confluence:pageId",
+          "@type": "xsd:string"
+        },
+        "blogPostId": {
+          "@id": "confluence:blogPostId",
+          "@type": "xsd:string"
+        },
+        "downloadLink": {
+          "@id": "schema:contentUrl",
+          "@type": "@id"
+        },
+        "version": {
+          "@id": "confluence:version"
+        }
+      }
+    },
+
+    "Label": {
+      "@id": "confluence:Label",
+      "@context": {
+        "id": {
+          "@id": "confluence:labelId",
+          "@type": "xsd:string"
+        },
+        "name": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "prefix": {
+          "@id": "confluence:labelPrefix",
+          "@type": "xsd:string"
+        }
+      }
+    },
+
+    "Version": {
+      "@id": "confluence:Version",
+      "@context": {
+        "number": {
+          "@id": "confluence:versionNumber",
+          "@type": "xsd:integer"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "message": {
+          "@id": "confluence:versionMessage",
+          "@type": "xsd:string"
+        },
+        "minorEdit": {
+          "@id": "confluence:minorEdit",
+          "@type": "xsd:boolean"
+        },
+        "authorId": {
+          "@id": "dcterms:creator",
+          "@type": "xsd:string"
+        }
+      }
+    },
+
+    "SpacePermission": {
+      "@id": "confluence:SpacePermission",
+      "@context": {
+        "id": {
+          "@id": "confluence:permissionId",
+          "@type": "xsd:string"
+        },
+        "principal": {
+          "@id": "confluence:principal"
+        },
+        "operation": {
+          "@id": "confluence:operation"
+        }
+      }
+    }
+  }
+}

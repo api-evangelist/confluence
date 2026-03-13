@@ -1,0 +1,321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.com/schemas/confluence/page",
+  "title": "Confluence Page",
+  "description": "Schema for a Confluence Cloud page resource as returned by the REST API v2. A page is the primary content type in Confluence, representing a wiki-style document within a space.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the page. Represented as a string in the v2 API."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current lifecycle status of the page.",
+      "enum": ["current", "draft", "archived", "trashed"]
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the page. Must be unique within the space for current pages.",
+      "maxLength": 255
+    },
+    "spaceId": {
+      "type": "string",
+      "description": "The ID of the space this page belongs to."
+    },
+    "parentId": {
+      "type": ["string", "null"],
+      "description": "The ID of the parent page. Null for top-level pages in a space."
+    },
+    "parentType": {
+      "type": "string",
+      "description": "The type of the parent entity.",
+      "enum": ["page", "space"]
+    },
+    "position": {
+      "type": ["integer", "null"],
+      "description": "The ordinal position of this page among its siblings in the page tree."
+    },
+    "authorId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the user who originally created the page."
+    },
+    "ownerId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the current page owner."
+    },
+    "lastOwnerId": {
+      "type": ["string", "null"],
+      "description": "The Atlassian account ID of the previous page owner."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 date-time when the page was originally created."
+    },
+    "version": {
+      "$ref": "#/$defs/Version"
+    },
+    "body": {
+      "$ref": "#/$defs/Body"
+    },
+    "labels": {
+      "$ref": "#/$defs/LabelArray"
+    },
+    "properties": {
+      "$ref": "#/$defs/ContentPropertyArray"
+    },
+    "operations": {
+      "$ref": "#/$defs/OperationArray"
+    },
+    "likes": {
+      "$ref": "#/$defs/LikeArray"
+    },
+    "versions": {
+      "$ref": "#/$defs/VersionArray"
+    },
+    "_links": {
+      "$ref": "#/$defs/PageLinks"
+    }
+  },
+  "required": ["id", "status", "title", "spaceId", "authorId", "createdAt", "version"],
+  "$defs": {
+    "Version": {
+      "type": "object",
+      "title": "Version",
+      "description": "Version metadata for the content. Each edit creates a new version.",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The ISO 8601 date-time when this version was created."
+        },
+        "message": {
+          "type": ["string", "null"],
+          "description": "An optional message describing the changes in this version."
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The version number. Starts at 1 and increments with each update."
+        },
+        "minorEdit": {
+          "type": "boolean",
+          "description": "Whether this version was saved as a minor edit. Minor edits do not trigger notifications."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "The Atlassian account ID of the user who created this version."
+        }
+      },
+      "required": ["number", "createdAt", "authorId"]
+    },
+    "VersionArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Version"
+          }
+        },
+        "_links": {
+          "$ref": "#/$defs/PaginationLinks"
+        }
+      }
+    },
+    "Body": {
+      "type": "object",
+      "title": "Body",
+      "description": "The content body in one or more representation formats.",
+      "properties": {
+        "storage": {
+          "$ref": "#/$defs/BodyRepresentation",
+          "description": "The storage format representation (XHTML-based)."
+        },
+        "atlas_doc_format": {
+          "$ref": "#/$defs/BodyRepresentation",
+          "description": "The Atlassian Document Format (ADF) representation."
+        },
+        "view": {
+          "$ref": "#/$defs/BodyRepresentation",
+          "description": "The rendered HTML view representation."
+        }
+      }
+    },
+    "BodyRepresentation": {
+      "type": "object",
+      "title": "Body Representation",
+      "description": "A single representation of the content body.",
+      "properties": {
+        "representation": {
+          "type": "string",
+          "description": "The name of this representation format."
+        },
+        "value": {
+          "type": "string",
+          "description": "The content body in this representation format."
+        }
+      },
+      "required": ["representation", "value"]
+    },
+    "Label": {
+      "type": "object",
+      "title": "Label",
+      "description": "A label used to categorize and organize content in Confluence.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the label."
+        },
+        "name": {
+          "type": "string",
+          "description": "The display name of the label."
+        },
+        "prefix": {
+          "type": "string",
+          "description": "The prefix indicating the label scope.",
+          "enum": ["global", "my", "team"]
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "LabelArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Label"
+          }
+        },
+        "_links": {
+          "$ref": "#/$defs/PaginationLinks"
+        }
+      }
+    },
+    "ContentProperty": {
+      "type": "object",
+      "title": "Content Property",
+      "description": "A key-value property stored on content for app-specific or custom metadata.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the property."
+        },
+        "key": {
+          "type": "string",
+          "description": "The key of the property."
+        },
+        "value": {
+          "description": "The value of the property. Can be any valid JSON value."
+        },
+        "version": {
+          "$ref": "#/$defs/Version"
+        }
+      },
+      "required": ["id", "key"]
+    },
+    "ContentPropertyArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ContentProperty"
+          }
+        }
+      }
+    },
+    "Operation": {
+      "type": "object",
+      "title": "Operation",
+      "description": "An operation that can be performed on content.",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "description": "The operation type.",
+          "enum": ["create", "read", "update", "delete", "administer"]
+        },
+        "targetType": {
+          "type": "string",
+          "description": "The target type for the operation."
+        }
+      },
+      "required": ["operation"]
+    },
+    "OperationArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Operation"
+          }
+        }
+      }
+    },
+    "Like": {
+      "type": "object",
+      "title": "Like",
+      "description": "A like on the content by a specific user.",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "The Atlassian account ID of the user who liked the content."
+        }
+      },
+      "required": ["accountId"]
+    },
+    "LikeArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Like"
+          }
+        }
+      }
+    },
+    "PageLinks": {
+      "type": "object",
+      "title": "Page Links",
+      "description": "Hypermedia links associated with the page.",
+      "properties": {
+        "webui": {
+          "type": "string",
+          "format": "uri-reference",
+          "description": "Relative path to view the page in the Confluence web UI."
+        },
+        "editui": {
+          "type": "string",
+          "format": "uri-reference",
+          "description": "Relative path to edit the page in the Confluence editor."
+        },
+        "tinyui": {
+          "type": "string",
+          "format": "uri-reference",
+          "description": "Shortened relative path for sharing the page."
+        }
+      }
+    },
+    "PaginationLinks": {
+      "type": "object",
+      "title": "Pagination Links",
+      "description": "Links for cursor-based pagination through result sets.",
+      "properties": {
+        "next": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the next page of results, including the cursor parameter."
+        },
+        "base": {
+          "type": "string",
+          "format": "uri",
+          "description": "The base URL of the Confluence instance."
+        }
+      }
+    }
+  }
+}

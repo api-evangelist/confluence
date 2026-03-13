@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.com/schemas/confluence/space",
+  "title": "Confluence Space",
+  "description": "Schema for a Confluence Cloud space resource as returned by the REST API v2. A space is the top-level organizational container in Confluence, holding pages, blog posts, and other content.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the space."
+    },
+    "key": {
+      "type": "string",
+      "description": "The unique key of the space. Used in URLs and as a human-readable identifier. Must be alphanumeric and uppercase.",
+      "pattern": "^[A-Z][A-Z0-9]*$",
+      "maxLength": 255
+    },
+    "name": {
+      "type": "string",
+      "description": "The display name of the space.",
+      "maxLength": 200
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of space. Global spaces are accessible to all users; personal spaces belong to an individual user.",
+      "enum": ["global", "personal"]
+    },
+    "status": {
+      "type": "string",
+      "description": "The lifecycle status of the space.",
+      "enum": ["current", "archived"]
+    },
+    "authorId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the user who created the space."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 date-time when the space was created."
+    },
+    "homepageId": {
+      "type": ["string", "null"],
+      "description": "The ID of the space homepage. Every space has a homepage that serves as the root of the page tree."
+    },
+    "description": {
+      "$ref": "#/$defs/SpaceDescription"
+    },
+    "icon": {
+      "$ref": "#/$defs/SpaceIcon"
+    },
+    "labels": {
+      "$ref": "#/$defs/LabelArray"
+    },
+    "properties": {
+      "$ref": "#/$defs/SpacePropertyArray"
+    },
+    "operations": {
+      "$ref": "#/$defs/OperationArray"
+    },
+    "permissions": {
+      "$ref": "#/$defs/SpacePermissionArray"
+    },
+    "_links": {
+      "$ref": "#/$defs/SpaceLinks"
+    }
+  },
+  "required": ["id", "key", "name", "type", "status", "authorId", "createdAt"],
+  "$defs": {
+    "SpaceDescription": {
+      "type": "object",
+      "title": "Space Description",
+      "description": "The description of the space in available representation formats.",
+      "properties": {
+        "plain": {
+          "$ref": "#/$defs/BodyRepresentation",
+          "description": "The plain text representation of the space description."
+        },
+        "view": {
+          "$ref": "#/$defs/BodyRepresentation",
+          "description": "The rendered HTML view of the space description."
+        }
+      }
+    },
+    "SpaceIcon": {
+      "type": "object",
+      "title": "Space Icon",
+      "description": "The icon associated with the space.",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "The relative path to the space icon image."
+        },
+        "apiDownloadLink": {
+          "type": "string",
+          "format": "uri-reference",
+          "description": "The API download link for the space icon."
+        }
+      }
+    },
+    "BodyRepresentation": {
+      "type": "object",
+      "title": "Body Representation",
+      "description": "A single representation of content.",
+      "properties": {
+        "representation": {
+          "type": "string",
+          "description": "The name of this representation format."
+        },
+        "value": {
+          "type": "string",
+          "description": "The content in this representation format."
+        }
+      },
+      "required": ["representation", "value"]
+    },
+    "Label": {
+      "type": "object",
+      "title": "Label",
+      "description": "A label used to categorize and organize content.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the label."
+        },
+        "name": {
+          "type": "string",
+          "description": "The display name of the label."
+        },
+        "prefix": {
+          "type": "string",
+          "description": "The prefix indicating the label scope.",
+          "enum": ["global", "my", "team"]
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "LabelArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Label"
+          }
+        },
+        "_links": {
+          "$ref": "#/$defs/PaginationLinks"
+        }
+      }
+    },
+    "SpaceProperty": {
+      "type": "object",
+      "title": "Space Property",
+      "description": "A key-value property stored on a space for custom metadata.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the property."
+        },
+        "key": {
+          "type": "string",
+          "description": "The key of the property."
+        },
+        "value": {
+          "description": "The value of the property. Can be any valid JSON value."
+        },
+        "version": {
+          "$ref": "#/$defs/Version"
+        }
+      },
+      "required": ["id", "key"]
+    },
+    "SpacePropertyArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpaceProperty"
+          }
+        }
+      }
+    },
+    "Version": {
+      "type": "object",
+      "title": "Version",
+      "description": "Version metadata for a resource.",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The ISO 8601 date-time when this version was created."
+        },
+        "message": {
+          "type": ["string", "null"],
+          "description": "An optional message describing the changes in this version."
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The version number."
+        },
+        "minorEdit": {
+          "type": "boolean",
+          "description": "Whether this version was a minor edit."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "The Atlassian account ID of the user who created this version."
+        }
+      },
+      "required": ["number", "createdAt", "authorId"]
+    },
+    "Operation": {
+      "type": "object",
+      "title": "Operation",
+      "description": "An operation that can be performed on a space.",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "description": "The operation type.",
+          "enum": ["create", "read", "update", "delete", "administer"]
+        },
+        "targetType": {
+          "type": "string",
+          "description": "The target type for the operation."
+        }
+      },
+      "required": ["operation"]
+    },
+    "OperationArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Operation"
+          }
+        }
+      }
+    },
+    "SpacePermission": {
+      "type": "object",
+      "title": "Space Permission",
+      "description": "A permission entry controlling access to the space.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the permission entry."
+        },
+        "principal": {
+          "type": "object",
+          "description": "The user, group, or role that this permission applies to.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of principal.",
+              "enum": ["user", "group", "role"]
+            },
+            "id": {
+              "type": "string",
+              "description": "The identifier of the principal."
+            }
+          },
+          "required": ["type", "id"]
+        },
+        "operation": {
+          "$ref": "#/$defs/Operation"
+        }
+      },
+      "required": ["id", "principal", "operation"]
+    },
+    "SpacePermissionArray": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SpacePermission"
+          }
+        }
+      }
+    },
+    "SpaceLinks": {
+      "type": "object",
+      "title": "Space Links",
+      "description": "Hypermedia links associated with the space.",
+      "properties": {
+        "webui": {
+          "type": "string",
+          "format": "uri-reference",
+          "description": "Relative path to view the space in the Confluence web UI."
+        }
+      }
+    },
+    "PaginationLinks": {
+      "type": "object",
+      "title": "Pagination Links",
+      "description": "Links for cursor-based pagination through result sets.",
+      "properties": {
+        "next": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the next page of results."
+        },
+        "base": {
+          "type": "string",
+          "format": "uri",
+          "description": "The base URL of the Confluence instance."
+        }
+      }
+    }
+  }
+}
