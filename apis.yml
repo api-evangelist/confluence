@@ -1,5 +1,5 @@
 aid: confluence
-name: Confluence API
+name: Confluence
 description: APIs for Atlassian Confluence - team collaboration and knowledge management software
 image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
 tags:
