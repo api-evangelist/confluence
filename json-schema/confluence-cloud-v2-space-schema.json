@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Space",
+  "type": "object",
+  "description": "Represents a Confluence space.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the space."
+    },
+    "key": {
+      "type": "string",
+      "description": "The key of the space, used in URLs."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the space."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of space."
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the space."
+    },
+    "authorId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the space creator."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The ISO 8601 timestamp when the space was created."
+    },
+    "homepageId": {
+      "type": "string",
+      "description": "The ID of the space homepage."
+    }
+  }
+}

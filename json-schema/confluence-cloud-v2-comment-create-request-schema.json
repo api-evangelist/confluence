@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CommentCreateRequest",
+  "type": "object",
+  "properties": {
+    "blogPostId": {
+      "type": "string",
+      "description": "The ID of the blog post to comment on."
+    },
+    "pageId": {
+      "type": "string",
+      "description": "The ID of the page to comment on."
+    },
+    "parentCommentId": {
+      "type": "string",
+      "description": "The ID of the parent comment for replies."
+    }
+  }
+}

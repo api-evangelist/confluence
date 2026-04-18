@@ -10,7 +10,7 @@ tags:
   - Knowledge Base
   - Wiki
 created: '2024'
-modified: '2026-03-16'
+modified: '2026-04-18'
 url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
 apis:
   - name: Confluence Cloud REST API v1
@@ -31,13 +31,13 @@ apis:
         url: https://dac-static.atlassian.com/cloud/confluence/swagger.v3.json
       - type: Authentication
         url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/#auth
-      - type: API Examples
+      - type: CodeExamples
         url: https://developer.atlassian.com/cloud/confluence/rest-api-examples/
-      - type: Getting Started
+      - type: GettingStarted
         url: https://developer.atlassian.com/cloud/confluence/getting-started/
-      - type: Change Log
+      - type: ChangeLog
         url: https://developer.atlassian.com/cloud/confluence/changelog/
-      - type: Postman Collection
+      - type: SDK
         url: https://www.postman.com/api-evangelist/atlassian-confluence/collection/k3y2x73/atlassian-confluence-cloud
   - name: Confluence Cloud REST API v2
     description: >-
@@ -60,11 +60,11 @@ apis:
         url: openapi/confluence-cloud-v2.yml
       - type: Authentication
         url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/#authentication
-      - type: Getting Started
+      - type: GettingStarted
         url: https://developer.atlassian.com/cloud/confluence/getting-started/
-      - type: Change Log
+      - type: ChangeLog
         url: https://developer.atlassian.com/cloud/confluence/changelog/
-      - type: Postman Collection
+      - type: SDK
         url: https://www.postman.com/api-reference-library/atlassian-cloud/collection/0a0hjxk/the-confluence-cloud-rest-api-v2
   - name: Confluence Content Properties API
     description: >-
@@ -94,7 +94,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-search/
-      - type: CQL Guide
+      - type: Documentation
         url: https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/
       - type: Authentication
         url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/#auth
@@ -286,7 +286,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.atlassian.com/cloud/confluence/graphql/
-      - type: Platform Documentation
+      - type: Documentation
         url: https://developer.atlassian.com/platform/atlassian-graphql-api/
   - name: Confluence Data Center REST API
     description: >-
@@ -303,13 +303,13 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.atlassian.com/server/confluence/confluence-server-rest-api/
-      - type: API Reference
+      - type: APIReference
         url: https://developer.atlassian.com/server/confluence/rest/v9217/
-      - type: API Examples
+      - type: CodeExamples
         url: https://developer.atlassian.com/server/confluence/confluence-rest-api-examples/
-      - type: Developer Portal
+      - type: DeveloperPortal
         url: https://developer.atlassian.com/server/confluence/
-      - type: Change Log
+      - type: ChangeLog
         url: https://developer.atlassian.com/server/confluence/changelog/
   - name: Confluence Content Attachments API
     description: >-
@@ -999,55 +999,55 @@ maintainers:
 common:
   - type: Portal
     url: https://developer.atlassian.com/
-  - type: Website
+  - type: Documentation
     url: https://www.atlassian.com/software/confluence
-  - type: Getting Started
+  - type: GettingStarted
     url: https://developer.atlassian.com/cloud/confluence/getting-started/
-  - type: Developer Portal
+  - type: DeveloperPortal
     url: https://developer.atlassian.com/cloud/confluence/
-  - type: Rate Limits
+  - type: RateLimits
     url: https://developer.atlassian.com/cloud/confluence/rate-limiting/
-  - type: Changelog
+  - type: ChangeLog
     url: https://developer.atlassian.com/cloud/confluence/changelog/
-  - type: Atlassian Developer Changelog
+  - type: ChangeLog
     url: https://developer.atlassian.com/changelog/
   - type: Support
     url: https://support.atlassian.com/
-  - type: Community
+  - type: Support
     url: https://community.atlassian.com/
-  - type: Developer Community
+  - type: Support
     url: https://community.developer.atlassian.com/
-  - type: Status
+  - type: StatusPage
     url: https://status.atlassian.com/
   - type: Authentication
     url: https://developer.atlassian.com/cloud/confluence/security-overview/
-  - type: OAuth
+  - type: Authentication
     url: https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/
-  - type: OAuth Scopes
+  - type: Authentication
     url: https://developer.atlassian.com/cloud/confluence/scopes-for-oauth-2-3LO-and-forge-apps/
-  - type: Basic Authentication
+  - type: Authentication
     url: https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/
-  - type: Webhooks
+  - type: Documentation
     url: https://developer.atlassian.com/cloud/confluence/using-webhooks/
-  - type: API Examples
+  - type: CodeExamples
     url: https://developer.atlassian.com/cloud/confluence/rest-api-examples/
-  - type: Using the REST API
+  - type: Documentation
     url: https://developer.atlassian.com/cloud/confluence/using-the-rest-api/
-  - type: CQL Guide
+  - type: Documentation
     url: https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/
-  - type: Migration Guide
+  - type: Documentation
     url: https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/
-  - type: Forge Platform
+  - type: Documentation
     url: https://developer.atlassian.com/platform/forge/
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.atlassian.com/legal/privacy-policy
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.atlassian.com/legal/cloud-terms-of-service
   - type: Blog
     url: https://www.atlassian.com/blog/confluence
-  - type: Developer Blog
+  - type: Blog
     url: https://www.atlassian.com/blog/developer
-  - type: Sign Up
+  - type: SignUp
     url: https://www.atlassian.com/try/cloud/signup?bundle=confluence&edition=free
   - type: Login
     url: https://id.atlassian.com/login
@@ -1055,24 +1055,66 @@ common:
     url: https://www.atlassian.com/software/confluence/pricing
   - type: Marketplace
     url: https://marketplace.atlassian.com/
-  - type: GitHub
+  - type: GitHubOrganization
     url: https://github.com/atlassian
   - type: YouTube
     url: https://www.youtube.com/@Atlassian
-  - type: Stack Overflow
+  - type: StackOverflow
     url: https://stackoverflow.com/questions/tagged/atlassian-confluence
   - type: LinkedIn
     url: https://www.linkedin.com/company/atlassian
-  - type: Twitter
+  - type: X
     url: https://twitter.com/Atlassian
-  - type: SDKs
+  - type: SDK
     url: https://developer.atlassian.com/server/framework/atlassian-sdk/
-  - type: Python SDK
+  - type: SDK
     url: https://github.com/atlassian-api/atlassian-python-api
-  - type: Node.js SDK
+  - type: SDK
     url: https://mrrefactoring.github.io/confluence.js/
-  - type: Postman Collection
+  - type: SDK
     url: https://www.postman.com/api-evangelist/atlassian-confluence/collection/k3y2x73/atlassian-confluence-cloud
+  - type: Features
+    data:
+      - name: Content Management
+        description: Create, read, update, and delete pages, blog posts, and other content types with full version history.
+      - name: Space Management
+        description: Organize content into spaces with configurable permissions and settings.
+      - name: Real-Time Collaboration
+        description: Multiple users can edit pages simultaneously with live cursor tracking.
+      - name: Search with CQL
+        description: Advanced search using Confluence Query Language for precise content discovery.
+      - name: Webhooks
+        description: Real-time event notifications for content changes, space updates, and user actions.
+      - name: Content Templates
+        description: Standardized page creation using blueprints and customizable templates.
+      - name: Labels and Organization
+        description: Tag and categorize content with labels for improved discovery and navigation.
+      - name: Permissions and Access Control
+        description: Granular read and update restrictions at space and content level.
+  - type: UseCases
+    data:
+      - name: Knowledge Base
+        description: Build and maintain internal knowledge bases for teams with structured content and search.
+      - name: Project Documentation
+        description: Create and collaborate on project documentation with version tracking and approvals.
+      - name: Content Migration
+        description: Programmatically migrate content between Confluence instances or from other platforms.
+      - name: Compliance and Auditing
+        description: Track content changes, manage access controls, and maintain audit trails.
+      - name: Automated Publishing
+        description: Generate and publish content programmatically from CI/CD pipelines or other systems.
+  - type: Integrations
+    data:
+      - name: Jira
+        description: Link Confluence pages to Jira issues for seamless project management workflows.
+      - name: Slack
+        description: Receive Confluence notifications and preview pages directly in Slack channels.
+      - name: Microsoft Teams
+        description: Collaborate on Confluence content within Microsoft Teams conversations.
+      - name: Trello
+        description: Embed Trello boards in Confluence pages and link cards to documentation.
+      - name: GitHub
+        description: Embed code snippets and link repositories to Confluence documentation.
   - type: OpenAPI
     url: openapi/confluence-cloud-v2.yml
   - type: OpenAPI
@@ -1085,3 +1127,5 @@ common:
     url: json-schema/confluence-space-schema.json
   - type: JSONLD
     url: json-ld/confluence-context.jsonld
+  - type: JSONLD
+    url: json-ld/confluence-cloud-v2-context.jsonld

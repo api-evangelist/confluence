@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PageBulk",
+  "type": "object",
+  "description": "A paginated list of pages.",
+  "properties": {
+    "results": {
+      "type": "array"
+    }
+  }
+}

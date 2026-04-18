@@ -1,0 +1,11 @@
+{
+  "id": "abc123",
+  "status": "example_value",
+  "title": "Example Title",
+  "blogPostId": "500123",
+  "pageId": "500123",
+  "parentCommentId": "500123",
+  "authorId": "500123",
+  "createdAt": "example_value",
+  "resolutionStatus": "example_value"
+}

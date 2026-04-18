@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-structure.org/draft/2020-12/schema",
+  "name": "Page",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "spaceId": {
+      "type": "string"
+    },
+    "parentId": {
+      "type": "string"
+    },
+    "parentType": {
+      "type": "string"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "authorId": {
+      "type": "string"
+    },
+    "ownerId": {
+      "type": "string"
+    },
+    "lastOwnerId": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    }
+  }
+}

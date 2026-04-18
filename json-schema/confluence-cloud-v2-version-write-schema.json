@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VersionWrite",
+  "type": "object",
+  "properties": {
+    "number": {
+      "type": "integer",
+      "description": "The new version number. Must be incremented by 1."
+    },
+    "message": {
+      "type": "string",
+      "description": "An optional message associated with this version."
+    }
+  }
+}

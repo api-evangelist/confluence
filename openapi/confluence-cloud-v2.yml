@@ -18,61 +18,61 @@ info:
   x-logo:
     url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
 servers:
-  - url: https://{domain}.atlassian.net/wiki/api/v2
-    description: Confluence Cloud
-    variables:
-      domain:
-        default: your-domain
-        description: Your Atlassian Cloud site domain
+- url: https://{domain}.atlassian.net/wiki/api/v2
+  description: Confluence Cloud
+  variables:
+    domain:
+      default: your-domain
+      description: Your Atlassian Cloud site domain
 security:
-  - basicAuth: []
-  - oAuth2: []
-  - bearerAuth: []
+- basicAuth: []
+- oAuth2: []
+- bearerAuth: []
 tags:
-  - name: Page
-    description: Create, retrieve, update, and delete pages
-    externalDocs:
-      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/
-  - name: Space
-    description: Retrieve and manage Confluence spaces
-    externalDocs:
-      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
-  - name: Comment
-    description: Create, retrieve, update, and delete comments on pages and blog posts
-    externalDocs:
-      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-comment/
-  - name: Blog Post
-    description: Create, retrieve, update, and delete blog posts
-    externalDocs:
-      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-blog-post/
-  - name: Attachment
-    description: Manage file attachments on content
-    externalDocs:
-      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-attachment/
-  - name: Label
-    description: Manage labels on content
-    externalDocs:
-      url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-label/
+- name: Page
+  description: Create, retrieve, update, and delete pages
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/
+- name: Space
+  description: Retrieve and manage Confluence spaces
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
+- name: Comment
+  description: Create, retrieve, update, and delete comments on pages and blog posts
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-comment/
+- name: Blog Post
+  description: Create, retrieve, update, and delete blog posts
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-blog-post/
+- name: Attachment
+  description: Manage file attachments on content
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-attachment/
+- name: Label
+  description: Manage labels on content
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-label/
 paths:
   /pages:
     get:
       operationId: getPages
-      summary: Get pages
+      summary: Get Pages
       description: >-
         Returns all pages. The number of results is limited by the limit
         parameter and additional results can be retrieved via the next cursor.
         Results can be filtered by space, status, title, and body format.
       tags:
-        - Page
+      - Page
       parameters:
-        - $ref: '#/components/parameters/PageIdParam'
-        - $ref: '#/components/parameters/SpaceIdFilter'
-        - $ref: '#/components/parameters/StatusFilter'
-        - $ref: '#/components/parameters/TitleFilter'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/SortParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/PageIdParam'
+      - $ref: '#/components/parameters/SpaceIdFilter'
+      - $ref: '#/components/parameters/StatusFilter'
+      - $ref: '#/components/parameters/TitleFilter'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the requested pages are returned.
@@ -80,27 +80,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageBulk'
+              examples:
+                Getpages200Example:
+                  summary: Default getPages 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      spaceId: '500123'
+                      parentId: '500123'
+                      parentType: page
+                      position: 10
+                      authorId: '500123'
+                      ownerId: '500123'
+                      lastOwnerId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                    _links:
+                      next: example_value
+                      base: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       operationId: createPage
-      summary: Create page
+      summary: Create Page
       description: >-
         Creates a page in the space. Pages can be created as a child of another
         page by specifying the parentId. Pages are created in the current
         status (draft or current).
       tags:
-        - Page
+      - Page
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PageCreateRequest'
+            examples:
+              CreatepageRequestExample:
+                summary: Default createPage request
+                x-microcks-default: true
+                value:
+                  spaceId: '500123'
+                  status: current
+                  title: Example Title
+                  parentId: '500123'
+                  body:
+                    representation: storage
+                    value: example_value
       responses:
         '200':
           description: Returned if the page was created successfully.
@@ -108,26 +143,71 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Page'
+              examples:
+                Createpage200Example:
+                  summary: Default createPage 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    spaceId: '500123'
+                    parentId: '500123'
+                    parentType: page
+                    position: 10
+                    authorId: '500123'
+                    ownerId: '500123'
+                    lastOwnerId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    labels:
+                      results:
+                      - {}
+                    properties:
+                      results:
+                      - {}
+                    operations:
+                      results:
+                      - {}
+                    likes:
+                      results:
+                      - {}
+                    versions:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
+                      editui: example_value
+                      tinyui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /pages/{id}:
     get:
       operationId: getPageById
-      summary: Get page by id
+      summary: Get Page by Id
       description: >-
         Returns a specific page. The response includes the page body in the
         requested format, version information, and links.
       tags:
-        - Page
+      - Page
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/GetDraftParam'
-        - $ref: '#/components/parameters/VersionParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/GetDraftParam'
+      - $ref: '#/components/parameters/VersionParam'
       responses:
         '200':
           description: Returned if the requested page is returned.
@@ -135,29 +215,90 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Page'
+              examples:
+                Getpagebyid200Example:
+                  summary: Default getPageById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    spaceId: '500123'
+                    parentId: '500123'
+                    parentType: page
+                    position: 10
+                    authorId: '500123'
+                    ownerId: '500123'
+                    lastOwnerId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    labels:
+                      results:
+                      - {}
+                    properties:
+                      results:
+                      - {}
+                    operations:
+                      results:
+                      - {}
+                    likes:
+                      results:
+                      - {}
+                    versions:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
+                      editui: example_value
+                      tinyui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       operationId: updatePage
-      summary: Update page
+      summary: Update Page
       description: >-
         Updates a page by id. The request body must include the current version
         number, the new title, the space id, the status, and the body in the
         specified representation.
       tags:
-        - Page
+      - Page
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/ContentIdPath'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PageUpdateRequest'
+            examples:
+              UpdatepageRequestExample:
+                summary: Default updatePage request
+                x-microcks-default: true
+                value:
+                  id: abc123
+                  status: current
+                  title: Example Title
+                  spaceId: '500123'
+                  parentId: '500123'
+                  body:
+                    representation: storage
+                    value: example_value
+                  version:
+                    number: 10
+                    message: example_value
       responses:
         '200':
           description: Returned if the page was updated successfully.
@@ -165,6 +306,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Page'
+              examples:
+                Updatepage200Example:
+                  summary: Default updatePage 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    spaceId: '500123'
+                    parentId: '500123'
+                    parentType: page
+                    position: 10
+                    authorId: '500123'
+                    ownerId: '500123'
+                    lastOwnerId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    labels:
+                      results:
+                      - {}
+                    properties:
+                      results:
+                      - {}
+                    operations:
+                      results:
+                      - {}
+                    likes:
+                      results:
+                      - {}
+                    versions:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
+                      editui: example_value
+                      tinyui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -173,22 +356,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       operationId: deletePage
-      summary: Delete page
+      summary: Delete Page
       description: >-
         Deletes a page by id. By default pages are moved to trash. To purge a
         page permanently, set the purge parameter to true.
       tags:
-        - Page
+      - Page
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - name: purge
-          in: query
-          description: If true, the page is permanently deleted instead of moved to trash.
-          schema:
-            type: boolean
-            default: false
+      - $ref: '#/components/parameters/ContentIdPath'
+      - name: purge
+        in: query
+        description: If true, the page is permanently deleted instead of moved to trash.
+        schema:
+          type: boolean
+          default: false
+        example: true
       responses:
         '204':
           description: Returned if the page was deleted successfully.
@@ -198,18 +385,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /pages/{id}/children:
     get:
       operationId: getChildPages
-      summary: Get child pages
+      summary: Get Child Pages
       description: Returns the child pages of a specific page, ordered by position in the page tree.
       tags:
-        - Page
+      - Page
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
-        - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/SortParam'
       responses:
         '200':
           description: Returned if the child pages are returned.
@@ -217,24 +407,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageBulk'
+              examples:
+                Getchildpages200Example:
+                  summary: Default getChildPages 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      spaceId: '500123'
+                      parentId: '500123'
+                      parentType: page
+                      position: 10
+                      authorId: '500123'
+                      ownerId: '500123'
+                      lastOwnerId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                    _links:
+                      next: example_value
+                      base: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /pages/{id}/labels:
     get:
       operationId: getPageLabels
-      summary: Get labels for page
+      summary: Get Labels for Page
       description: Returns the labels associated with a specific page.
       tags:
-        - Label
+      - Label
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/LabelPrefixParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/LabelPrefixParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the labels are returned.
@@ -242,62 +455,82 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LabelArray'
+              examples:
+                Getpagelabels200Example:
+                  summary: Default getPageLabels 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      name: Example Title
+                      prefix: example_value
+                    _links:
+                      next: example_value
+                      base: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /spaces:
     get:
       operationId: getSpaces
-      summary: Get spaces
+      summary: Get Spaces
       description: >-
         Returns all spaces. The results can be filtered by space type, status,
         and labels. Pagination is cursor-based.
       tags:
-        - Space
+      - Space
       parameters:
-        - name: ids
-          in: query
-          description: Filter by space IDs. Multiple IDs can be specified as comma-separated values.
-          schema:
-            type: array
-            items:
-              type: integer
-              format: int64
-        - name: keys
-          in: query
-          description: Filter by space keys. Multiple keys can be specified as comma-separated values.
-          schema:
-            type: array
-            items:
-              type: string
-        - name: type
-          in: query
-          description: Filter by space type.
-          schema:
+      - name: ids
+        in: query
+        description: Filter by space IDs. Multiple IDs can be specified as comma-separated values.
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+        example: []
+      - name: keys
+        in: query
+        description: Filter by space keys. Multiple keys can be specified as comma-separated values.
+        schema:
+          type: array
+          items:
             type: string
-            enum:
-              - global
-              - personal
-        - name: status
-          in: query
-          description: Filter by space status.
-          schema:
+        example: []
+      - name: type
+        in: query
+        description: Filter by space type.
+        schema:
+          type: string
+          enum:
+          - global
+          - personal
+        example: global
+      - name: status
+        in: query
+        description: Filter by space status.
+        schema:
+          type: string
+          enum:
+          - current
+          - archived
+        example: current
+      - name: labels
+        in: query
+        description: Filter by space labels. Multiple labels can be specified.
+        schema:
+          type: array
+          items:
             type: string
-            enum:
-              - current
-              - archived
-        - name: labels
-          in: query
-          description: Filter by space labels. Multiple labels can be specified.
-          schema:
-            type: array
-            items:
-              type: string
-        - $ref: '#/components/parameters/SortParam'
-        - $ref: '#/components/parameters/DescriptionFormatParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+        example: []
+      - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/DescriptionFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the requested spaces are returned.
@@ -305,26 +538,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SpaceBulk'
+              examples:
+                Getspaces200Example:
+                  summary: Default getSpaces 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      key: example_value
+                      name: Example Title
+                      type: global
+                      status: current
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      homepageId: '500123'
+                    _links:
+                      next: example_value
+                      base: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /spaces/{id}:
     get:
       operationId: getSpaceById
-      summary: Get space by id
+      summary: Get Space by Id
       description: Returns a specific space by its id.
       tags:
-        - Space
+      - Space
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the space.
-          schema:
-            type: integer
-            format: int64
-        - $ref: '#/components/parameters/DescriptionFormatParam'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - $ref: '#/components/parameters/DescriptionFormatParam'
       responses:
         '200':
           description: Returned if the requested space is returned.
@@ -332,39 +586,75 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Space'
+              examples:
+                Getspacebyid200Example:
+                  summary: Default getSpaceById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    key: example_value
+                    name: Example Title
+                    type: global
+                    status: current
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    homepageId: '500123'
+                    description: {}
+                    icon:
+                      path: example_value
+                      apiDownloadLink: example_value
+                    labels:
+                      results:
+                      - {}
+                    properties:
+                      results:
+                      - {}
+                    operations:
+                      results:
+                      - {}
+                    permissions:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /spaces/{id}/pages:
     get:
       operationId: getPagesInSpace
-      summary: Get pages in space
+      summary: Get Pages in Space
       description: Returns all pages in a specific space. Supports filtering by status and depth.
       tags:
-        - Page
-        - Space
+      - Page
+      - Space
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the space.
-          schema:
-            type: integer
-            format: int64
-        - name: depth
-          in: query
-          description: Filter by depth in the page tree. Use root to get only top-level pages.
-          schema:
-            type: string
-            enum:
-              - all
-              - root
-        - $ref: '#/components/parameters/StatusFilter'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/SortParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - name: depth
+        in: query
+        description: Filter by depth in the page tree. Use root to get only top-level pages.
+        schema:
+          type: string
+          enum:
+          - all
+          - root
+        example: all
+      - $ref: '#/components/parameters/StatusFilter'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the pages in the space are returned.
@@ -372,24 +662,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageBulk'
+              examples:
+                Getpagesinspace200Example:
+                  summary: Default getPagesInSpace 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      spaceId: '500123'
+                      parentId: '500123'
+                      parentType: page
+                      position: 10
+                      authorId: '500123'
+                      ownerId: '500123'
+                      lastOwnerId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                    _links:
+                      next: example_value
+                      base: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /pages/{id}/footer-comments:
     get:
       operationId: getFooterComments
-      summary: Get footer comments for page
+      summary: Get Footer Comments for Page
       description: Returns the footer comments of a specific page.
       tags:
-        - Comment
+      - Comment
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the footer comments are returned.
@@ -397,22 +710,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentBulk'
+              examples:
+                Getfootercomments200Example:
+                  summary: Default getFooterComments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      blogPostId: '500123'
+                      pageId: '500123'
+                      parentCommentId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      resolutionStatus: open
+                    _links:
+                      next: example_value
+                      base: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /pages/{id}/inline-comments:
     get:
       operationId: getInlineComments
-      summary: Get inline comments for page
+      summary: Get Inline Comments for Page
       description: Returns the inline comments of a specific page.
       tags:
-        - Comment
+      - Comment
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the inline comments are returned.
@@ -420,23 +754,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentBulk'
+              examples:
+                Getinlinecomments200Example:
+                  summary: Default getInlineComments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      blogPostId: '500123'
+                      pageId: '500123'
+                      parentCommentId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      resolutionStatus: open
+                    _links:
+                      next: example_value
+                      base: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /footer-comments:
     post:
       operationId: createFooterComment
-      summary: Create footer comment
+      summary: Create Footer Comment
       description: Creates a footer comment on a page or blog post.
       tags:
-        - Comment
+      - Comment
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CommentCreateRequest'
+            examples:
+              CreatefootercommentRequestExample:
+                summary: Default createFooterComment request
+                x-microcks-default: true
+                value:
+                  blogPostId: '500123'
+                  pageId: '500123'
+                  parentCommentId: '500123'
+                  body:
+                    representation: storage
+                    value: example_value
       responses:
         '200':
           description: Returned if the comment was created successfully.
@@ -444,25 +810,67 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+              examples:
+                Createfootercomment200Example:
+                  summary: Default createFooterComment 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /inline-comments:
     post:
       operationId: createInlineComment
-      summary: Create inline comment
+      summary: Create Inline Comment
       description: Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection.
       tags:
-        - Comment
+      - Comment
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/InlineCommentCreateRequest'
+            examples:
+              CreateinlinecommentRequestExample:
+                summary: Default createInlineComment request
+                x-microcks-default: true
+                value:
+                  blogPostId: '500123'
+                  pageId: '500123'
+                  body:
+                    representation: storage
+                    value: example_value
+                  inlineCommentProperties:
+                    textSelection: example_value
+                    textSelectionMatchCount: 10
       responses:
         '200':
           description: Returned if the inline comment was created successfully.
@@ -470,29 +878,59 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+              examples:
+                Createinlinecomment200Example:
+                  summary: Default createInlineComment 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /comments/{id}:
     get:
       operationId: getCommentById
-      summary: Get comment by id
+      summary: Get Comment by Id
       description: Returns a specific comment by id.
       tags:
-        - Comment
+      - Comment
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the comment.
-          schema:
-            type: integer
-            format: int64
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/VersionParam'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/VersionParam'
       responses:
         '200':
           description: Returned if the comment is returned.
@@ -500,30 +938,71 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+              examples:
+                Getcommentbyid200Example:
+                  summary: Default getCommentById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       operationId: updateComment
-      summary: Update comment
+      summary: Update Comment
       description: Updates a comment by id. The version number must be incremented.
       tags:
-        - Comment
+      - Comment
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the comment.
-          schema:
-            type: integer
-            format: int64
+      - name: id
+        in: path
+        required: true
+        description: The ID of the comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CommentUpdateRequest'
+            examples:
+              UpdatecommentRequestExample:
+                summary: Default updateComment request
+                x-microcks-default: true
+                value:
+                  body:
+                    representation: storage
+                    value: example_value
+                  version:
+                    number: 10
+                    message: example_value
       responses:
         '200':
           description: Returned if the comment was updated successfully.
@@ -531,26 +1010,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+              examples:
+                Updatecomment200Example:
+                  summary: Default updateComment 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       operationId: deleteComment
-      summary: Delete comment
+      summary: Delete Comment
       description: Deletes a comment by id.
       tags:
-        - Comment
+      - Comment
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the comment.
-          schema:
-            type: integer
-            format: int64
+      - name: id
+        in: path
+        required: true
+        description: The ID of the comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
       responses:
         '204':
           description: Returned if the comment was deleted successfully.
@@ -558,24 +1067,28 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /comments/{id}/children:
     get:
       operationId: getChildComments
-      summary: Get child comments
+      summary: Get Child Comments
       description: Returns the child (reply) comments of a specific comment.
       tags:
-        - Comment
+      - Comment
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the parent comment.
-          schema:
-            type: integer
-            format: int64
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the child comments are returned.
@@ -583,25 +1096,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentBulk'
+              examples:
+                Getchildcomments200Example:
+                  summary: Default getChildComments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      blogPostId: '500123'
+                      pageId: '500123'
+                      parentCommentId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      resolutionStatus: open
+                    _links:
+                      next: example_value
+                      base: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /blogposts:
     get:
       operationId: getBlogPosts
-      summary: Get blog posts
+      summary: Get Blog Posts
       description: Returns all blog posts. Results can be filtered by space, status, and title.
       tags:
-        - Blog Post
+      - Blog Post
       parameters:
-        - $ref: '#/components/parameters/SpaceIdFilter'
-        - $ref: '#/components/parameters/StatusFilter'
-        - $ref: '#/components/parameters/TitleFilter'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/SortParam'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/SpaceIdFilter'
+      - $ref: '#/components/parameters/StatusFilter'
+      - $ref: '#/components/parameters/TitleFilter'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the blog posts are returned.
@@ -609,22 +1143,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlogPostBulk'
+              examples:
+                Getblogposts200Example:
+                  summary: Default getBlogPosts 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      spaceId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                    _links:
+                      next: example_value
+                      base: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       operationId: createBlogPost
-      summary: Create blog post
+      summary: Create Blog Post
       description: Creates a blog post in the specified space.
       tags:
-        - Blog Post
+      - Blog Post
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/BlogPostCreateRequest'
+            examples:
+              CreateblogpostRequestExample:
+                summary: Default createBlogPost request
+                x-microcks-default: true
+                value:
+                  spaceId: '500123'
+                  status: current
+                  title: Example Title
+                  body:
+                    representation: storage
+                    value: example_value
       responses:
         '200':
           description: Returned if the blog post was created successfully.
@@ -632,23 +1195,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlogPost'
+              examples:
+                Createblogpost200Example:
+                  summary: Default createBlogPost 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    spaceId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    labels:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /blogposts/{id}:
     get:
       operationId: getBlogPostById
-      summary: Get blog post by id
+      summary: Get Blog Post by Id
       description: Returns a specific blog post by id.
       tags:
-        - Blog Post
+      - Blog Post
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/BodyFormatParam'
-        - $ref: '#/components/parameters/VersionParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/VersionParam'
       responses:
         '200':
           description: Returned if the blog post is returned.
@@ -656,24 +1245,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlogPost'
+              examples:
+                Getblogpostbyid200Example:
+                  summary: Default getBlogPostById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    spaceId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    labels:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       operationId: updateBlogPost
-      summary: Update blog post
+      summary: Update Blog Post
       description: Updates a blog post by id.
       tags:
-        - Blog Post
+      - Blog Post
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/ContentIdPath'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/BlogPostUpdateRequest'
+            examples:
+              UpdateblogpostRequestExample:
+                summary: Default updateBlogPost request
+                x-microcks-default: true
+                value:
+                  id: abc123
+                  status: current
+                  title: Example Title
+                  body:
+                    representation: storage
+                    value: example_value
+                  version:
+                    number: 10
+                    message: example_value
       responses:
         '200':
           description: Returned if the blog post was updated successfully.
@@ -681,20 +1310,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlogPost'
+              examples:
+                Updateblogpost200Example:
+                  summary: Default updateBlogPost 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    spaceId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    labels:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       operationId: deleteBlogPost
-      summary: Delete blog post
+      summary: Delete Blog Post
       description: Deletes a blog post by id.
       tags:
-        - Blog Post
+      - Blog Post
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/ContentIdPath'
       responses:
         '204':
           description: Returned if the blog post was deleted successfully.
@@ -702,15 +1357,18 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /attachments/{id}:
     get:
       operationId: getAttachmentById
-      summary: Get attachment by id
+      summary: Get Attachment by Id
       description: Returns a specific attachment by id.
       tags:
-        - Attachment
+      - Attachment
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/ContentIdPath'
       responses:
         '200':
           description: Returned if the attachment is returned.
@@ -718,18 +1376,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Attachment'
+              examples:
+                Getattachmentbyid200Example:
+                  summary: Default getAttachmentById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    mediaType: example_value
+                    mediaTypeDescription: example_value
+                    comment: example_value
+                    fileSize: 10
+                    webuiLink: example_value
+                    downloadLink: example_value
+                    pageId: '500123'
+                    blogPostId: '500123'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    _links:
+                      webui: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       operationId: deleteAttachment
-      summary: Delete attachment
+      summary: Delete Attachment
       description: Deletes an attachment by id.
       tags:
-        - Attachment
+      - Attachment
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/ContentIdPath'
       responses:
         '204':
           description: Returned if the attachment was deleted successfully.
@@ -737,17 +1422,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /pages/{id}/attachments:
     get:
       operationId: getPageAttachments
-      summary: Get attachments for page
+      summary: Get Attachments for Page
       description: Returns the attachments of a specific page.
       tags:
-        - Attachment
+      - Attachment
       parameters:
-        - $ref: '#/components/parameters/ContentIdPath'
-        - $ref: '#/components/parameters/CursorParam'
-        - $ref: '#/components/parameters/LimitParam'
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
       responses:
         '200':
           description: Returned if the attachments are returned.
@@ -755,25 +1443,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AttachmentBulk'
+              examples:
+                Getpageattachments200Example:
+                  summary: Default getPageAttachments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      mediaType: example_value
+                      mediaTypeDescription: example_value
+                      comment: example_value
+                      fileSize: 10
+                      webuiLink: example_value
+                      downloadLink: example_value
+                      pageId: '500123'
+                      blogPostId: '500123'
+                    _links:
+                      next: example_value
+                      base: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /labels/{id}:
     get:
       operationId: getLabelById
-      summary: Get label by id
+      summary: Get Label by Id
       description: Returns a specific label by id.
       tags:
-        - Label
+      - Label
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the label.
-          schema:
-            type: integer
-            format: int64
+      - name: id
+        in: path
+        required: true
+        description: The ID of the label.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
       responses:
         '200':
           description: Returned if the label is returned.
@@ -781,10 +1493,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Label'
+              examples:
+                Getlabelbyid200Example:
+                  summary: Default getLabelById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    name: Example Title
+                    prefix: example_value
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   securitySchemes:
     basicAuth:
@@ -848,10 +1571,10 @@ components:
       schema:
         type: string
         enum:
-          - current
-          - archived
-          - draft
-          - trashed
+        - current
+        - archived
+        - draft
+        - trashed
     TitleFilter:
       name: title
       in: query
@@ -865,12 +1588,12 @@ components:
       schema:
         type: string
         enum:
-          - storage
-          - atlas_doc_format
-          - view
-          - export_view
-          - anonymous_export_view
-          - editor
+        - storage
+        - atlas_doc_format
+        - view
+        - export_view
+        - anonymous_export_view
+        - editor
     DescriptionFormatParam:
       name: description-format
       in: query
@@ -878,8 +1601,8 @@ components:
       schema:
         type: string
         enum:
-          - plain
-          - view
+        - plain
+        - view
     SortParam:
       name: sort
       in: query
@@ -889,14 +1612,14 @@ components:
       schema:
         type: string
         enum:
-          - id
-          - -id
-          - title
-          - -title
-          - created-date
-          - -created-date
-          - modified-date
-          - -modified-date
+        - id
+        - -id
+        - title
+        - -title
+        - created-date
+        - -created-date
+        - modified-date
+        - -modified-date
     CursorParam:
       name: cursor
       in: query
@@ -936,9 +1659,9 @@ components:
       schema:
         type: string
         enum:
-          - global
-          - my
-          - team
+        - global
+        - my
+        - team
   schemas:
     Page:
       type: object
@@ -947,45 +1670,56 @@ components:
         id:
           type: string
           description: The unique identifier of the page.
+          example: abc123
         status:
           type: string
           description: The current status of the page.
           enum:
-            - current
-            - draft
-            - archived
-            - trashed
+          - current
+          - draft
+          - archived
+          - trashed
+          example: current
         title:
           type: string
           description: The title of the page.
+          example: Example Title
         spaceId:
           type: string
           description: The ID of the space this page belongs to.
+          example: '500123'
         parentId:
           type: string
           description: The ID of the parent page, if the page is nested.
+          example: '500123'
         parentType:
           type: string
           description: The type of the parent (page or space).
           enum:
-            - page
-            - space
+          - page
+          - space
+          example: page
         position:
           type: integer
           description: The position of this page in the page tree relative to siblings.
+          example: 10
         authorId:
           type: string
           description: The Atlassian account ID of the page author.
+          example: '500123'
         ownerId:
           type: string
           description: The Atlassian account ID of the page owner.
+          example: '500123'
         lastOwnerId:
           type: string
           description: The Atlassian account ID of the previous owner.
+          example: '500123'
         createdAt:
           type: string
           format: date-time
           description: The ISO 8601 timestamp when the page was created.
+          example: '2026-01-15T10:30:00Z'
         version:
           $ref: '#/components/schemas/Version'
         body:
@@ -1010,61 +1744,71 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Page'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     PageCreateRequest:
       type: object
       required:
-        - spaceId
-        - status
-        - title
-        - body
+      - spaceId
+      - status
+      - title
+      - body
       properties:
         spaceId:
           type: string
           description: The ID of the space to create the page in.
+          example: '500123'
         status:
           type: string
           description: The status of the page.
           enum:
-            - current
-            - draft
+          - current
+          - draft
+          example: current
         title:
           type: string
           description: The title of the page.
+          example: Example Title
         parentId:
           type: string
           description: The ID of the parent page. If omitted, the page will be a root-level page.
+          example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
     PageUpdateRequest:
       type: object
       required:
-        - id
-        - status
-        - title
-        - body
-        - version
+      - id
+      - status
+      - title
+      - body
+      - version
       properties:
         id:
           type: string
           description: The ID of the page being updated.
+          example: abc123
         status:
           type: string
           description: The status of the page.
           enum:
-            - current
-            - draft
-            - archived
+          - current
+          - draft
+          - archived
+          example: current
         title:
           type: string
           description: The new title of the page.
+          example: Example Title
         spaceId:
           type: string
           description: The ID of the space the page belongs to.
+          example: '500123'
         parentId:
           type: string
           description: The ID of the new parent page.
+          example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
         version:
@@ -1076,34 +1820,42 @@ components:
         id:
           type: string
           description: The unique identifier of the space.
+          example: abc123
         key:
           type: string
           description: The key of the space, used in URLs.
+          example: example_value
         name:
           type: string
           description: The name of the space.
+          example: Example Title
         type:
           type: string
           description: The type of space.
           enum:
-            - global
-            - personal
+          - global
+          - personal
+          example: global
         status:
           type: string
           description: The status of the space.
           enum:
-            - current
-            - archived
+          - current
+          - archived
+          example: current
         authorId:
           type: string
           description: The Atlassian account ID of the space creator.
+          example: '500123'
         createdAt:
           type: string
           format: date-time
           description: The ISO 8601 timestamp when the space was created.
+          example: '2026-01-15T10:30:00Z'
         homepageId:
           type: string
           description: The ID of the space homepage.
+          example: '500123'
         description:
           $ref: '#/components/schemas/SpaceDescription'
         icon:
@@ -1126,6 +1878,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Space'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     Comment:
@@ -1135,32 +1888,40 @@ components:
         id:
           type: string
           description: The unique identifier of the comment.
+          example: abc123
         status:
           type: string
           description: The current status of the comment.
           enum:
-            - current
-            - draft
-            - trashed
+          - current
+          - draft
+          - trashed
+          example: current
         title:
           type: string
           description: The title of the comment (typically auto-generated).
+          example: Example Title
         blogPostId:
           type: string
           description: The ID of the blog post the comment is on, if applicable.
+          example: '500123'
         pageId:
           type: string
           description: The ID of the page the comment is on, if applicable.
+          example: '500123'
         parentCommentId:
           type: string
           description: The ID of the parent comment, if this is a reply.
+          example: '500123'
         authorId:
           type: string
           description: The Atlassian account ID of the comment author.
+          example: '500123'
         createdAt:
           type: string
           format: date-time
           description: The ISO 8601 timestamp when the comment was created.
+          example: '2026-01-15T10:30:00Z'
         version:
           $ref: '#/components/schemas/Version'
         body:
@@ -1169,9 +1930,10 @@ components:
           type: string
           description: Resolution status for inline comments.
           enum:
-            - open
-            - resolved
-            - reopened
+          - open
+          - resolved
+          - reopened
+          example: open
         properties:
           $ref: '#/components/schemas/InlineCommentProperties'
         _links:
@@ -1184,36 +1946,42 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Comment'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     CommentCreateRequest:
       type: object
       required:
-        - body
+      - body
       properties:
         blogPostId:
           type: string
           description: The ID of the blog post to comment on.
+          example: '500123'
         pageId:
           type: string
           description: The ID of the page to comment on.
+          example: '500123'
         parentCommentId:
           type: string
           description: The ID of the parent comment for replies.
+          example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
     InlineCommentCreateRequest:
       type: object
       required:
-        - body
-        - inlineCommentProperties
+      - body
+      - inlineCommentProperties
       properties:
         blogPostId:
           type: string
           description: The ID of the blog post to add an inline comment on.
+          example: '500123'
         pageId:
           type: string
           description: The ID of the page to add an inline comment on.
+          example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
         inlineCommentProperties:
@@ -1221,8 +1989,8 @@ components:
     CommentUpdateRequest:
       type: object
       required:
-        - body
-        - version
+      - body
+      - version
       properties:
         body:
           $ref: '#/components/schemas/BodyWrite'
@@ -1235,26 +2003,32 @@ components:
         id:
           type: string
           description: The unique identifier of the blog post.
+          example: abc123
         status:
           type: string
           description: The current status of the blog post.
           enum:
-            - current
-            - draft
-            - trashed
+          - current
+          - draft
+          - trashed
+          example: current
         title:
           type: string
           description: The title of the blog post.
+          example: Example Title
         spaceId:
           type: string
           description: The ID of the space this blog post belongs to.
+          example: '500123'
         authorId:
           type: string
           description: The Atlassian account ID of the blog post author.
+          example: '500123'
         createdAt:
           type: string
           format: date-time
           description: The ISO 8601 timestamp when the blog post was created.
+          example: '2026-01-15T10:30:00Z'
         version:
           $ref: '#/components/schemas/Version'
         body:
@@ -1271,51 +2045,58 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BlogPost'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     BlogPostCreateRequest:
       type: object
       required:
-        - spaceId
-        - status
-        - title
-        - body
+      - spaceId
+      - status
+      - title
+      - body
       properties:
         spaceId:
           type: string
           description: The ID of the space to create the blog post in.
+          example: '500123'
         status:
           type: string
           description: The status of the blog post.
           enum:
-            - current
-            - draft
+          - current
+          - draft
+          example: current
         title:
           type: string
           description: The title of the blog post.
+          example: Example Title
         body:
           $ref: '#/components/schemas/BodyWrite'
     BlogPostUpdateRequest:
       type: object
       required:
-        - id
-        - status
-        - title
-        - body
-        - version
+      - id
+      - status
+      - title
+      - body
+      - version
       properties:
         id:
           type: string
           description: The ID of the blog post being updated.
+          example: abc123
         status:
           type: string
           description: The status of the blog post.
           enum:
-            - current
-            - draft
+          - current
+          - draft
+          example: current
         title:
           type: string
           description: The new title of the blog post.
+          example: Example Title
         body:
           $ref: '#/components/schemas/BodyWrite'
         version:
@@ -1327,40 +2108,51 @@ components:
         id:
           type: string
           description: The unique identifier of the attachment.
+          example: abc123
         status:
           type: string
           description: The status of the attachment.
           enum:
-            - current
-            - trashed
+          - current
+          - trashed
+          example: current
         title:
           type: string
           description: The filename of the attachment.
+          example: Example Title
         mediaType:
           type: string
           description: The MIME type of the attachment.
+          example: example_value
         mediaTypeDescription:
           type: string
           description: Human-readable description of the media type.
+          example: example_value
         comment:
           type: string
           description: Comment associated with the attachment upload.
+          example: example_value
         fileSize:
           type: integer
           format: int64
           description: File size in bytes.
+          example: 10
         webuiLink:
           type: string
           description: The web UI link for viewing the attachment.
+          example: example_value
         downloadLink:
           type: string
           description: The download link for the attachment.
+          example: example_value
         pageId:
           type: string
           description: The ID of the page this attachment belongs to.
+          example: '500123'
         blogPostId:
           type: string
           description: The ID of the blog post this attachment belongs to.
+          example: '500123'
         version:
           $ref: '#/components/schemas/Version'
         _links:
@@ -1373,6 +2165,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Attachment'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     Label:
@@ -1382,12 +2175,15 @@ components:
         id:
           type: string
           description: The unique identifier of the label.
+          example: abc123
         name:
           type: string
           description: The name of the label.
+          example: Example Title
         prefix:
           type: string
           description: The prefix of the label (global, my, team).
+          example: example_value
     LabelArray:
       type: object
       description: A list of labels.
@@ -1396,6 +2192,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     Version:
@@ -1406,29 +2203,36 @@ components:
           type: string
           format: date-time
           description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
         message:
           type: string
           description: The message associated with this version.
+          example: example_value
         number:
           type: integer
           description: The version number.
+          example: 10
         minorEdit:
           type: boolean
           description: Whether this was a minor edit.
+          example: true
         authorId:
           type: string
           description: The Atlassian account ID of the version author.
+          example: '500123'
     VersionWrite:
       type: object
       required:
-        - number
+      - number
       properties:
         number:
           type: integer
           description: The new version number. Must be incremented by 1.
+          example: 10
         message:
           type: string
           description: An optional message associated with this version.
+          example: example_value
     VersionArray:
       type: object
       properties:
@@ -1436,6 +2240,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Version'
+          example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
     Body:
@@ -1451,29 +2256,33 @@ components:
     BodyWrite:
       type: object
       required:
-        - representation
-        - value
+      - representation
+      - value
       properties:
         representation:
           type: string
           description: The representation format of the body content.
           enum:
-            - storage
-            - atlas_doc_format
-            - wiki
-            - editor
+          - storage
+          - atlas_doc_format
+          - wiki
+          - editor
+          example: storage
         value:
           type: string
           description: The body content in the specified representation.
+          example: example_value
     BodyRepresentation:
       type: object
       properties:
         representation:
           type: string
           description: The name of the representation format.
+          example: example_value
         value:
           type: string
           description: The body content in this representation.
+          example: example_value
     InlineCommentProperties:
       type: object
       description: Properties specific to inline comments.
@@ -1481,9 +2290,11 @@ components:
         textSelection:
           type: string
           description: The selected text that this inline comment is anchored to.
+          example: example_value
         textSelectionMatchCount:
           type: integer
           description: The match index of the text selection, if the same text appears multiple times.
+          example: 10
     ContentPropertyArray:
       type: object
       properties:
@@ -1491,14 +2302,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContentProperty'
+          example: []
     ContentProperty:
       type: object
       properties:
         id:
           type: string
+          example: abc123
         key:
           type: string
-        value: {}
+          example: example_value
+        value:
+          example: example_value
         version:
           $ref: '#/components/schemas/Version'
     OperationArray:
@@ -1508,6 +2323,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Operation'
+          example: []
     Operation:
       type: object
       properties:
@@ -1515,14 +2331,16 @@ components:
           type: string
           description: The operation type.
           enum:
-            - create
-            - read
-            - update
-            - delete
-            - administer
+          - create
+          - read
+          - update
+          - delete
+          - administer
+          example: create
         targetType:
           type: string
           description: The target type for the operation.
+          example: example_value
     LikeArray:
       type: object
       properties:
@@ -1530,12 +2348,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Like'
+          example: []
     Like:
       type: object
       properties:
         accountId:
           type: string
           description: The Atlassian account ID of the user who liked the content.
+          example: '500123'
     SpaceDescription:
       type: object
       properties:
@@ -1549,9 +2369,11 @@ components:
         path:
           type: string
           description: The relative path to the space icon.
+          example: example_value
         apiDownloadLink:
           type: string
           description: The API download link for the space icon.
+          example: example_value
     SpacePropertyArray:
       type: object
       properties:
@@ -1559,6 +2381,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContentProperty'
+          example: []
     SpacePermissionArray:
       type: object
       properties:
@@ -1566,22 +2389,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SpacePermission'
+          example: []
     SpacePermission:
       type: object
       properties:
         id:
           type: string
+          example: abc123
         principal:
           type: object
           properties:
             type:
               type: string
               enum:
-                - user
-                - group
-                - role
+              - user
+              - group
+              - role
             id:
               type: string
+          example: example_value
         operation:
           $ref: '#/components/schemas/Operation'
     PageLinks:
@@ -1590,30 +2416,36 @@ components:
         webui:
           type: string
           description: Web UI link for the page.
+          example: example_value
         editui:
           type: string
           description: Edit UI link for the page.
+          example: example_value
         tinyui:
           type: string
           description: Shortened link for the page.
+          example: example_value
     SpaceLinks:
       type: object
       properties:
         webui:
           type: string
           description: Web UI link for the space.
+          example: example_value
     CommentLinks:
       type: object
       properties:
         webui:
           type: string
           description: Web UI link for the comment.
+          example: example_value
     ContentLinks:
       type: object
       properties:
         webui:
           type: string
           description: Web UI link for the content.
+          example: example_value
     PaginationLinks:
       type: object
       description: Pagination links for cursor-based pagination.
@@ -1621,9 +2453,11 @@ components:
         next:
           type: string
           description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
         base:
           type: string
           description: The base URL of the Confluence instance.
+          example: example_value
     Error:
       type: object
       description: Error response from the Confluence API.
@@ -1631,6 +2465,7 @@ components:
         statusCode:
           type: integer
           description: The HTTP status code.
+          example: 10
         data:
           type: object
           properties:
@@ -1657,9 +2492,11 @@ components:
             successful:
               type: boolean
           description: Details about the error.
+          example: example_value
         message:
           type: string
           description: A human-readable error message.
+          example: example_value
   responses:
     BadRequest:
       description: Returned if the request is malformed or contains invalid parameters.

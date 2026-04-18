@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InlineCommentCreateRequest",
+  "type": "object",
+  "properties": {
+    "blogPostId": {
+      "type": "string",
+      "description": "The ID of the blog post to add an inline comment on."
+    },
+    "pageId": {
+      "type": "string",
+      "description": "The ID of the page to add an inline comment on."
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SpaceBulk",
+  "type": "object",
+  "description": "A paginated list of spaces.",
+  "properties": {
+    "results": {
+      "type": "array"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-structure.org/draft/2020-12/schema",
+  "name": "Version",
+  "type": "object",
+  "properties": {
+    "createdAt": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "minorEdit": {
+      "type": "boolean"
+    },
+    "authorId": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "abc123",
+  "status": "example_value",
+  "title": "Example Title",
+  "spaceId": "500123",
+  "parentId": "500123",
+  "parentType": "example_value",
+  "position": 10,
+  "authorId": "500123",
+  "ownerId": "500123",
+  "lastOwnerId": "500123",
+  "createdAt": "example_value"
+}

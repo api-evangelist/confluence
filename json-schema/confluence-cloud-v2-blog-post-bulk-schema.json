@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BlogPostBulk",
+  "type": "object",
+  "description": "A paginated list of blog posts.",
+  "properties": {
+    "results": {
+      "type": "array"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BlogPostUpdateRequest",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The ID of the blog post being updated."
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the blog post."
+    },
+    "title": {
+      "type": "string",
+      "description": "The new title of the blog post."
+    }
+  }
+}

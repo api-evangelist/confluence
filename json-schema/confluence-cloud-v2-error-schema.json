@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Error",
+  "type": "object",
+  "description": "Error response from the Confluence API.",
+  "properties": {
+    "statusCode": {
+      "type": "integer",
+      "description": "The HTTP status code."
+    },
+    "data": {
+      "type": "object",
+      "description": "Details about the error."
+    },
+    "message": {
+      "type": "string",
+      "description": "A human-readable error message."
+    }
+  }
+}

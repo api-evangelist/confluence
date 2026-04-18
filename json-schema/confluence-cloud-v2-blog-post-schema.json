@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BlogPost",
+  "type": "object",
+  "description": "Represents a Confluence blog post.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the blog post."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the blog post."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the blog post."
+    },
+    "spaceId": {
+      "type": "string",
+      "description": "The ID of the space this blog post belongs to."
+    },
+    "authorId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the blog post author."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The ISO 8601 timestamp when the blog post was created."
+    }
+  }
+}

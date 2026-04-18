@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BodyRepresentation",
+  "type": "object",
+  "properties": {
+    "representation": {
+      "type": "string",
+      "description": "The name of the representation format."
+    },
+    "value": {
+      "type": "string",
+      "description": "The body content in this representation."
+    }
+  }
+}

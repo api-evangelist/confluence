@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PageLinks",
+  "type": "object",
+  "properties": {
+    "webui": {
+      "type": "string",
+      "description": "Web UI link for the page."
+    },
+    "editui": {
+      "type": "string",
+      "description": "Edit UI link for the page."
+    },
+    "tinyui": {
+      "type": "string",
+      "description": "Shortened link for the page."
+    }
+  }
+}

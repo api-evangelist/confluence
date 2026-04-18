@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-structure.org/draft/2020-12/schema",
+  "name": "CommentCreateRequest",
+  "type": "object",
+  "properties": {
+    "blogPostId": {
+      "type": "string"
+    },
+    "pageId": {
+      "type": "string"
+    },
+    "parentCommentId": {
+      "type": "string"
+    }
+  }
+}

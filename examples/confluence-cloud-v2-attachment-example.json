@@ -1,0 +1,13 @@
+{
+  "id": "abc123",
+  "status": "example_value",
+  "title": "Example Title",
+  "mediaType": "example_value",
+  "mediaTypeDescription": "example_value",
+  "comment": "example_value",
+  "fileSize": 10,
+  "webuiLink": "example_value",
+  "downloadLink": "example_value",
+  "pageId": "500123",
+  "blogPostId": "500123"
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Page",
+  "type": "object",
+  "description": "Represents a Confluence page.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the page."
+    },
+    "status": {
+      "type": "string",
+      "description": "The current status of the page."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the page."
+    },
+    "spaceId": {
+      "type": "string",
+      "description": "The ID of the space this page belongs to."
+    },
+    "parentId": {
+      "type": "string",
+      "description": "The ID of the parent page, if the page is nested."
+    },
+    "parentType": {
+      "type": "string",
+      "description": "The type of the parent (page or space)."
+    },
+    "position": {
+      "type": "integer",
+      "description": "The position of this page in the page tree relative to siblings."
+    },
+    "authorId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the page author."
+    },
+    "ownerId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the page owner."
+    },
+    "lastOwnerId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the previous owner."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The ISO 8601 timestamp when the page was created."
+    }
+  }
+}

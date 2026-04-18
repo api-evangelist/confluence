@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Version",
+  "type": "object",
+  "description": "Version information for content.",
+  "properties": {
+    "createdAt": {
+      "type": "string",
+      "description": "The ISO 8601 timestamp of this version."
+    },
+    "message": {
+      "type": "string",
+      "description": "The message associated with this version."
+    },
+    "number": {
+      "type": "integer",
+      "description": "The version number."
+    },
+    "minorEdit": {
+      "type": "boolean",
+      "description": "Whether this was a minor edit."
+    },
+    "authorId": {
+      "type": "string",
+      "description": "The Atlassian account ID of the version author."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SpaceIcon",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "The relative path to the space icon."
+    },
+    "apiDownloadLink": {
+      "type": "string",
+      "description": "The API download link for the space icon."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-structure.org/draft/2020-12/schema",
+  "name": "Attachment",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "mediaType": {
+      "type": "string"
+    },
+    "mediaTypeDescription": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "fileSize": {
+      "type": "integer"
+    },
+    "webuiLink": {
+      "type": "string"
+    },
+    "downloadLink": {
+      "type": "string"
+    },
+    "pageId": {
+      "type": "string"
+    },
+    "blogPostId": {
+      "type": "string"
+    }
+  }
+}

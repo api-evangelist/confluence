@@ -1,0 +1,13 @@
+name: confluence API Vocabulary
+provider: confluence
+created: '2026-04-18'
+modified: '2026-04-18'
+operations: 27
+schemas: 43
+tags:
+- Attachment
+- Blog Post
+- Comment
+- Label
+- Page
+- Space

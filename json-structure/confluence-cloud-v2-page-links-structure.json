@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-structure.org/draft/2020-12/schema",
+  "name": "PageLinks",
+  "type": "object",
+  "properties": {
+    "webui": {
+      "type": "string"
+    },
+    "editui": {
+      "type": "string"
+    },
+    "tinyui": {
+      "type": "string"
+    }
+  }
+}

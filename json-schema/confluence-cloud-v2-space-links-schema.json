@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SpaceLinks",
+  "type": "object",
+  "properties": {
+    "webui": {
+      "type": "string",
+      "description": "Web UI link for the space."
+    }
+  }
+}

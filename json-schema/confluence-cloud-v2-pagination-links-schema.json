@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PaginationLinks",
+  "type": "object",
+  "description": "Pagination links for cursor-based pagination.",
+  "properties": {
+    "next": {
+      "type": "string",
+      "description": "URL for the next page of results. Contains the cursor parameter."
+    },
+    "base": {
+      "type": "string",
+      "description": "The base URL of the Confluence instance."
+    }
+  }
+}
