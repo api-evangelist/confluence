@@ -1,628 +1,1166 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "Confluence Content Management"
-  description: "Unified workflow for managing Confluence content including pages, blog posts, comments, attachments, spaces, and labels. Used by content authors, knowledge managers, and platform administrators."
+  label: Confluence Content Management
+  description: Unified workflow for managing Confluence content including pages, blog posts, comments, attachments, spaces,
+    and labels. Used by content authors, knowledge managers, and platform administrators.
   tags:
-    - Confluence
-    - Content Management
-    - Collaboration
-    - Wiki
-    - Knowledge Base
-  created: "2026-04-18"
-  modified: "2026-04-18"
-
+  - Confluence
+  - Content Management
+  - Collaboration
+  - Wiki
+  - Knowledge Base
+  created: '2026-04-18'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      CONFLUENCE_API_TOKEN: CONFLUENCE_API_TOKEN
-      CONFLUENCE_EMAIL: CONFLUENCE_EMAIL
-
+- namespace: env
+  keys:
+    CONFLUENCE_API_TOKEN: CONFLUENCE_API_TOKEN
+    CONFLUENCE_EMAIL: CONFLUENCE_EMAIL
 capability:
   consumes:
-    - import: confluence-cloud-v2
-      location: ./shared/cloud-v2.yaml
-
+  - type: http
+    namespace: confluence-cloud-v2
+    baseUri: https://{domain}.atlassian.net/wiki/api/v2
+    description: Next generation Confluence Cloud REST API with improved performance and new features.
+    authentication:
+      type: basic
+      username: '{{CONFLUENCE_EMAIL}}'
+      password: '{{CONFLUENCE_API_TOKEN}}'
+    resources:
+    - name: pages
+      path: /pages
+      description: Manage Confluence pages
+      operations:
+      - name: get-pages
+        method: GET
+        description: Returns all pages with optional filtering by space, status, and title.
+        inputParameters:
+        - name: space-id
+          in: query
+          type: string
+          required: false
+          description: Filter by space ID
+        - name: status
+          in: query
+          type: string
+          required: false
+          description: Filter by page status
+        - name: title
+          in: query
+          type: string
+          required: false
+          description: Filter by page title
+        - name: body-format
+          in: query
+          type: string
+          required: false
+          description: Body format to return
+        - name: cursor
+          in: query
+          type: string
+          required: false
+          description: Pagination cursor
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-page
+        method: POST
+        description: Creates a new page in a Confluence space.
+        inputParameters: []
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            spaceId: '{{tools.space_id}}'
+            title: '{{tools.title}}'
+            body: '{{tools.body}}'
+    - name: page-by-id
+      path: /pages/{id}
+      description: Manage individual pages by ID
+      operations:
+      - name: get-page-by-id
+        method: GET
+        description: Returns a specific page by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        - name: body-format
+          in: query
+          type: string
+          required: false
+          description: Body format to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-page
+        method: PUT
+        description: Updates a page by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            title: '{{tools.title}}'
+            body: '{{tools.body}}'
+            version: '{{tools.version}}'
+      - name: delete-page
+        method: DELETE
+        description: Deletes a page by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: child-pages
+      path: /pages/{id}/children
+      description: Retrieve child pages
+      operations:
+      - name: get-child-pages
+        method: GET
+        description: Returns child pages of a specific page.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The parent page ID
+        - name: cursor
+          in: query
+          type: string
+          required: false
+          description: Pagination cursor
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: page-labels
+      path: /pages/{id}/labels
+      description: Manage page labels
+      operations:
+      - name: get-page-labels
+        method: GET
+        description: Returns labels for a specific page.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: spaces
+      path: /spaces
+      description: Manage Confluence spaces
+      operations:
+      - name: get-spaces
+        method: GET
+        description: Returns all spaces with optional filtering.
+        inputParameters:
+        - name: cursor
+          in: query
+          type: string
+          required: false
+          description: Pagination cursor
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: space-by-id
+      path: /spaces/{id}
+      description: Retrieve a specific space
+      operations:
+      - name: get-space-by-id
+        method: GET
+        description: Returns a specific space by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The space ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: pages-in-space
+      path: /spaces/{id}/pages
+      description: Retrieve pages within a space
+      operations:
+      - name: get-pages-in-space
+        method: GET
+        description: Returns pages belonging to a specific space.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The space ID
+        - name: cursor
+          in: query
+          type: string
+          required: false
+          description: Pagination cursor
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: comments
+      path: /comments/{id}
+      description: Manage comments
+      operations:
+      - name: get-comment-by-id
+        method: GET
+        description: Returns a specific comment by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The comment ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-comment
+        method: PUT
+        description: Updates a comment by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The comment ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            body: '{{tools.body}}'
+            version: '{{tools.version}}'
+      - name: delete-comment
+        method: DELETE
+        description: Deletes a comment by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The comment ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: footer-comments
+      path: /footer-comments
+      description: Create footer comments
+      operations:
+      - name: create-footer-comment
+        method: POST
+        description: Creates a footer comment on a page or blog post.
+        inputParameters: []
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            pageId: '{{tools.page_id}}'
+            body: '{{tools.body}}'
+    - name: inline-comments
+      path: /inline-comments
+      description: Create inline comments
+      operations:
+      - name: create-inline-comment
+        method: POST
+        description: Creates an inline comment on a page.
+        inputParameters: []
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            pageId: '{{tools.page_id}}'
+            body: '{{tools.body}}'
+            inlineCommentProperties: '{{tools.properties}}'
+    - name: page-footer-comments
+      path: /pages/{id}/footer-comments
+      description: Retrieve page footer comments
+      operations:
+      - name: get-footer-comments
+        method: GET
+        description: Returns footer comments for a specific page.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: page-inline-comments
+      path: /pages/{id}/inline-comments
+      description: Retrieve page inline comments
+      operations:
+      - name: get-inline-comments
+        method: GET
+        description: Returns inline comments for a specific page.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: child-comments
+      path: /comments/{id}/children
+      description: Retrieve child comments
+      operations:
+      - name: get-child-comments
+        method: GET
+        description: Returns child comments of a specific comment.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The parent comment ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: blog-posts
+      path: /blogposts
+      description: Manage blog posts
+      operations:
+      - name: get-blog-posts
+        method: GET
+        description: Returns all blog posts.
+        inputParameters:
+        - name: space-id
+          in: query
+          type: string
+          required: false
+          description: Filter by space ID
+        - name: cursor
+          in: query
+          type: string
+          required: false
+          description: Pagination cursor
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-blog-post
+        method: POST
+        description: Creates a new blog post.
+        inputParameters: []
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            spaceId: '{{tools.space_id}}'
+            title: '{{tools.title}}'
+            body: '{{tools.body}}'
+    - name: blog-post-by-id
+      path: /blogposts/{id}
+      description: Manage individual blog posts
+      operations:
+      - name: get-blog-post-by-id
+        method: GET
+        description: Returns a specific blog post by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The blog post ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-blog-post
+        method: PUT
+        description: Updates a blog post by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The blog post ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            title: '{{tools.title}}'
+            body: '{{tools.body}}'
+            version: '{{tools.version}}'
+      - name: delete-blog-post
+        method: DELETE
+        description: Deletes a blog post by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The blog post ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: attachments
+      path: /attachments/{id}
+      description: Manage attachments
+      operations:
+      - name: get-attachment-by-id
+        method: GET
+        description: Returns a specific attachment by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The attachment ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-attachment
+        method: DELETE
+        description: Deletes an attachment by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The attachment ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: page-attachments
+      path: /pages/{id}/attachments
+      description: Retrieve page attachments
+      operations:
+      - name: get-page-attachments
+        method: GET
+        description: Returns attachments for a specific page.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The page ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: labels
+      path: /labels/{id}
+      description: Retrieve label information
+      operations:
+      - name: get-label-by-id
+        method: GET
+        description: Returns a specific label by its ID.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: The label ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: confluence-content-api
-      description: "Unified REST API for Confluence content management workflows."
-      resources:
-        - path: /v1/pages
-          name: pages
-          description: "Manage Confluence pages"
-          operations:
-            - method: GET
-              name: list-pages
-              description: "List all pages with optional filtering"
-              call: "confluence-cloud-v2.get-pages"
-              with:
-                space-id: "rest.space_id"
-                status: "rest.status"
-                title: "rest.title"
-                cursor: "rest.cursor"
-                limit: "rest.limit"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: create-page
-              description: "Create a new page"
-              call: "confluence-cloud-v2.create-page"
-              with:
-                space_id: "rest.space_id"
-                title: "rest.title"
-                body: "rest.body"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/pages/{id}
-          name: page-by-id
-          description: "Individual page operations"
-          operations:
-            - method: GET
-              name: get-page
-              description: "Get a page by ID"
-              call: "confluence-cloud-v2.get-page-by-id"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PUT
-              name: update-page
-              description: "Update a page"
-              call: "confluence-cloud-v2.update-page"
-              with:
-                id: "rest.id"
-                title: "rest.title"
-                body: "rest.body"
-                version: "rest.version"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: delete-page
-              description: "Delete a page"
-              call: "confluence-cloud-v2.delete-page"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/pages/{id}/children
-          name: child-pages
-          description: "Child page navigation"
-          operations:
-            - method: GET
-              name: list-child-pages
-              description: "List child pages"
-              call: "confluence-cloud-v2.get-child-pages"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/pages/{id}/labels
-          name: page-labels
-          description: "Page label management"
-          operations:
-            - method: GET
-              name: get-page-labels
-              description: "Get labels for a page"
-              call: "confluence-cloud-v2.get-page-labels"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/pages/{id}/attachments
-          name: page-attachments
-          description: "Page attachment management"
-          operations:
-            - method: GET
-              name: list-page-attachments
-              description: "List attachments for a page"
-              call: "confluence-cloud-v2.get-page-attachments"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/pages/{id}/comments
-          name: page-comments
-          description: "Page comment management"
-          operations:
-            - method: GET
-              name: list-footer-comments
-              description: "List footer comments for a page"
-              call: "confluence-cloud-v2.get-footer-comments"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/spaces
-          name: spaces
-          description: "Manage Confluence spaces"
-          operations:
-            - method: GET
-              name: list-spaces
-              description: "List all spaces"
-              call: "confluence-cloud-v2.get-spaces"
-              with:
-                cursor: "rest.cursor"
-                limit: "rest.limit"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/spaces/{id}
-          name: space-by-id
-          description: "Individual space operations"
-          operations:
-            - method: GET
-              name: get-space
-              description: "Get a space by ID"
-              call: "confluence-cloud-v2.get-space-by-id"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/spaces/{id}/pages
-          name: space-pages
-          description: "Pages within a space"
-          operations:
-            - method: GET
-              name: list-pages-in-space
-              description: "List pages in a space"
-              call: "confluence-cloud-v2.get-pages-in-space"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/blog-posts
-          name: blog-posts
-          description: "Manage blog posts"
-          operations:
-            - method: GET
-              name: list-blog-posts
-              description: "List all blog posts"
-              call: "confluence-cloud-v2.get-blog-posts"
-              with:
-                space-id: "rest.space_id"
-                cursor: "rest.cursor"
-                limit: "rest.limit"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: create-blog-post
-              description: "Create a new blog post"
-              call: "confluence-cloud-v2.create-blog-post"
-              with:
-                space_id: "rest.space_id"
-                title: "rest.title"
-                body: "rest.body"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/blog-posts/{id}
-          name: blog-post-by-id
-          description: "Individual blog post operations"
-          operations:
-            - method: GET
-              name: get-blog-post
-              description: "Get a blog post by ID"
-              call: "confluence-cloud-v2.get-blog-post-by-id"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PUT
-              name: update-blog-post
-              description: "Update a blog post"
-              call: "confluence-cloud-v2.update-blog-post"
-              with:
-                id: "rest.id"
-                title: "rest.title"
-                body: "rest.body"
-                version: "rest.version"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: delete-blog-post
-              description: "Delete a blog post"
-              call: "confluence-cloud-v2.delete-blog-post"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/comments/{id}
-          name: comments
-          description: "Manage comments"
-          operations:
-            - method: GET
-              name: get-comment
-              description: "Get a comment by ID"
-              call: "confluence-cloud-v2.get-comment-by-id"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PUT
-              name: update-comment
-              description: "Update a comment"
-              call: "confluence-cloud-v2.update-comment"
-              with:
-                id: "rest.id"
-                body: "rest.body"
-                version: "rest.version"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: delete-comment
-              description: "Delete a comment"
-              call: "confluence-cloud-v2.delete-comment"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/attachments/{id}
-          name: attachments
-          description: "Manage attachments"
-          operations:
-            - method: GET
-              name: get-attachment
-              description: "Get an attachment by ID"
-              call: "confluence-cloud-v2.get-attachment-by-id"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: delete-attachment
-              description: "Delete an attachment"
-              call: "confluence-cloud-v2.delete-attachment"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/labels/{id}
-          name: labels
-          description: "Label information"
-          operations:
-            - method: GET
-              name: get-label
-              description: "Get a label by ID"
-              call: "confluence-cloud-v2.get-label-by-id"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: confluence-content-mcp
-      transport: http
-      description: "MCP server for AI-assisted Confluence content management."
-      tools:
-        - name: list-pages
-          description: "List all Confluence pages with optional filtering by space, status, and title."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-pages"
-          with:
-            space-id: "tools.space_id"
-            status: "tools.status"
-            title: "tools.title"
-            cursor: "tools.cursor"
-            limit: "tools.limit"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-page
-          description: "Create a new Confluence page in a space."
-          hints:
-            readOnly: false
-          call: "confluence-cloud-v2.create-page"
-          with:
-            space_id: "tools.space_id"
-            title: "tools.title"
-            body: "tools.body"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-page
-          description: "Get a specific Confluence page by its ID."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-page-by-id"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: update-page
-          description: "Update an existing Confluence page title and body."
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "confluence-cloud-v2.update-page"
-          with:
-            id: "tools.id"
-            title: "tools.title"
-            body: "tools.body"
-            version: "tools.version"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: delete-page
-          description: "Delete a Confluence page by ID."
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "confluence-cloud-v2.delete-page"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-child-pages
-          description: "List child pages of a specific page for navigating content hierarchies."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-child-pages"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-page-labels
-          description: "Get all labels applied to a specific page."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-page-labels"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-page-attachments
-          description: "List all file attachments on a specific page."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-page-attachments"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-spaces
-          description: "List all Confluence spaces."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-spaces"
-          with:
-            cursor: "tools.cursor"
-            limit: "tools.limit"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-space
-          description: "Get a specific Confluence space by its ID."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-space-by-id"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-pages-in-space
-          description: "List all pages belonging to a specific space."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-pages-in-space"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-blog-posts
-          description: "List all blog posts with optional space filtering."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-blog-posts"
-          with:
-            space-id: "tools.space_id"
-            cursor: "tools.cursor"
-            limit: "tools.limit"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-blog-post
-          description: "Create a new Confluence blog post."
-          hints:
-            readOnly: false
-          call: "confluence-cloud-v2.create-blog-post"
-          with:
-            space_id: "tools.space_id"
-            title: "tools.title"
-            body: "tools.body"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-blog-post
-          description: "Get a specific blog post by its ID."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-blog-post-by-id"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: update-blog-post
-          description: "Update an existing blog post."
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "confluence-cloud-v2.update-blog-post"
-          with:
-            id: "tools.id"
-            title: "tools.title"
-            body: "tools.body"
-            version: "tools.version"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: delete-blog-post
-          description: "Delete a blog post by ID."
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "confluence-cloud-v2.delete-blog-post"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-comment
-          description: "Get a specific comment by its ID."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-comment-by-id"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-footer-comment
-          description: "Create a footer comment on a page or blog post."
-          hints:
-            readOnly: false
-          call: "confluence-cloud-v2.create-footer-comment"
-          with:
-            page_id: "tools.page_id"
-            body: "tools.body"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-inline-comment
-          description: "Create an inline comment on a specific text selection in a page."
-          hints:
-            readOnly: false
-          call: "confluence-cloud-v2.create-inline-comment"
-          with:
-            page_id: "tools.page_id"
-            body: "tools.body"
-            properties: "tools.properties"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: update-comment
-          description: "Update an existing comment."
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "confluence-cloud-v2.update-comment"
-          with:
-            id: "tools.id"
-            body: "tools.body"
-            version: "tools.version"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: delete-comment
-          description: "Delete a comment by ID."
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "confluence-cloud-v2.delete-comment"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-footer-comments
-          description: "List footer comments on a specific page."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-footer-comments"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-inline-comments
-          description: "List inline comments on a specific page."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-inline-comments"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-attachment
-          description: "Get a specific attachment by its ID."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-attachment-by-id"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: delete-attachment
-          description: "Delete an attachment by ID."
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "confluence-cloud-v2.delete-attachment"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-label
-          description: "Get a specific label by its ID."
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "confluence-cloud-v2.get-label-by-id"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: confluence-content-api
+    description: Unified REST API for Confluence content management workflows.
+    resources:
+    - path: /v1/pages
+      name: pages
+      description: Manage Confluence pages
+      operations:
+      - method: GET
+        name: list-pages
+        description: List all pages with optional filtering
+        call: confluence-cloud-v2.get-pages
+        with:
+          space-id: rest.space_id
+          status: rest.status
+          title: rest.title
+          cursor: rest.cursor
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: create-page
+        description: Create a new page
+        call: confluence-cloud-v2.create-page
+        with:
+          space_id: rest.space_id
+          title: rest.title
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}
+      name: page-by-id
+      description: Individual page operations
+      operations:
+      - method: GET
+        name: get-page
+        description: Get a page by ID
+        call: confluence-cloud-v2.get-page-by-id
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: update-page
+        description: Update a page
+        call: confluence-cloud-v2.update-page
+        with:
+          id: rest.id
+          title: rest.title
+          body: rest.body
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete-page
+        description: Delete a page
+        call: confluence-cloud-v2.delete-page
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}/children
+      name: child-pages
+      description: Child page navigation
+      operations:
+      - method: GET
+        name: list-child-pages
+        description: List child pages
+        call: confluence-cloud-v2.get-child-pages
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}/labels
+      name: page-labels
+      description: Page label management
+      operations:
+      - method: GET
+        name: get-page-labels
+        description: Get labels for a page
+        call: confluence-cloud-v2.get-page-labels
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}/attachments
+      name: page-attachments
+      description: Page attachment management
+      operations:
+      - method: GET
+        name: list-page-attachments
+        description: List attachments for a page
+        call: confluence-cloud-v2.get-page-attachments
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}/comments
+      name: page-comments
+      description: Page comment management
+      operations:
+      - method: GET
+        name: list-footer-comments
+        description: List footer comments for a page
+        call: confluence-cloud-v2.get-footer-comments
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces
+      name: spaces
+      description: Manage Confluence spaces
+      operations:
+      - method: GET
+        name: list-spaces
+        description: List all spaces
+        call: confluence-cloud-v2.get-spaces
+        with:
+          cursor: rest.cursor
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces/{id}
+      name: space-by-id
+      description: Individual space operations
+      operations:
+      - method: GET
+        name: get-space
+        description: Get a space by ID
+        call: confluence-cloud-v2.get-space-by-id
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces/{id}/pages
+      name: space-pages
+      description: Pages within a space
+      operations:
+      - method: GET
+        name: list-pages-in-space
+        description: List pages in a space
+        call: confluence-cloud-v2.get-pages-in-space
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/blog-posts
+      name: blog-posts
+      description: Manage blog posts
+      operations:
+      - method: GET
+        name: list-blog-posts
+        description: List all blog posts
+        call: confluence-cloud-v2.get-blog-posts
+        with:
+          space-id: rest.space_id
+          cursor: rest.cursor
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: create-blog-post
+        description: Create a new blog post
+        call: confluence-cloud-v2.create-blog-post
+        with:
+          space_id: rest.space_id
+          title: rest.title
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/blog-posts/{id}
+      name: blog-post-by-id
+      description: Individual blog post operations
+      operations:
+      - method: GET
+        name: get-blog-post
+        description: Get a blog post by ID
+        call: confluence-cloud-v2.get-blog-post-by-id
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: update-blog-post
+        description: Update a blog post
+        call: confluence-cloud-v2.update-blog-post
+        with:
+          id: rest.id
+          title: rest.title
+          body: rest.body
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete-blog-post
+        description: Delete a blog post
+        call: confluence-cloud-v2.delete-blog-post
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/comments/{id}
+      name: comments
+      description: Manage comments
+      operations:
+      - method: GET
+        name: get-comment
+        description: Get a comment by ID
+        call: confluence-cloud-v2.get-comment-by-id
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: update-comment
+        description: Update a comment
+        call: confluence-cloud-v2.update-comment
+        with:
+          id: rest.id
+          body: rest.body
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete-comment
+        description: Delete a comment
+        call: confluence-cloud-v2.delete-comment
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/attachments/{id}
+      name: attachments
+      description: Manage attachments
+      operations:
+      - method: GET
+        name: get-attachment
+        description: Get an attachment by ID
+        call: confluence-cloud-v2.get-attachment-by-id
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete-attachment
+        description: Delete an attachment
+        call: confluence-cloud-v2.delete-attachment
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/labels/{id}
+      name: labels
+      description: Label information
+      operations:
+      - method: GET
+        name: get-label
+        description: Get a label by ID
+        call: confluence-cloud-v2.get-label-by-id
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: confluence-content-mcp
+    transport: http
+    description: MCP server for AI-assisted Confluence content management.
+    tools:
+    - name: list-pages
+      description: List all Confluence pages with optional filtering by space, status, and title.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-pages
+      with:
+        space-id: tools.space_id
+        status: tools.status
+        title: tools.title
+        cursor: tools.cursor
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-page
+      description: Create a new Confluence page in a space.
+      hints:
+        readOnly: false
+      call: confluence-cloud-v2.create-page
+      with:
+        space_id: tools.space_id
+        title: tools.title
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-page
+      description: Get a specific Confluence page by its ID.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-page-by-id
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-page
+      description: Update an existing Confluence page title and body.
+      hints:
+        readOnly: false
+        idempotent: true
+      call: confluence-cloud-v2.update-page
+      with:
+        id: tools.id
+        title: tools.title
+        body: tools.body
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-page
+      description: Delete a Confluence page by ID.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: confluence-cloud-v2.delete-page
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-child-pages
+      description: List child pages of a specific page for navigating content hierarchies.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-child-pages
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-page-labels
+      description: Get all labels applied to a specific page.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-page-labels
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-page-attachments
+      description: List all file attachments on a specific page.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-page-attachments
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-spaces
+      description: List all Confluence spaces.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-spaces
+      with:
+        cursor: tools.cursor
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-space
+      description: Get a specific Confluence space by its ID.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-space-by-id
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-pages-in-space
+      description: List all pages belonging to a specific space.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-pages-in-space
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-blog-posts
+      description: List all blog posts with optional space filtering.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-blog-posts
+      with:
+        space-id: tools.space_id
+        cursor: tools.cursor
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-blog-post
+      description: Create a new Confluence blog post.
+      hints:
+        readOnly: false
+      call: confluence-cloud-v2.create-blog-post
+      with:
+        space_id: tools.space_id
+        title: tools.title
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-blog-post
+      description: Get a specific blog post by its ID.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-blog-post-by-id
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-blog-post
+      description: Update an existing blog post.
+      hints:
+        readOnly: false
+        idempotent: true
+      call: confluence-cloud-v2.update-blog-post
+      with:
+        id: tools.id
+        title: tools.title
+        body: tools.body
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-blog-post
+      description: Delete a blog post by ID.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: confluence-cloud-v2.delete-blog-post
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-comment
+      description: Get a specific comment by its ID.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-comment-by-id
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-footer-comment
+      description: Create a footer comment on a page or blog post.
+      hints:
+        readOnly: false
+      call: confluence-cloud-v2.create-footer-comment
+      with:
+        page_id: tools.page_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-inline-comment
+      description: Create an inline comment on a specific text selection in a page.
+      hints:
+        readOnly: false
+      call: confluence-cloud-v2.create-inline-comment
+      with:
+        page_id: tools.page_id
+        body: tools.body
+        properties: tools.properties
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-comment
+      description: Update an existing comment.
+      hints:
+        readOnly: false
+        idempotent: true
+      call: confluence-cloud-v2.update-comment
+      with:
+        id: tools.id
+        body: tools.body
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-comment
+      description: Delete a comment by ID.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: confluence-cloud-v2.delete-comment
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-footer-comments
+      description: List footer comments on a specific page.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-footer-comments
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-inline-comments
+      description: List inline comments on a specific page.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-inline-comments
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-attachment
+      description: Get a specific attachment by its ID.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-attachment-by-id
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-attachment
+      description: Delete an attachment by ID.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: confluence-cloud-v2.delete-attachment
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-label
+      description: Get a specific label by its ID.
+      hints:
+        readOnly: true
+        openWorld: true
+      call: confluence-cloud-v2.get-label-by-id
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
