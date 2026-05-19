@@ -1,0 +1,197 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Confluence Cloud REST API v2 — Blog Post
+  description: 'Confluence Cloud REST API v2 — Blog Post. 5 operations. Lead operation: Get Blog Posts. Self-contained Naftiko
+    capability covering one Confluence business surface.'
+  tags:
+  - Confluence
+  - Blog Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CONFLUENCE_API_KEY: CONFLUENCE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-v2-blog-post
+    baseUri: https://{domain}.atlassian.net/wiki/api/v2
+    description: Confluence Cloud REST API v2 — Blog Post business capability. Self-contained, no shared references.
+    resources:
+    - name: blogposts
+      path: /blogposts
+      operations:
+      - name: getblogposts
+        method: GET
+        description: Get Blog Posts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createblogpost
+        method: POST
+        description: Create Blog Post
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: blogposts-id
+      path: /blogposts/{id}
+      operations:
+      - name: getblogpostbyid
+        method: GET
+        description: Get Blog Post by Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateblogpost
+        method: PUT
+        description: Update Blog Post
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleteblogpost
+        method: DELETE
+        description: Delete Blog Post
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CONFLUENCE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cloud-v2-blog-post-rest
+    port: 8080
+    description: REST adapter for Confluence Cloud REST API v2 — Blog Post. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/blogposts
+      name: blogposts
+      description: REST surface for blogposts.
+      operations:
+      - method: GET
+        name: getblogposts
+        description: Get Blog Posts
+        call: cloud-v2-blog-post.getblogposts
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createblogpost
+        description: Create Blog Post
+        call: cloud-v2-blog-post.createblogpost
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/blogposts/{id}
+      name: blogposts-id
+      description: REST surface for blogposts-id.
+      operations:
+      - method: GET
+        name: getblogpostbyid
+        description: Get Blog Post by Id
+        call: cloud-v2-blog-post.getblogpostbyid
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateblogpost
+        description: Update Blog Post
+        call: cloud-v2-blog-post.updateblogpost
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteblogpost
+        description: Delete Blog Post
+        call: cloud-v2-blog-post.deleteblogpost
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-v2-blog-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Confluence Cloud REST API v2 — Blog Post. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: get-blog-posts
+      description: Get Blog Posts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-blog-post.getblogposts
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-blog-post
+      description: Create Blog Post
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-v2-blog-post.createblogpost
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-blog-post-id
+      description: Get Blog Post by Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-blog-post.getblogpostbyid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-blog-post
+      description: Update Blog Post
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: cloud-v2-blog-post.updateblogpost
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-blog-post
+      description: Delete Blog Post
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: cloud-v2-blog-post.deleteblogpost
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,286 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Confluence Cloud REST API v2 — Page
+  description: 'Confluence Cloud REST API v2 — Page. 7 operations. Lead operation: Get Pages. Self-contained Naftiko capability
+    covering one Confluence business surface.'
+  tags:
+  - Confluence
+  - Page
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CONFLUENCE_API_KEY: CONFLUENCE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-v2-page
+    baseUri: https://{domain}.atlassian.net/wiki/api/v2
+    description: Confluence Cloud REST API v2 — Page business capability. Self-contained, no shared references.
+    resources:
+    - name: pages
+      path: /pages
+      operations:
+      - name: getpages
+        method: GET
+        description: Get Pages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createpage
+        method: POST
+        description: Create Page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: pages-id
+      path: /pages/{id}
+      operations:
+      - name: getpagebyid
+        method: GET
+        description: Get Page by Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatepage
+        method: PUT
+        description: Update Page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletepage
+        method: DELETE
+        description: Delete Page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: purge
+          in: query
+          type: boolean
+          description: If true, the page is permanently deleted instead of moved to trash.
+    - name: pages-id-children
+      path: /pages/{id}/children
+      operations:
+      - name: getchildpages
+        method: GET
+        description: Get Child Pages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: spaces-id-pages
+      path: /spaces/{id}/pages
+      operations:
+      - name: getpagesinspace
+        method: GET
+        description: Get Pages in Space
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: integer
+          description: The ID of the space.
+          required: true
+        - name: depth
+          in: query
+          type: string
+          description: Filter by depth in the page tree. Use root to get only top-level pages.
+    authentication:
+      type: bearer
+      token: '{{env.CONFLUENCE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cloud-v2-page-rest
+    port: 8080
+    description: REST adapter for Confluence Cloud REST API v2 — Page. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/pages
+      name: pages
+      description: REST surface for pages.
+      operations:
+      - method: GET
+        name: getpages
+        description: Get Pages
+        call: cloud-v2-page.getpages
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpage
+        description: Create Page
+        call: cloud-v2-page.createpage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}
+      name: pages-id
+      description: REST surface for pages-id.
+      operations:
+      - method: GET
+        name: getpagebyid
+        description: Get Page by Id
+        call: cloud-v2-page.getpagebyid
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatepage
+        description: Update Page
+        call: cloud-v2-page.updatepage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepage
+        description: Delete Page
+        call: cloud-v2-page.deletepage
+        with:
+          purge: rest.purge
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}/children
+      name: pages-id-children
+      description: REST surface for pages-id-children.
+      operations:
+      - method: GET
+        name: getchildpages
+        description: Get Child Pages
+        call: cloud-v2-page.getchildpages
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/spaces/{id}/pages
+      name: spaces-id-pages
+      description: REST surface for spaces-id-pages.
+      operations:
+      - method: GET
+        name: getpagesinspace
+        description: Get Pages in Space
+        call: cloud-v2-page.getpagesinspace
+        with:
+          id: rest.id
+          depth: rest.depth
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-v2-page-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Confluence Cloud REST API v2 — Page. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-pages
+      description: Get Pages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-page.getpages
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-page
+      description: Create Page
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-v2-page.createpage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-page-id
+      description: Get Page by Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-page.getpagebyid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-page
+      description: Update Page
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: cloud-v2-page.updatepage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-page
+      description: Delete Page
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: cloud-v2-page.deletepage
+      with:
+        purge: tools.purge
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-child-pages
+      description: Get Child Pages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-page.getchildpages
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-pages-space
+      description: Get Pages in Space
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-page.getpagesinspace
+      with:
+        id: tools.id
+        depth: tools.depth
+      outputParameters:
+      - type: object
+        mapping: $.

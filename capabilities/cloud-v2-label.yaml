@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Confluence Cloud REST API v2 — Label
+  description: 'Confluence Cloud REST API v2 — Label. 2 operations. Lead operation: Get Label by Id. Self-contained Naftiko
+    capability covering one Confluence business surface.'
+  tags:
+  - Confluence
+  - Label
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CONFLUENCE_API_KEY: CONFLUENCE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-v2-label
+    baseUri: https://{domain}.atlassian.net/wiki/api/v2
+    description: Confluence Cloud REST API v2 — Label business capability. Self-contained, no shared references.
+    resources:
+    - name: labels-id
+      path: /labels/{id}
+      operations:
+      - name: getlabelbyid
+        method: GET
+        description: Get Label by Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: integer
+          description: The ID of the label.
+          required: true
+    - name: pages-id-labels
+      path: /pages/{id}/labels
+      operations:
+      - name: getpagelabels
+        method: GET
+        description: Get Labels for Page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CONFLUENCE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cloud-v2-label-rest
+    port: 8080
+    description: REST adapter for Confluence Cloud REST API v2 — Label. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/labels/{id}
+      name: labels-id
+      description: REST surface for labels-id.
+      operations:
+      - method: GET
+        name: getlabelbyid
+        description: Get Label by Id
+        call: cloud-v2-label.getlabelbyid
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/pages/{id}/labels
+      name: pages-id-labels
+      description: REST surface for pages-id-labels.
+      operations:
+      - method: GET
+        name: getpagelabels
+        description: Get Labels for Page
+        call: cloud-v2-label.getpagelabels
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-v2-label-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Confluence Cloud REST API v2 — Label. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-label-id
+      description: Get Label by Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-label.getlabelbyid
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-labels-page
+      description: Get Labels for Page
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-v2-label.getpagelabels
+      outputParameters:
+      - type: object
+        mapping: $.
