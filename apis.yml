@@ -37,18 +37,6 @@ apis:
     url: https://developer.atlassian.com/cloud/confluence/changelog/
   - type: SDK
     url: https://www.postman.com/api-evangelist/atlassian-confluence/collection/k3y2x73/atlassian-confluence-cloud
-  - type: NaftikoCapability
-    url: capabilities/cloud-v2-attachment.yaml
-  - type: NaftikoCapability
-    url: capabilities/cloud-v2-blog-post.yaml
-  - type: NaftikoCapability
-    url: capabilities/cloud-v2-comment.yaml
-  - type: NaftikoCapability
-    url: capabilities/cloud-v2-label.yaml
-  - type: NaftikoCapability
-    url: capabilities/cloud-v2-page.yaml
-  - type: NaftikoCapability
-    url: capabilities/cloud-v2-space.yaml
 - name: Confluence Cloud REST API v2
   description: Next generation Confluence Cloud REST API with improved performance and new features.
   image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
@@ -73,7 +61,8 @@ apis:
   - type: ChangeLog
     url: https://developer.atlassian.com/cloud/confluence/changelog/
   - type: SDK
-    url: https://www.postman.com/api-reference-library/atlassian-cloud/collection/0a0hjxk/the-confluence-cloud-rest-api-v2
+    url: >-
+      https://www.postman.com/api-reference-library/atlassian-cloud/collection/0a0hjxk/the-confluence-cloud-rest-api-v2
 - name: Confluence Content Properties API
   description: Store and retrieve custom data against Confluence content.
   image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
@@ -274,6 +263,8 @@ apis:
     url: https://developer.atlassian.com/cloud/confluence/graphql/
   - type: Documentation
     url: https://developer.atlassian.com/platform/atlassian-graphql-api/
+  - url: graphql/confluence-graphql.md
+    type: GraphQL
 - name: Confluence Data Center REST API
   description: REST API for Confluence Data Center and Server for on-premise content, space, and user management.
   image: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
