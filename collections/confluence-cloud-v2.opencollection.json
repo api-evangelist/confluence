@@ -1,0 +1,892 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluence Cloud REST API v2",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Page",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by page IDs. Multiple IDs can be specified as comma-separated values."
+              },
+              {
+                "name": "space-id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space ID. Multiple IDs can be specified."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by content status."
+              },
+              {
+                "name": "title",
+                "value": "",
+                "type": "query",
+                "description": "Filter by content title. Supports exact match."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns all pages. The number of results is limited by the limit parameter and additional results can be retrieved via the next cursor. Results can be filtered by space, status, title, and body format."
+        },
+        {
+          "info": {
+            "name": "Create Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a page in the space. Pages can be created as a child of another page by specifying the parentId. Pages are created in the current status (draft or current)."
+        },
+        {
+          "info": {
+            "name": "Get Page by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "get-draft",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns the draft version of the page."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the content to retrieve."
+              }
+            ]
+          },
+          "docs": "Returns a specific page. The response includes the page body in the requested format, version information, and links."
+        },
+        {
+          "info": {
+            "name": "Update Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a page by id. The request body must include the current version number, the new title, the space id, the status, and the body in the specified representation."
+        },
+        {
+          "info": {
+            "name": "Delete Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "purge",
+                "value": "true",
+                "type": "query",
+                "description": "If true, the page is permanently deleted instead of moved to trash."
+              }
+            ]
+          },
+          "docs": "Deletes a page by id. By default pages are moved to trash. To purge a page permanently, set the purge parameter to true."
+        },
+        {
+          "info": {
+            "name": "Get Child Pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/children",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              }
+            ]
+          },
+          "docs": "Returns the child pages of a specific page, ordered by position in the page tree."
+        },
+        {
+          "info": {
+            "name": "Get Pages in Space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/spaces/:id/pages",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the space."
+              },
+              {
+                "name": "depth",
+                "value": "all",
+                "type": "query",
+                "description": "Filter by depth in the page tree. Use root to get only top-level pages."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by content status."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns all pages in a specific space. Supports filtering by status and depth."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Label",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Labels for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/labels",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter labels by prefix (global, my, team)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the labels associated with a specific page."
+        },
+        {
+          "info": {
+            "name": "Get Label by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/labels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the label."
+              }
+            ]
+          },
+          "docs": "Returns a specific label by id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Space",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Spaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/spaces",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values."
+              },
+              {
+                "name": "keys",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space keys. Multiple keys can be specified as comma-separated values."
+              },
+              {
+                "name": "type",
+                "value": "global",
+                "type": "query",
+                "description": "Filter by space type."
+              },
+              {
+                "name": "status",
+                "value": "current",
+                "type": "query",
+                "description": "Filter by space status."
+              },
+              {
+                "name": "labels",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space labels. Multiple labels can be specified."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              },
+              {
+                "name": "description-format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the space description in the response."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns all spaces. The results can be filtered by space type, status, and labels. Pagination is cursor-based."
+        },
+        {
+          "info": {
+            "name": "Get Space by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/spaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the space."
+              },
+              {
+                "name": "description-format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the space description in the response."
+              }
+            ]
+          },
+          "docs": "Returns a specific space by its id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Comment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Footer Comments for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/footer-comments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the footer comments of a specific page."
+        },
+        {
+          "info": {
+            "name": "Get Inline Comments for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/inline-comments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the inline comments of a specific page."
+        },
+        {
+          "info": {
+            "name": "Create Footer Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/footer-comments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a footer comment on a page or blog post."
+        },
+        {
+          "info": {
+            "name": "Create Inline Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/inline-comments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection."
+        },
+        {
+          "info": {
+            "name": "Get Comment by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the comment."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the content to retrieve."
+              }
+            ]
+          },
+          "docs": "Returns a specific comment by id."
+        },
+        {
+          "info": {
+            "name": "Update Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a comment by id. The version number must be incremented."
+        },
+        {
+          "info": {
+            "name": "Delete Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the comment."
+              }
+            ]
+          },
+          "docs": "Deletes a comment by id."
+        },
+        {
+          "info": {
+            "name": "Get Child Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id/children",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the parent comment."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the child (reply) comments of a specific comment."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Blog Post",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Blog Posts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/blogposts",
+            "params": [
+              {
+                "name": "space-id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space ID. Multiple IDs can be specified."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by content status."
+              },
+              {
+                "name": "title",
+                "value": "",
+                "type": "query",
+                "description": "Filter by content title. Supports exact match."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns all blog posts. Results can be filtered by space, status, and title."
+        },
+        {
+          "info": {
+            "name": "Create Blog Post",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/blogposts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a blog post in the specified space."
+        },
+        {
+          "info": {
+            "name": "Get Blog Post by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/blogposts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the content to retrieve."
+              }
+            ]
+          },
+          "docs": "Returns a specific blog post by id."
+        },
+        {
+          "info": {
+            "name": "Update Blog Post",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/blogposts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a blog post by id."
+        },
+        {
+          "info": {
+            "name": "Delete Blog Post",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/blogposts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              }
+            ]
+          },
+          "docs": "Deletes a blog post by id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Attachment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Attachment by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/attachments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              }
+            ]
+          },
+          "docs": "Returns a specific attachment by id."
+        },
+        {
+          "info": {
+            "name": "Delete Attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/attachments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              }
+            ]
+          },
+          "docs": "Deletes an attachment by id."
+        },
+        {
+          "info": {
+            "name": "Get Attachments for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/attachments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the attachments of a specific page."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
