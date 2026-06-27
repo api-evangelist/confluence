@@ -35,7 +35,7 @@ apis:
     url: https://developer.atlassian.com/cloud/confluence/getting-started/
   - type: ChangeLog
     url: https://developer.atlassian.com/cloud/confluence/changelog/
-  - type: SDK
+  - type: SDKs
     url: https://www.postman.com/api-evangelist/atlassian-confluence/collection/k3y2x73/atlassian-confluence-cloud
 - name: Confluence Cloud REST API v2
   description: Next generation Confluence Cloud REST API with improved performance and new features.
@@ -60,7 +60,7 @@ apis:
     url: https://developer.atlassian.com/cloud/confluence/getting-started/
   - type: ChangeLog
     url: https://developer.atlassian.com/cloud/confluence/changelog/
-  - type: SDK
+  - type: SDKs
     url: >-
       https://www.postman.com/api-reference-library/atlassian-cloud/collection/0a0hjxk/the-confluence-cloud-rest-api-v2
 - name: Confluence Content Properties API
@@ -966,7 +966,7 @@ common:
   url: https://www.atlassian.com/blog/confluence
 - type: Blog
   url: https://www.atlassian.com/blog/developer
-- type: SignUp
+- type: Signup
   url: https://www.atlassian.com/try/cloud/signup?bundle=confluence&edition=free
 - type: Login
   url: https://id.atlassian.com/login
@@ -984,13 +984,13 @@ common:
   url: https://www.linkedin.com/company/atlassian
 - type: X
   url: https://twitter.com/Atlassian
-- type: SDK
+- type: SDKs
   url: https://developer.atlassian.com/server/framework/atlassian-sdk/
-- type: SDK
+- type: SDKs
   url: https://github.com/atlassian-api/atlassian-python-api
-- type: SDK
+- type: SDKs
   url: https://mrrefactoring.github.io/confluence.js/
-- type: SDK
+- type: SDKs
   url: https://www.postman.com/api-evangelist/atlassian-confluence/collection/k3y2x73/atlassian-confluence-cloud
 - type: Features
   data:
