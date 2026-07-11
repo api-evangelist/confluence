@@ -1,0 +1,33 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/confluence-cloud-v2.yml
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: Basic authentication using email and API token. Provide your Atlassian account
+    email as the username and an API token as the password.
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- name: oAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.atlassian.com/authorize
+    tokenUrl: https://auth.atlassian.com/oauth/token
+    scopes: 9
+  description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Personal Access Token or OAuth 2.0 Bearer token.
+  sources:
+  - openapi/confluence-cloud-v2.yml
