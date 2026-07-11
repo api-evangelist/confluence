@@ -916,6 +916,8 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: OAuthScopes
+  url: scopes/confluence-scopes.yml
 - type: Portal
   url: https://developer.atlassian.com/
 - type: Documentation

@@ -1,0 +1,66 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/confluence-cloud-v2.yml
+schemes:
+- name: oAuth2
+  source: openapi/confluence-cloud-v2.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.atlassian.com/authorize
+    tokenUrl: https://auth.atlassian.com/oauth/token
+  description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+scopes:
+- scope: delete:confluence-content
+  description: Delete Confluence content
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: read:confluence-content.all
+  description: Read Confluence content
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: read:confluence-content.summary
+  description: Read Confluence content summaries
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: read:confluence-groups
+  description: Read Confluence groups
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: read:confluence-space.summary
+  description: Read Confluence space summaries
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: read:confluence-user
+  description: Read Confluence user information
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: write:confluence-content
+  description: Create and update Confluence content
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: write:confluence-file
+  description: Upload attachments to Confluence
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
+- scope: write:confluence-space
+  description: Create and update Confluence spaces
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/confluence-cloud-v2.yml
