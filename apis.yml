@@ -916,6 +916,8 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: AgenticAccess
+  url: agentic-access/confluence-agentic-access.yml
 - type: TrustCenter
   url: security/confluence-trust-center.yml
 - type: VulnerabilityDisclosure
