@@ -1,0 +1,33 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/cloud/confluence/changelog/
+description: >-
+  Recent window of the Confluence Cloud developer changelog. The live changelog
+  is the source of truth; this captures recent entries only.
+scheme: dated
+current_version: v2
+entries:
+- date: '2026-06-18'
+  type: addition
+  breaking: false
+  highlight: Resource-restricted OAuth tokens available for all new 3LO apps (scope tokens to specific sites).
+- date: '2026-06-18'
+  type: addition
+  breaking: false
+  highlight: Partner Security Program — incident-scoped platform log/telemetry sharing for Forge apps.
+- date: '2026-06-11'
+  type: addition
+  breaking: false
+  highlight: Experimental space-permission transition endpoints (/wiki/api/v2/space-permissions/transition) to migrate to RBAC.
+- date: '2026-06-01'
+  type: breaking
+  breaking: true
+  highlight: v2 version-listing endpoints cap results at 50 when body-format is included (was 250); returns 200 not 400.
+- date: '2026-05-25'
+  type: addition
+  breaking: false
+  highlight: Forge UI Kit Tile component in Preview.
+- date: '2026-04-15'
+  type: addition
+  breaking: false
+  highlight: New Forge event avi:confluence:performed:search triggers app functions on search.

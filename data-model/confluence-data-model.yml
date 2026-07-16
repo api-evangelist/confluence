@@ -1,0 +1,116 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/confluence-cloud-v2.yml
+docs: https://developer.atlassian.com/cloud/confluence/rest/v2/
+description: >-
+  Entity-relationship graph derived from the Confluence Cloud v2 OpenAPI schema
+  id-reference fields. Relationships infer has_one / has_many / belongs_to from
+  fields such as spaceId, parentId, pageId, blogPostId, authorId.
+entities:
+- name: Space
+  id: id
+  relationships:
+  - type: has_many
+    to: Page
+    via: spaceId
+  - type: has_many
+    to: BlogPost
+    via: spaceId
+  - type: has_one
+    to: Page
+    via: homepageId
+    role: homepage
+  - type: belongs_to
+    to: User
+    via: authorId
+- name: Page
+  id: id
+  relationships:
+  - type: belongs_to
+    to: Space
+    via: spaceId
+  - type: belongs_to
+    to: Page
+    via: parentId
+    role: parent
+  - type: has_many
+    to: Page
+    via: parentId
+    role: children
+  - type: belongs_to
+    to: User
+    via: authorId
+  - type: belongs_to
+    to: User
+    via: ownerId
+  - type: has_many
+    to: Comment
+    via: pageId
+  - type: has_many
+    to: Attachment
+    via: pageId
+  - type: has_many
+    to: Label
+    via: page-labels
+  - type: has_many
+    to: Version
+    via: page-versions
+- name: BlogPost
+  id: id
+  relationships:
+  - type: belongs_to
+    to: Space
+    via: spaceId
+  - type: belongs_to
+    to: User
+    via: authorId
+  - type: has_many
+    to: Comment
+    via: blogPostId
+  - type: has_many
+    to: Attachment
+    via: blogPostId
+- name: Comment
+  id: id
+  relationships:
+  - type: belongs_to
+    to: Page
+    via: pageId
+  - type: belongs_to
+    to: BlogPost
+    via: blogPostId
+  - type: belongs_to
+    to: Comment
+    via: parentCommentId
+    role: parent
+  - type: belongs_to
+    to: User
+    via: authorId
+- name: Attachment
+  id: id
+  relationships:
+  - type: belongs_to
+    to: Page
+    via: pageId
+  - type: belongs_to
+    to: BlogPost
+    via: blogPostId
+- name: Label
+  id: id
+  relationships:
+  - type: has_many
+    to: Page
+    via: label-content
+- name: Version
+  id: number
+  relationships:
+  - type: belongs_to
+    to: User
+    via: authorId
+- name: Like
+  relationships:
+  - type: belongs_to
+    to: User
+    via: accountId
+- name: User
+  id: accountId

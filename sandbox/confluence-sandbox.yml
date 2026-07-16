@@ -1,0 +1,35 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/platform/marketplace/getting-started/#free-developer-instance
+description: >-
+  Confluence/Atlassian does not publish payment-style test data (no test cards
+  or magic identifiers). Testing is done against real, free, isolated instances
+  rather than a mock sandbox: a free Cloud developer site and, on Premium/
+  Enterprise, a full production sandbox environment. No published test values
+  are invented here.
+test_environments:
+- name: Free Cloud developer instance
+  type: isolated cloud site
+  url: https://developer.atlassian.com/platform/marketplace/getting-started/
+  description: >-
+    Free my-domain.atlassian.net developer site provisioned via the Developer
+    Console for building and testing Confluence Cloud apps and API integrations.
+  billing: none
+- name: Forge local tunnel
+  type: local development
+  url: https://developer.atlassian.com/platform/forge/tunneling/
+  description: >-
+    `forge tunnel` runs a Forge app locally against an installed dev site so API
+    calls execute against live (dev) Confluence data.
+- name: Cloud sandbox (Premium/Enterprise)
+  type: production-like sandbox
+  url: https://support.atlassian.com/organization-administration/docs/create-a-sandbox/
+  description: >-
+    Premium and Enterprise plans include sandbox instances that mirror
+    production for change testing before promotion.
+test_credentials:
+  scheme: api-token
+  notes: >-
+    Auth against dev instances uses real Atlassian account email + API token
+    (id.atlassian.com/manage-profile/security/api-tokens) or OAuth 2.0 (3LO).
+    No shared/published test credentials exist.

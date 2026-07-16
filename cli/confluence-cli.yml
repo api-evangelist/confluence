@@ -1,0 +1,32 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/platform/forge/cli-reference/
+description: >-
+  Atlassian ships no dedicated "confluence" REST CLI. The first-party developer
+  CLI for building on Confluence (and other Atlassian Cloud products) is the
+  Forge CLI, distributed as the npm package @forge/cli (binary `forge`). It is
+  used to scaffold, tunnel, deploy, and install Forge apps that call the
+  Confluence APIs. Atlassian also ships ACLI (Atlassian CLI) for Rovo/agent and
+  administrative workflows.
+clis:
+- name: Forge CLI
+  binary: forge
+  package: "@forge/cli"
+  install:
+  - npm install -g @forge/cli
+  docs: https://developer.atlassian.com/platform/forge/cli-reference/
+  command_groups:
+  - group: app lifecycle
+    commands: [create, register, deploy, install, uninstall]
+  - group: development
+    commands: [tunnel, lint, logs, variables, webtrigger]
+  - group: environments
+    commands: [environments, settings]
+  key_flows:
+  - forge create — scaffold a Confluence Forge app from a template
+  - forge tunnel — run the app locally against a live dev site
+  - forge deploy && forge install — ship to a Confluence Cloud site
+- name: ACLI (Atlassian CLI)
+  binary: acli
+  docs: https://developer.atlassian.com/cloud/acli/
+  notes: Command-line access to Atlassian Cloud including Rovo and admin operations.

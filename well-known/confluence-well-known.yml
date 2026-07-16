@@ -1,0 +1,46 @@
+generated: '2026-06-20'
+method: searched
+description: >-
+  Discovery documents probed across Atlassian hosts. security.txt is served
+  identically (canonical www.atlassian.com) on developer/api/auth/www hosts.
+  OIDC + OAuth Authorization Server metadata are published on the identity host
+  auth.atlassian.com used by Confluence Cloud OAuth 2.0 (3LO).
+hosts:
+- host: https://developer.atlassian.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: confluence-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.atlassian.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: confluence-security.txt
+- host: https://auth.atlassian.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: confluence-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: confluence-oauth-authorization-server.json
+  - path: /.well-known/security.txt
+    status: 200
+    file: confluence-security.txt
+- host: https://www.atlassian.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: confluence-security.txt
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404

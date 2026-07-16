@@ -1,0 +1,36 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/platform/forge/ui-kit/
+description: >-
+  Client-side / embeddable UI surfaces for building inside and around
+  Confluence. These are app-UI component systems (Forge UI Kit, Custom UI,
+  Connect modules) and the Atlaskit design system, distinct from server-side
+  REST clients in packages/.
+component_families:
+- family: Forge UI Kit
+  kind: declarative component library
+  docs: https://developer.atlassian.com/platform/forge/ui-kit/
+  description: >-
+    React-based declarative components (Text, Button, Table, Tile, form
+    controls, macros) that render Confluence app UIs in Atlassian-hosted
+    iframes without shipping your own front-end assets.
+  loaders:
+  - "@forge/react"
+- family: Forge Custom UI
+  kind: hosted custom front end
+  docs: https://developer.atlassian.com/platform/forge/custom-ui/
+  description: Bring your own HTML/CSS/JS front end, bridged to product APIs via @forge/bridge.
+  loaders:
+  - "@forge/bridge"
+- family: Atlassian Connect modules
+  kind: iframe extension points
+  docs: https://developer.atlassian.com/cloud/confluence/modules/
+  description: >-
+    Confluence Connect modules (macros, content bylines, space/global pages,
+    dialogs, content actions) embedded via atlassian-connect.json descriptors.
+- family: Atlaskit / Atlassian Design System
+  kind: React component library
+  docs: https://atlassian.design/
+  description: The public React component library and design tokens Atlassian products (incl. Confluence app UIs) are built with.
+  loaders:
+  - "@atlaskit/*"

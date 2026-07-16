@@ -1,0 +1,34 @@
+generated: '2026-06-20'
+method: searched
+status: published
+source: https://github.com/atlassian/atlassian-mcp-server
+docs: https://support.atlassian.com/atlassian-rovo-mcp-server/docs/getting-started-with-the-atlassian-remote-mcp-server/
+description: >-
+  Official Atlassian Rovo MCP Server — a cloud-hosted (Cloudflare) remote MCP
+  server that bridges Atlassian Cloud (Confluence, Jira, Jira Service
+  Management, Bitbucket, Compass) to AI clients. Confluence access is exposed
+  through read, write, and search permission groups and respects the user's
+  existing product permissions. Generally available.
+server:
+  name: atlassian-rovo-mcp
+  vendor: Atlassian
+  transport: http
+  url: https://mcp.atlassian.com/v1/mcp/authv2
+  alternate_urls:
+  - https://mcp.atlassian.com/v1/mcp
+  - https://mcp.atlassian.com/v1/sse   # legacy SSE, supported but not recommended
+  authentication:
+  - oauth2.1
+  - api-token
+  tls: TLSv1.2+
+permission_groups:
+  confluence:
+  - read
+  - write
+  - search
+notes: >-
+  Individual Confluence tool names are documented at
+  https://support.atlassian.com/atlassian-rovo-mcp-server/docs/supported-tools/
+  and cover searching/summarizing content, and creating/updating Confluence
+  pages via natural language. Tool inventory not enumerated verbatim here to
+  avoid drift from the live server.

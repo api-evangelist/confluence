@@ -1,0 +1,33 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/cloud/confluence/changelog/
+description: >-
+  Versioning, deprecation, and reliability posture for Confluence Cloud APIs.
+versioning:
+  scheme: uri-path
+  current: v2
+  legacy: v1
+  notes: >-
+    Two concurrent REST generations: v1 (/wiki/rest/api) and next-generation v2
+    (/wiki/api/v2). GraphQL served at /gateway/api/graphql. Data Center/Server
+    ships a separately versioned on-premise REST API.
+  docs: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+deprecation:
+  policy_url: https://developer.atlassian.com/platform/deprecation-policy/
+  changelog: https://developer.atlassian.com/cloud/confluence/changelog/
+  announced_via: changelog entries with removal dates; migration guides
+  notice: >-
+    Atlassian publishes deprecation notices in the developer changelog with
+    stated removal dates (typically 6 months for REST changes). Example active
+    migration: User Privacy API migration guide.
+  migration_guides:
+  - https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/
+sla:
+  uptime_target: 99.95%
+  edition: Premium/Enterprise financially-backed SLA
+  docs: https://www.atlassian.com/software/confluence/pricing
+status_page: https://status.atlassian.com/
+recent_breaking:
+- date: '2026-06-01'
+  change: v2 version-listing endpoints cap results at 50 when body-format is included (was 250).
+deprecated_operations: []

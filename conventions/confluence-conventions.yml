@@ -1,0 +1,64 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+description: >-
+  Cross-cutting request/response semantics for Confluence Cloud REST API v2,
+  from Atlassian docs and the repo OpenAPI.
+authentication:
+  styles:
+  - oauth2-3lo
+  - basic-email-api-token
+  - bearer-pat
+  gateway_base: https://api.atlassian.com/ex/confluence/{cloudid}/wiki/api/v2
+  ref: authentication/confluence-authentication.yml
+pagination:
+  style: cursor
+  request_params:
+  - cursor
+  - limit
+  response:
+    next: _links.next
+    header: Link (rel="next")
+  notes: v2 uses opaque cursor pagination; do not construct cursors by hand.
+versioning:
+  style: uri-path
+  ref: lifecycle/confluence-lifecycle.yml
+optimistic_concurrency:
+  mechanism: version.number
+  notes: Updates must send the current version number + 1; stale numbers return 409 Conflict.
+content_representations:
+  body_formats:
+  - storage
+  - atlas_doc_format
+  - view
+  - export_view
+  - anonymous_export_view
+  - editor
+  param: body-format
+rate_limiting:
+  model: points-based
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - X-RateLimit-NearLimit
+  - Retry-After
+  - RateLimit-Reason
+  ref: rate-limits/confluence-rate-limits.yml
+error_envelope:
+  format: proprietary
+  shape: '{ statusCode, message, data.errors[].message.{key,args,translation} }'
+  ref: errors/confluence-problem-types.yml
+bulk:
+  max_items_per_request: 100
+search:
+  language: CQL
+  docs: https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/
+webhooks:
+  docs: https://developer.atlassian.com/cloud/confluence/using-webhooks/
+  ref: asyncapi/confluence-webhooks.yml
+idempotency:
+  supported: false
+  notes: >-
+    No documented Idempotency-Key header on Confluence Cloud content endpoints;
+    use optimistic concurrency (version numbers) for safe updates.

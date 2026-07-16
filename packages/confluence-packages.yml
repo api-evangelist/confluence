@@ -1,0 +1,52 @@
+generated: '2026-06-20'
+method: searched
+source: https://developer.atlassian.com/platform/forge/
+description: >-
+  Atlassian does not ship a dedicated first-party Confluence REST client SDK;
+  developers call the REST/GraphQL APIs directly or via the Forge and Atlassian
+  Connect app frameworks. The first-party packages below are the Atlassian app
+  platform libraries (Forge runtime/CLI, Connect Express). Widely used
+  community client libraries are included and clearly marked official: false.
+packages:
+- language: javascript
+  registry: npm
+  name: "@forge/api"
+  url: https://www.npmjs.com/package/@forge/api
+  install: npm install @forge/api
+  official: true
+  description: Forge runtime API for calling Confluence/Jira product REST APIs from Forge apps (asApp/asUser, requestConfluence).
+- language: javascript
+  registry: npm
+  name: "@forge/cli"
+  url: https://www.npmjs.com/package/@forge/cli
+  install: npm install -g @forge/cli
+  official: true
+  description: Forge command-line tool to create, deploy, and manage Forge apps (the `forge` binary).
+- language: javascript
+  registry: npm
+  name: "@forge/bridge"
+  url: https://www.npmjs.com/package/@forge/bridge
+  install: npm install @forge/bridge
+  official: true
+  description: Bridge library for Forge Custom UI front ends to invoke resolvers and product APIs.
+- language: javascript
+  registry: npm
+  name: atlassian-connect-express
+  url: https://www.npmjs.com/package/atlassian-connect-express
+  install: npm install atlassian-connect-express
+  official: true
+  description: Toolkit (ACE) for building Atlassian Connect apps for Confluence/Jira Cloud on Node.js/Express.
+- language: javascript
+  registry: npm
+  name: confluence.js
+  url: https://www.npmjs.com/package/confluence.js
+  install: npm install confluence.js
+  official: false
+  description: Popular community TypeScript/JavaScript client for the Confluence Cloud and Server REST APIs (maintained by Vladislav Tupikin).
+- language: python
+  registry: pypi
+  name: atlassian-python-api
+  url: https://pypi.org/project/atlassian-python-api/
+  install: pip install atlassian-python-api
+  official: false
+  description: Widely used community Python client covering Confluence, Jira, Bitbucket, and other Atlassian products.

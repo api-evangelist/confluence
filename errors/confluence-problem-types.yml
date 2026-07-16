@@ -1,0 +1,59 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/confluence-cloud-v2.yml
+docs: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/#status-codes
+format: proprietary
+envelope:
+  description: >-
+    Confluence Cloud returns a JSON error envelope (not RFC 9457
+    application/problem+json). The Error schema carries statusCode, a
+    human-readable message, and a data object with a nested errors[] list whose
+    messages include an i18n key, args, and a translation.
+  fields:
+  - statusCode
+  - message
+  - data.errors[].message.key
+  - data.errors[].message.translation
+  schema: json-schema/confluence-cloud-v2-error-schema.json
+problems:
+- status: 400
+  title: Bad Request
+  meaning: The request was malformed, or a body/parameter failed validation.
+  remediation: Check required fields, body-format values, and ID types (page/space IDs are int64).
+  source_operations:
+  - openapi/confluence-cloud-v2.yml#createPage
+  - openapi/confluence-cloud-v2.yml#updatePage
+  - openapi/confluence-cloud-v2.yml#createFooterComment
+- status: 401
+  title: Unauthorized
+  meaning: Missing or invalid authentication (expired token, wrong email/API-token pair).
+  remediation: Re-authenticate via OAuth 2.0 (3LO), Basic (email + API token), or a valid bearer token.
+  source_operations:
+  - openapi/confluence-cloud-v2.yml#getPages
+  - openapi/confluence-cloud-v2.yml#getSpaces
+- status: 403
+  title: Forbidden
+  meaning: Authenticated but the principal lacks the required scope or Confluence permission.
+  remediation: Grant the required OAuth scope (see scopes/confluence-scopes.yml) or content/space permission.
+- status: 404
+  title: Not Found
+  meaning: The content, space, comment, or attachment does not exist or is not visible to the caller.
+  remediation: Verify the ID and that the caller has read permission on the resource.
+  source_operations:
+  - openapi/confluence-cloud-v2.yml#getPageById
+  - openapi/confluence-cloud-v2.yml#getCommentById
+- status: 409
+  title: Conflict
+  meaning: Version conflict on update (stale version number) or a uniqueness conflict.
+  remediation: Re-fetch the resource, use its current version.number + 1, and retry the update.
+  source_operations:
+  - openapi/confluence-cloud-v2.yml#updatePage
+  - openapi/confluence-cloud-v2.yml#updateComment
+- status: 429
+  title: Too Many Requests
+  meaning: Points-based rate-limit quota exhausted for the app/user/tenant.
+  remediation: Honor the Retry-After header; back off until the hourly UTC reset. See rate-limits/confluence-rate-limits.yml.
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server-side failure.
+  remediation: Retry with backoff; if persistent, contact Atlassian developer support.

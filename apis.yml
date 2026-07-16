@@ -9,7 +9,7 @@ tags:
 - Knowledge Base
 - Wiki
 created: '2024'
-modified: '2026-05-19'
+modified: '2026-06-20'
 url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
 apis:
 - name: Confluence Cloud REST API v1
@@ -916,6 +916,38 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: Packages
+  url: packages/confluence-packages.yml
+- type: WellKnown
+  url: well-known/confluence-well-known.yml
+- type: SecurityTxt
+  url: well-known/confluence-security.txt
+- type: MCPServer
+  url: mcp/confluence-mcp.yml
+- type: LLMsTxt
+  url: llms/confluence-llms.txt
+- type: LLMsTxt
+  url: llms/confluence-llms-atlassian.txt
+- type: Overlay
+  url: overlays/confluence-cloud-v2-overlay.yaml
+- type: Conformance
+  url: conformance/confluence-conformance.yml
+- type: ErrorCatalog
+  url: errors/confluence-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/confluence-lifecycle.yml
+- type: Conventions
+  url: conventions/confluence-conventions.yml
+- type: ChangeLog
+  url: changelog/confluence-changelog.yml
+- type: CLI
+  url: cli/confluence-cli.yml
+- type: Components
+  url: components/confluence-components.yml
+- type: DataModel
+  url: data-model/confluence-data-model.yml
+- type: Sandbox
+  url: sandbox/confluence-sandbox.yml
 - type: AgenticAccess
   url: agentic-access/confluence-agentic-access.yml
 - type: TrustCenter

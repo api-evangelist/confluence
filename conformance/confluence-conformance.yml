@@ -1,0 +1,43 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/confluence-cloud-v2.yml
+description: >-
+  Cross-cutting standards conformance for Confluence Cloud, derived from the
+  OpenAPI security schemes and response shapes and corroborated by Atlassian
+  developer docs.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: openapi securitySchemes declares oauth2 authorizationCode flow (auth.atlassian.com); OAuth 2.0 (3LO)
+- id: oidc
+  conforms: true
+  evidence: auth.atlassian.com/.well-known/openid-configuration returns 200 (OIDC discovery)
+- id: oauth-authorization-server-metadata
+  conforms: true
+  evidence: auth.atlassian.com/.well-known/oauth-authorization-server returns 200 (RFC 8414)
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: /.well-known/security.txt served (PGP-signed) on developer/api/auth/www hosts
+- id: http-basic-auth
+  conforms: true
+  evidence: openapi basicAuth scheme (email + API token)
+- id: bearer-token
+  conforms: true
+  evidence: openapi bearerAuth http bearer scheme
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: error responses use a proprietary Error envelope (statusCode/message/data), not application/problem+json
+- id: cursor-pagination
+  conforms: true
+  evidence: v2 endpoints use cursor pagination via `cursor` param and Link header / _links.next
+- id: rfc8594-deprecation-sunset
+  conforms: true
+  evidence: Atlassian announces deprecations via changelog with removal dates; Deprecation/Sunset guidance in developer policy
+- id: webhooks
+  conforms: true
+  evidence: asyncapi/confluence-webhooks.yml captures content-change webhooks
+- id: fhir-r4
+  conforms: false
+- id: scim2
+  conforms: false
+  evidence: SCIM handled at the Atlassian org/identity layer, not the Confluence content API

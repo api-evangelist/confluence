@@ -1,12 +1,29 @@
-generated: '2026-07-11'
+generated: '2026-06-20'
 method: searched
 probe: true
-source: https://www.atlassian.com/trust
+source: https://www.atlassian.com/trust/compliance
 url: https://www.atlassian.com/trust
+compliance_url: https://www.atlassian.com/trust/compliance/resources
 certifications:
+- SOC 2 Type II
+- SOC 3
+- ISO 27001
+- ISO 27017
+- ISO 27018
+- ISO 27701
+- PCI DSS
 - FedRAMP
+- HIPAA
+- CSA STAR
+- GDPR
 evidence:
 - source: https://www.atlassian.com/trust
   keywords:
   - fedramp
   - trust center
+- source: https://www.atlassian.com/trust/compliance
+  keywords:
+  - soc 2
+  - iso 27001
+  - pci dss
+  - compliance program

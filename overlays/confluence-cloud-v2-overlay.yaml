@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Confluence Cloud REST API v2
+  version: 1.0.0
+extends: openapi/confluence-cloud-v2.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: confluence
+    x-apievangelist-enriched: '2026-06-20'
+    x-api-lifecycle: lifecycle/confluence-lifecycle.yml
+    x-api-authentication: authentication/confluence-authentication.yml
+    x-api-scopes: scopes/confluence-scopes.yml
+    x-api-conventions: conventions/confluence-conventions.yml
+    x-api-error-catalog: errors/confluence-problem-types.yml
+    x-api-data-model: data-model/confluence-data-model.yml
+    x-mcp-server: https://mcp.atlassian.com/v1/mcp/authv2
+- target: $.info
+  update:
+    x-rate-limit:
+      model: points-based
+      docs: https://developer.atlassian.com/cloud/confluence/rate-limiting/
+      headers:
+      - X-RateLimit-Limit
+      - X-RateLimit-Remaining
+      - X-RateLimit-Reset
+      - X-RateLimit-NearLimit
+      - Retry-After
+- target: $.servers[0]
+  update:
+    x-apievangelist-note: >-
+      Cloud REST v2 base is https://{domain}.atlassian.net/wiki/api/v2; the
+      OAuth 2.0 (3LO) gateway equivalent is https://api.atlassian.com/ex/confluence/{cloudid}/wiki/api/v2.
