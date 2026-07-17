@@ -1,0 +1,155 @@
+arazzo: 1.0.1
+info:
+  title: Confluence Inventory a Space and Its Page Labels
+  summary: Resolve a space by key, read its metadata, walk its pages, and resolve the labels on a page.
+  description: >-
+    A read-only audit flow for anyone taking stock of a Confluence space before
+    a migration, a governance review, or a content clean-up. It resolves the
+    space key to an id, reads the full space record for its homepage and
+    permissions surface, lists the pages in the space, then drills into one page
+    to read its labels and resolve a label id to its canonical name and prefix.
+    Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: confluenceCloudV2
+  url: ../openapi/confluence-cloud-v2.yml
+  type: openapi
+workflows:
+- workflowId: inventory-space-content
+  summary: Produce a read-only inventory of a Confluence space, its pages, and its labels.
+  description: >-
+    Resolves a space key to an id, reads the space, lists its current pages,
+    reads the labels on the first page returned, and resolves the first label to
+    its canonical record.
+  inputs:
+    type: object
+    required:
+    - spaceKey
+    properties:
+      spaceKey:
+        type: string
+        description: The space key to inventory (e.g. "ENG").
+      pageLimit:
+        type: integer
+        description: Maximum number of pages to return per inventory call, 1-250.
+      depth:
+        type: string
+        description: Use "root" for top-level pages only, or "all" for the whole tree.
+  steps:
+  - stepId: resolveSpace
+    description: >-
+      Resolve the supplied space key to the numeric space id that the rest of
+      the inventory hangs off, and confirm a space actually matched.
+    operationId: getSpaces
+    parameters:
+    - name: keys
+      in: query
+      value: $inputs.spaceKey
+    - name: status
+      in: query
+      value: current
+    - name: description-format
+      in: query
+      value: plain
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.results.length > 0
+      type: jsonpath
+    outputs:
+      spaceId: $response.body#/results/0/id
+      spaceName: $response.body#/results/0/name
+      spaceType: $response.body#/results/0/type
+  - stepId: readSpace
+    description: >-
+      Read the full space record to capture the homepage id, author, and the
+      description that a bare listing does not return.
+    operationId: getSpaceById
+    parameters:
+    - name: id
+      in: path
+      value: $steps.resolveSpace.outputs.spaceId
+    - name: description-format
+      in: query
+      value: plain
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      spaceKey: $response.body#/key
+      homepageId: $response.body#/homepageId
+      authorId: $response.body#/authorId
+      createdAt: $response.body#/createdAt
+      description: $response.body#/description
+  - stepId: listSpacePages
+    description: >-
+      List the current pages in the space, sorted by last modification so the
+      most recently touched content leads the inventory.
+    operationId: getPagesInSpace
+    parameters:
+    - name: id
+      in: path
+      value: $steps.resolveSpace.outputs.spaceId
+    - name: status
+      in: query
+      value: current
+    - name: depth
+      in: query
+      value: $inputs.depth
+    - name: sort
+      in: query
+      value: -modified-date
+    - name: limit
+      in: query
+      value: $inputs.pageLimit
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      pages: $response.body#/results
+      firstPageId: $response.body#/results/0/id
+      nextCursor: $response.body#/_links/next
+  - stepId: readPageLabels
+    description: >-
+      Read the labels attached to the first page in the inventory, which is how
+      most Confluence taxonomies are actually expressed.
+    operationId: getPageLabels
+    parameters:
+    - name: id
+      in: path
+      value: $steps.listSpacePages.outputs.firstPageId
+    - name: prefix
+      in: query
+      value: global
+    - name: limit
+      in: query
+      value: 250
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      labels: $response.body#/results
+      firstLabelId: $response.body#/results/0/id
+  - stepId: resolveLabel
+    description: >-
+      Resolve one label id to its canonical name and prefix so the inventory
+      records the taxonomy term rather than an opaque id.
+    operationId: getLabelById
+    parameters:
+    - name: id
+      in: path
+      value: $steps.readPageLabels.outputs.firstLabelId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      labelId: $response.body#/id
+      labelName: $response.body#/name
+      labelPrefix: $response.body#/prefix
+  outputs:
+    spaceId: $steps.resolveSpace.outputs.spaceId
+    spaceName: $steps.resolveSpace.outputs.spaceName
+    homepageId: $steps.readSpace.outputs.homepageId
+    pages: $steps.listSpacePages.outputs.pages
+    labels: $steps.readPageLabels.outputs.labels
+    labelName: $steps.resolveLabel.outputs.labelName

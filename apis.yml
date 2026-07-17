@@ -1095,3 +1095,42 @@ common:
   url: json-ld/confluence-context.jsonld
 - type: JSONLD
   url: json-ld/confluence-cloud-v2-context.jsonld
+- type: Arazzo
+  url: arazzo/confluence-blog-post-retire-workflow.yml
+  name: Confluence Archive or Delete a Blog Post
+- type: Arazzo
+  url: arazzo/confluence-comment-moderation-workflow.yml
+  name: Confluence Moderate a Page Comment
+- type: Arazzo
+  url: arazzo/confluence-comment-thread-reply-workflow.yml
+  name: Confluence Reply to a Page Comment Thread
+- type: Arazzo
+  url: arazzo/confluence-create-page-read-back-workflow.yml
+  name: Confluence Create a Page in a Space and Read It Back
+- type: Arazzo
+  url: arazzo/confluence-inline-comment-on-page-workflow.yml
+  name: Confluence Anchor an Inline Comment to Page Text
+- type: Arazzo
+  url: arazzo/confluence-page-archive-retire-workflow.yml
+  name: Confluence Archive or Retire a Page
+- type: Arazzo
+  url: arazzo/confluence-page-attachment-audit-workflow.yml
+  name: Confluence Audit and Prune a Page Attachment
+- type: Arazzo
+  url: arazzo/confluence-page-move-reparent-workflow.yml
+  name: Confluence Move a Page to a New Parent
+- type: Arazzo
+  url: arazzo/confluence-page-tree-export-workflow.yml
+  name: Confluence Export a Page with Its Children, Attachments, and Labels
+- type: Arazzo
+  url: arazzo/confluence-publish-blog-post-workflow.yml
+  name: Confluence Publish a Blog Post and Read It Back
+- type: Arazzo
+  url: arazzo/confluence-revise-blog-post-workflow.yml
+  name: Confluence Find and Revise a Blog Post
+- type: Arazzo
+  url: arazzo/confluence-space-content-inventory-workflow.yml
+  name: Confluence Inventory a Space and Its Page Labels
+- type: Arazzo
+  url: arazzo/confluence-upsert-page-by-title-workflow.yml
+  name: Confluence Upsert a Page by Title

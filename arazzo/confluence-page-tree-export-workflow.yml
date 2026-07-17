@@ -1,0 +1,122 @@
+arazzo: 1.0.1
+info:
+  title: Confluence Export a Page with Its Children, Attachments, and Labels
+  summary: Assemble a complete portrait of a page — body, child pages, attachments, and labels — in one read-only pass.
+  description: >-
+    Confluence v2 splits a page's substance across four endpoints, so anything
+    that has to leave Confluence intact — a migration, a backup, a
+    documentation-as-code sync, or an agent grounding itself on a page — needs
+    all four reads rather than the page body alone. This flow reads the page in
+    storage format, walks its immediate children, collects its attachments, and
+    resolves its labels, producing a single set of outputs that describes the
+    page completely. It is strictly read-only. Every step spells out its request
+    inline so the flow can be read and executed without opening the underlying
+    OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: confluenceCloudV2
+  url: ../openapi/confluence-cloud-v2.yml
+  type: openapi
+workflows:
+- workflowId: export-page-tree
+  summary: Read a Confluence page together with its children, attachments, and labels.
+  description: >-
+    Performs the four reads that together constitute a complete page export and
+    returns them as one aggregated result.
+  inputs:
+    type: object
+    required:
+    - pageId
+    properties:
+      pageId:
+        type: string
+        description: The id of the page to export.
+      bodyFormat:
+        type: string
+        description: >-
+          The body representation to export, e.g. storage for round-trippable
+          XHTML or export_view for rendered output.
+  steps:
+  - stepId: readPage
+    description: >-
+      Read the page itself, which carries the body, version, author, and space
+      that anchor the rest of the export.
+    operationId: getPageById
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.pageId
+    - name: body-format
+      in: query
+      value: $inputs.bodyFormat
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      title: $response.body#/title
+      spaceId: $response.body#/spaceId
+      pageStatus: $response.body#/status
+      parentId: $response.body#/parentId
+      authorId: $response.body#/authorId
+      createdAt: $response.body#/createdAt
+      versionNumber: $response.body#/version/number
+      body: $response.body#/body
+      webui: $response.body#/_links/webui
+  - stepId: readChildPages
+    description: >-
+      Walk the page's immediate children so the export records the subtree
+      beneath it, ordered by their position in the page tree.
+    operationId: getChildPages
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.pageId
+    - name: limit
+      in: query
+      value: 250
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      children: $response.body#/results
+      childrenCursor: $response.body#/_links/next
+  - stepId: readAttachments
+    description: >-
+      Collect the files stored against the page, whose download links an export
+      needs in order to fetch the binaries separately.
+    operationId: getPageAttachments
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.pageId
+    - name: limit
+      in: query
+      value: 250
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      attachments: $response.body#/results
+      attachmentsCursor: $response.body#/_links/next
+  - stepId: readLabels
+    description: >-
+      Resolve the page's labels, which carry the taxonomy that would otherwise
+      be lost when the content leaves Confluence.
+    operationId: getPageLabels
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.pageId
+    - name: limit
+      in: query
+      value: 250
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      labels: $response.body#/results
+  outputs:
+    title: $steps.readPage.outputs.title
+    spaceId: $steps.readPage.outputs.spaceId
+    versionNumber: $steps.readPage.outputs.versionNumber
+    body: $steps.readPage.outputs.body
+    webui: $steps.readPage.outputs.webui
+    children: $steps.readChildPages.outputs.children
+    attachments: $steps.readAttachments.outputs.attachments
+    labels: $steps.readLabels.outputs.labels
