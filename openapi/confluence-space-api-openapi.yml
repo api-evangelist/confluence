@@ -1,0 +1,784 @@
+openapi: 3.1.0
+info:
+  title: Confluence Cloud REST API v2 Attachment Space API
+  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  version: 2.0.0
+  contact:
+    name: Atlassian
+    url: https://developer.atlassian.com/cloud/confluence/
+    email: ecosystem@atlassian.com
+  license:
+    name: Atlassian Developer Terms
+    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
+  x-logo:
+    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+servers:
+- url: https://{domain}.atlassian.net/wiki/api/v2
+  description: Confluence Cloud
+  variables:
+    domain:
+      default: your-domain
+      description: Your Atlassian Cloud site domain
+security:
+- basicAuth: []
+- oAuth2: []
+- bearerAuth: []
+tags:
+- name: Space
+  description: Retrieve and manage Confluence spaces
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
+paths:
+  /spaces:
+    get:
+      operationId: getSpaces
+      summary: Get Spaces
+      description: Returns all spaces. The results can be filtered by space type, status, and labels. Pagination is cursor-based.
+      tags:
+      - Space
+      parameters:
+      - name: ids
+        in: query
+        description: Filter by space IDs. Multiple IDs can be specified as comma-separated values.
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+        example: []
+      - name: keys
+        in: query
+        description: Filter by space keys. Multiple keys can be specified as comma-separated values.
+        schema:
+          type: array
+          items:
+            type: string
+        example: []
+      - name: type
+        in: query
+        description: Filter by space type.
+        schema:
+          type: string
+          enum:
+          - global
+          - personal
+        example: global
+      - name: status
+        in: query
+        description: Filter by space status.
+        schema:
+          type: string
+          enum:
+          - current
+          - archived
+        example: current
+      - name: labels
+        in: query
+        description: Filter by space labels. Multiple labels can be specified.
+        schema:
+          type: array
+          items:
+            type: string
+        example: []
+      - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/DescriptionFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the requested spaces are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceBulk'
+              examples:
+                Getspaces200Example:
+                  summary: Default getSpaces 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      key: example_value
+                      name: Example Title
+                      type: global
+                      status: current
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      homepageId: '500123'
+                    _links:
+                      next: example_value
+                      base: example_value
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /spaces/{id}:
+    get:
+      operationId: getSpaceById
+      summary: Get Space by Id
+      description: Returns a specific space by its id.
+      tags:
+      - Space
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - $ref: '#/components/parameters/DescriptionFormatParam'
+      responses:
+        '200':
+          description: Returned if the requested space is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+              examples:
+                Getspacebyid200Example:
+                  summary: Default getSpaceById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    key: example_value
+                    name: Example Title
+                    type: global
+                    status: current
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    homepageId: '500123'
+                    description: {}
+                    icon:
+                      path: example_value
+                      apiDownloadLink: example_value
+                    labels:
+                      results:
+                      - {}
+                    properties:
+                      results:
+                      - {}
+                    operations:
+                      results:
+                      - {}
+                    permissions:
+                      results:
+                      - {}
+                    _links:
+                      webui: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /spaces/{id}/pages:
+    get:
+      operationId: getPagesInSpace
+      summary: Get Pages in Space
+      description: Returns all pages in a specific space. Supports filtering by status and depth.
+      tags:
+      - Space
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - name: depth
+        in: query
+        description: Filter by depth in the page tree. Use root to get only top-level pages.
+        schema:
+          type: string
+          enum:
+          - all
+          - root
+        example: all
+      - $ref: '#/components/parameters/StatusFilter'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/SortParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the pages in the space are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageBulk'
+              examples:
+                Getpagesinspace200Example:
+                  summary: Default getPagesInSpace 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      spaceId: '500123'
+                      parentId: '500123'
+                      parentType: page
+                      position: 10
+                      authorId: '500123'
+                      ownerId: '500123'
+                      lastOwnerId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                    _links:
+                      next: example_value
+                      base: example_value
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    SpaceIcon:
+      type: object
+      properties:
+        path:
+          type: string
+          description: The relative path to the space icon.
+          example: example_value
+        apiDownloadLink:
+          type: string
+          description: The API download link for the space icon.
+          example: example_value
+    SpaceBulk:
+      type: object
+      description: A paginated list of spaces.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Space'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Version:
+      type: object
+      description: Version information for content.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
+        message:
+          type: string
+          description: The message associated with this version.
+          example: example_value
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
+          type: string
+          description: The Atlassian account ID of the version author.
+          example: '500123'
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    SpacePermissionArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpacePermission'
+          example: []
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    SpaceDescription:
+      type: object
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    PageLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the page.
+          example: example_value
+        editui:
+          type: string
+          description: Edit UI link for the page.
+          example: example_value
+        tinyui:
+          type: string
+          description: Shortened link for the page.
+          example: example_value
+    SpacePropertyArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentProperty'
+          example: []
+    LikeArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Like'
+          example: []
+    SpacePermission:
+      type: object
+      properties:
+        id:
+          type: string
+          example: abc123
+        principal:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - user
+              - group
+              - role
+            id:
+              type: string
+          example: example_value
+        operation:
+          $ref: '#/components/schemas/Operation'
+    Operation:
+      type: object
+      properties:
+        operation:
+          type: string
+          description: The operation type.
+          enum:
+          - create
+          - read
+          - update
+          - delete
+          - administer
+          example: create
+        targetType:
+          type: string
+          description: The target type for the operation.
+          example: example_value
+    SpaceLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the space.
+          example: example_value
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The Atlassian account ID of the user who liked the content.
+          example: '500123'
+    PageBulk:
+      type: object
+      description: A paginated list of pages.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Body:
+      type: object
+      description: The body content in various representations.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    VersionArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    OperationArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+          example: []
+    ContentPropertyArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentProperty'
+          example: []
+    Label:
+      type: object
+      description: Represents a label applied to Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+          example: example_value
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          example: abc123
+        key:
+          type: string
+          example: example_value
+        value:
+          example: example_value
+        version:
+          $ref: '#/components/schemas/Version'
+    Space:
+      type: object
+      description: Represents a Confluence space.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the space.
+          example: abc123
+        key:
+          type: string
+          description: The key of the space, used in URLs.
+          example: example_value
+        name:
+          type: string
+          description: The name of the space.
+          example: Example Title
+        type:
+          type: string
+          description: The type of space.
+          enum:
+          - global
+          - personal
+          example: global
+        status:
+          type: string
+          description: The status of the space.
+          enum:
+          - current
+          - archived
+          example: current
+        authorId:
+          type: string
+          description: The Atlassian account ID of the space creator.
+          example: '500123'
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the space was created.
+          example: '2026-01-15T10:30:00Z'
+        homepageId:
+          type: string
+          description: The ID of the space homepage.
+          example: '500123'
+        description:
+          $ref: '#/components/schemas/SpaceDescription'
+        icon:
+          $ref: '#/components/schemas/SpaceIcon'
+        labels:
+          $ref: '#/components/schemas/LabelArray'
+        properties:
+          $ref: '#/components/schemas/SpacePropertyArray'
+        operations:
+          $ref: '#/components/schemas/OperationArray'
+        permissions:
+          $ref: '#/components/schemas/SpacePermissionArray'
+        _links:
+          $ref: '#/components/schemas/SpaceLinks'
+    LabelArray:
+      type: object
+      description: A list of labels.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Page:
+      type: object
+      description: Represents a Confluence page.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the page.
+          example: abc123
+        status:
+          type: string
+          description: The current status of the page.
+          enum:
+          - current
+          - draft
+          - archived
+          - trashed
+          example: current
+        title:
+          type: string
+          description: The title of the page.
+          example: Example Title
+        spaceId:
+          type: string
+          description: The ID of the space this page belongs to.
+          example: '500123'
+        parentId:
+          type: string
+          description: The ID of the parent page, if the page is nested.
+          example: '500123'
+        parentType:
+          type: string
+          description: The type of the parent (page or space).
+          enum:
+          - page
+          - space
+          example: page
+        position:
+          type: integer
+          description: The position of this page in the page tree relative to siblings.
+          example: 10
+        authorId:
+          type: string
+          description: The Atlassian account ID of the page author.
+          example: '500123'
+        ownerId:
+          type: string
+          description: The Atlassian account ID of the page owner.
+          example: '500123'
+        lastOwnerId:
+          type: string
+          description: The Atlassian account ID of the previous owner.
+          example: '500123'
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the page was created.
+          example: '2026-01-15T10:30:00Z'
+        version:
+          $ref: '#/components/schemas/Version'
+        body:
+          $ref: '#/components/schemas/Body'
+        labels:
+          $ref: '#/components/schemas/LabelArray'
+        properties:
+          $ref: '#/components/schemas/ContentPropertyArray'
+        operations:
+          $ref: '#/components/schemas/OperationArray'
+        likes:
+          $ref: '#/components/schemas/LikeArray'
+        versions:
+          $ref: '#/components/schemas/VersionArray'
+        _links:
+          $ref: '#/components/schemas/PageLinks'
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+          example: example_value
+        value:
+          type: string
+          description: The body content in this representation.
+          example: example_value
+  parameters:
+    BodyFormatParam:
+      name: body-format
+      in: query
+      description: The representation format for the content body.
+      schema:
+        type: string
+        enum:
+        - storage
+        - atlas_doc_format
+        - view
+        - export_view
+        - anonymous_export_view
+        - editor
+    SortParam:
+      name: sort
+      in: query
+      description: Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.
+      schema:
+        type: string
+        enum:
+        - id
+        - -id
+        - title
+        - -title
+        - created-date
+        - -created-date
+        - modified-date
+        - -modified-date
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    StatusFilter:
+      name: status
+      in: query
+      description: Filter by content status.
+      schema:
+        type: string
+        enum:
+        - current
+        - archived
+        - draft
+        - trashed
+    DescriptionFormatParam:
+      name: description-format
+      in: query
+      description: The format of the space description in the response.
+      schema:
+        type: string
+        enum:
+        - plain
+        - view
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Returned if the request is malformed or contains invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication using email and API token. Provide your Atlassian account email as the username and an API token as the password.
+    oAuth2:
+      type: oauth2
+      description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read Confluence content
+            read:confluence-content.summary: Read Confluence content summaries
+            write:confluence-content: Create and update Confluence content
+            read:confluence-space.summary: Read Confluence space summaries
+            write:confluence-space: Create and update Confluence spaces
+            read:confluence-user: Read Confluence user information
+            read:confluence-groups: Read Confluence groups
+            write:confluence-file: Upload attachments to Confluence
+            delete:confluence-content: Delete Confluence content
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token or OAuth 2.0 Bearer token.
+externalDocs:
+  description: Confluence Cloud REST API v2 Documentation
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/

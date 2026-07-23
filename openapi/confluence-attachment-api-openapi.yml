@@ -1,0 +1,361 @@
+openapi: 3.1.0
+info:
+  title: Confluence Cloud REST API v2 Attachment API
+  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  version: 2.0.0
+  contact:
+    name: Atlassian
+    url: https://developer.atlassian.com/cloud/confluence/
+    email: ecosystem@atlassian.com
+  license:
+    name: Atlassian Developer Terms
+    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
+  x-logo:
+    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+servers:
+- url: https://{domain}.atlassian.net/wiki/api/v2
+  description: Confluence Cloud
+  variables:
+    domain:
+      default: your-domain
+      description: Your Atlassian Cloud site domain
+security:
+- basicAuth: []
+- oAuth2: []
+- bearerAuth: []
+tags:
+- name: Attachment
+  description: Manage file attachments on content
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-attachment/
+paths:
+  /attachments/{id}:
+    get:
+      operationId: getAttachmentById
+      summary: Get Attachment by Id
+      description: Returns a specific attachment by id.
+      tags:
+      - Attachment
+      parameters:
+      - $ref: '#/components/parameters/ContentIdPath'
+      responses:
+        '200':
+          description: Returned if the attachment is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+              examples:
+                Getattachmentbyid200Example:
+                  summary: Default getAttachmentById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    mediaType: example_value
+                    mediaTypeDescription: example_value
+                    comment: example_value
+                    fileSize: 10
+                    webuiLink: example_value
+                    downloadLink: example_value
+                    pageId: '500123'
+                    blogPostId: '500123'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    _links:
+                      webui: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteAttachment
+      summary: Delete Attachment
+      description: Deletes an attachment by id.
+      tags:
+      - Attachment
+      parameters:
+      - $ref: '#/components/parameters/ContentIdPath'
+      responses:
+        '204':
+          description: Returned if the attachment was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /pages/{id}/attachments:
+    get:
+      operationId: getPageAttachments
+      summary: Get Attachments for Page
+      description: Returns the attachments of a specific page.
+      tags:
+      - Attachment
+      parameters:
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the attachments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentBulk'
+              examples:
+                Getpageattachments200Example:
+                  summary: Default getPageAttachments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      mediaType: example_value
+                      mediaTypeDescription: example_value
+                      comment: example_value
+                      fileSize: 10
+                      webuiLink: example_value
+                      downloadLink: example_value
+                      pageId: '500123'
+                      blogPostId: '500123'
+                    _links:
+                      next: example_value
+                      base: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  parameters:
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+  schemas:
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    ContentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the content.
+          example: example_value
+    AttachmentBulk:
+      type: object
+      description: A paginated list of attachments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Attachment:
+      type: object
+      description: Represents a file attachment on Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the attachment.
+          example: abc123
+        status:
+          type: string
+          description: The status of the attachment.
+          enum:
+          - current
+          - trashed
+          example: current
+        title:
+          type: string
+          description: The filename of the attachment.
+          example: Example Title
+        mediaType:
+          type: string
+          description: The MIME type of the attachment.
+          example: example_value
+        mediaTypeDescription:
+          type: string
+          description: Human-readable description of the media type.
+          example: example_value
+        comment:
+          type: string
+          description: Comment associated with the attachment upload.
+          example: example_value
+        fileSize:
+          type: integer
+          format: int64
+          description: File size in bytes.
+          example: 10
+        webuiLink:
+          type: string
+          description: The web UI link for viewing the attachment.
+          example: example_value
+        downloadLink:
+          type: string
+          description: The download link for the attachment.
+          example: example_value
+        pageId:
+          type: string
+          description: The ID of the page this attachment belongs to.
+          example: '500123'
+        blogPostId:
+          type: string
+          description: The ID of the blog post this attachment belongs to.
+          example: '500123'
+        version:
+          $ref: '#/components/schemas/Version'
+        _links:
+          $ref: '#/components/schemas/ContentLinks'
+    Version:
+      type: object
+      description: Version information for content.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
+        message:
+          type: string
+          description: The message associated with this version.
+          example: example_value
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
+          type: string
+          description: The Atlassian account ID of the version author.
+          example: '500123'
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication using email and API token. Provide your Atlassian account email as the username and an API token as the password.
+    oAuth2:
+      type: oauth2
+      description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read Confluence content
+            read:confluence-content.summary: Read Confluence content summaries
+            write:confluence-content: Create and update Confluence content
+            read:confluence-space.summary: Read Confluence space summaries
+            write:confluence-space: Create and update Confluence spaces
+            read:confluence-user: Read Confluence user information
+            read:confluence-groups: Read Confluence groups
+            write:confluence-file: Upload attachments to Confluence
+            delete:confluence-content: Delete Confluence content
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token or OAuth 2.0 Bearer token.
+externalDocs:
+  description: Confluence Cloud REST API v2 Documentation
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/

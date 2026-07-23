@@ -1,0 +1,265 @@
+openapi: 3.1.0
+info:
+  title: Confluence Cloud REST API v2 Attachment Label API
+  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  version: 2.0.0
+  contact:
+    name: Atlassian
+    url: https://developer.atlassian.com/cloud/confluence/
+    email: ecosystem@atlassian.com
+  license:
+    name: Atlassian Developer Terms
+    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
+  x-logo:
+    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+servers:
+- url: https://{domain}.atlassian.net/wiki/api/v2
+  description: Confluence Cloud
+  variables:
+    domain:
+      default: your-domain
+      description: Your Atlassian Cloud site domain
+security:
+- basicAuth: []
+- oAuth2: []
+- bearerAuth: []
+tags:
+- name: Label
+  description: Manage labels on content
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-label/
+paths:
+  /pages/{id}/labels:
+    get:
+      operationId: getPageLabels
+      summary: Get Labels for Page
+      description: Returns the labels associated with a specific page.
+      tags:
+      - Label
+      parameters:
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/LabelPrefixParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the labels are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelArray'
+              examples:
+                Getpagelabels200Example:
+                  summary: Default getPageLabels 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      name: Example Title
+                      prefix: example_value
+                    _links:
+                      next: example_value
+                      base: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /labels/{id}:
+    get:
+      operationId: getLabelById
+      summary: Get Label by Id
+      description: Returns a specific label by id.
+      tags:
+      - Label
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the label.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      responses:
+        '200':
+          description: Returned if the label is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+              examples:
+                Getlabelbyid200Example:
+                  summary: Default getLabelById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    name: Example Title
+                    prefix: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  parameters:
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    LabelPrefixParam:
+      name: prefix
+      in: query
+      description: Filter labels by prefix (global, my, team).
+      schema:
+        type: string
+        enum:
+        - global
+        - my
+        - team
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+  schemas:
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    LabelArray:
+      type: object
+      description: A list of labels.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Label:
+      type: object
+      description: Represents a label applied to Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+          example: example_value
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication using email and API token. Provide your Atlassian account email as the username and an API token as the password.
+    oAuth2:
+      type: oauth2
+      description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read Confluence content
+            read:confluence-content.summary: Read Confluence content summaries
+            write:confluence-content: Create and update Confluence content
+            read:confluence-space.summary: Read Confluence space summaries
+            write:confluence-space: Create and update Confluence spaces
+            read:confluence-user: Read Confluence user information
+            read:confluence-groups: Read Confluence groups
+            write:confluence-file: Upload attachments to Confluence
+            delete:confluence-content: Delete Confluence content
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token or OAuth 2.0 Bearer token.
+externalDocs:
+  description: Confluence Cloud REST API v2 Documentation
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/

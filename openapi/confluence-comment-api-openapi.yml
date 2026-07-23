@@ -1,0 +1,820 @@
+openapi: 3.1.0
+info:
+  title: Confluence Cloud REST API v2 Attachment Comment API
+  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  version: 2.0.0
+  contact:
+    name: Atlassian
+    url: https://developer.atlassian.com/cloud/confluence/
+    email: ecosystem@atlassian.com
+  license:
+    name: Atlassian Developer Terms
+    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
+  x-logo:
+    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+servers:
+- url: https://{domain}.atlassian.net/wiki/api/v2
+  description: Confluence Cloud
+  variables:
+    domain:
+      default: your-domain
+      description: Your Atlassian Cloud site domain
+security:
+- basicAuth: []
+- oAuth2: []
+- bearerAuth: []
+tags:
+- name: Comment
+  description: Create, retrieve, update, and delete comments on pages and blog posts
+  externalDocs:
+    url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-comment/
+paths:
+  /pages/{id}/footer-comments:
+    get:
+      operationId: getFooterComments
+      summary: Get Footer Comments for Page
+      description: Returns the footer comments of a specific page.
+      tags:
+      - Comment
+      parameters:
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the footer comments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentBulk'
+              examples:
+                Getfootercomments200Example:
+                  summary: Default getFooterComments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      blogPostId: '500123'
+                      pageId: '500123'
+                      parentCommentId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      resolutionStatus: open
+                    _links:
+                      next: example_value
+                      base: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /pages/{id}/inline-comments:
+    get:
+      operationId: getInlineComments
+      summary: Get Inline Comments for Page
+      description: Returns the inline comments of a specific page.
+      tags:
+      - Comment
+      parameters:
+      - $ref: '#/components/parameters/ContentIdPath'
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the inline comments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentBulk'
+              examples:
+                Getinlinecomments200Example:
+                  summary: Default getInlineComments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      blogPostId: '500123'
+                      pageId: '500123'
+                      parentCommentId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      resolutionStatus: open
+                    _links:
+                      next: example_value
+                      base: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /footer-comments:
+    post:
+      operationId: createFooterComment
+      summary: Create Footer Comment
+      description: Creates a footer comment on a page or blog post.
+      tags:
+      - Comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+            examples:
+              CreatefootercommentRequestExample:
+                summary: Default createFooterComment request
+                x-microcks-default: true
+                value:
+                  blogPostId: '500123'
+                  pageId: '500123'
+                  parentCommentId: '500123'
+                  body:
+                    representation: storage
+                    value: example_value
+      responses:
+        '200':
+          description: Returned if the comment was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+              examples:
+                Createfootercomment200Example:
+                  summary: Default createFooterComment 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /inline-comments:
+    post:
+      operationId: createInlineComment
+      summary: Create Inline Comment
+      description: Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection.
+      tags:
+      - Comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InlineCommentCreateRequest'
+            examples:
+              CreateinlinecommentRequestExample:
+                summary: Default createInlineComment request
+                x-microcks-default: true
+                value:
+                  blogPostId: '500123'
+                  pageId: '500123'
+                  body:
+                    representation: storage
+                    value: example_value
+                  inlineCommentProperties:
+                    textSelection: example_value
+                    textSelectionMatchCount: 10
+      responses:
+        '200':
+          description: Returned if the inline comment was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+              examples:
+                Createinlinecomment200Example:
+                  summary: Default createInlineComment 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /comments/{id}:
+    get:
+      operationId: getCommentById
+      summary: Get Comment by Id
+      description: Returns a specific comment by id.
+      tags:
+      - Comment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/VersionParam'
+      responses:
+        '200':
+          description: Returned if the comment is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+              examples:
+                Getcommentbyid200Example:
+                  summary: Default getCommentById 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: updateComment
+      summary: Update Comment
+      description: Updates a comment by id. The version number must be incremented.
+      tags:
+      - Comment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentUpdateRequest'
+            examples:
+              UpdatecommentRequestExample:
+                summary: Default updateComment request
+                x-microcks-default: true
+                value:
+                  body:
+                    representation: storage
+                    value: example_value
+                  version:
+                    number: 10
+                    message: example_value
+      responses:
+        '200':
+          description: Returned if the comment was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+              examples:
+                Updatecomment200Example:
+                  summary: Default updateComment 200 response
+                  x-microcks-default: true
+                  value:
+                    id: abc123
+                    status: current
+                    title: Example Title
+                    blogPostId: '500123'
+                    pageId: '500123'
+                    parentCommentId: '500123'
+                    authorId: '500123'
+                    createdAt: '2026-01-15T10:30:00Z'
+                    version:
+                      createdAt: '2026-01-15T10:30:00Z'
+                      message: example_value
+                      number: 10
+                      minorEdit: true
+                      authorId: '500123'
+                    body: {}
+                    resolutionStatus: open
+                    properties:
+                      textSelection: example_value
+                      textSelectionMatchCount: 10
+                    _links:
+                      webui: example_value
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteComment
+      summary: Delete Comment
+      description: Deletes a comment by id.
+      tags:
+      - Comment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      responses:
+        '204':
+          description: Returned if the comment was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /comments/{id}/children:
+    get:
+      operationId: getChildComments
+      summary: Get Child Comments
+      description: Returns the child (reply) comments of a specific comment.
+      tags:
+      - Comment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent comment.
+        schema:
+          type: integer
+          format: int64
+        example: abc123
+      - $ref: '#/components/parameters/BodyFormatParam'
+      - $ref: '#/components/parameters/CursorParam'
+      - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Returned if the child comments are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentBulk'
+              examples:
+                Getchildcomments200Example:
+                  summary: Default getChildComments 200 response
+                  x-microcks-default: true
+                  value:
+                    results:
+                    - id: abc123
+                      status: current
+                      title: Example Title
+                      blogPostId: '500123'
+                      pageId: '500123'
+                      parentCommentId: '500123'
+                      authorId: '500123'
+                      createdAt: '2026-01-15T10:30:00Z'
+                      resolutionStatus: open
+                    _links:
+                      next: example_value
+                      base: example_value
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    CommentUpdateRequest:
+      type: object
+      required:
+      - body
+      - version
+      properties:
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        version:
+          $ref: '#/components/schemas/VersionWrite'
+    InlineCommentCreateRequest:
+      type: object
+      required:
+      - body
+      - inlineCommentProperties
+      properties:
+        blogPostId:
+          type: string
+          description: The ID of the blog post to add an inline comment on.
+          example: '500123'
+        pageId:
+          type: string
+          description: The ID of the page to add an inline comment on.
+          example: '500123'
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        inlineCommentProperties:
+          $ref: '#/components/schemas/InlineCommentProperties'
+    Version:
+      type: object
+      description: Version information for content.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
+        message:
+          type: string
+          description: The message associated with this version.
+          example: example_value
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
+          type: string
+          description: The Atlassian account ID of the version author.
+          example: '500123'
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    Comment:
+      type: object
+      description: Represents a comment on a Confluence page or blog post.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the comment.
+          example: abc123
+        status:
+          type: string
+          description: The current status of the comment.
+          enum:
+          - current
+          - draft
+          - trashed
+          example: current
+        title:
+          type: string
+          description: The title of the comment (typically auto-generated).
+          example: Example Title
+        blogPostId:
+          type: string
+          description: The ID of the blog post the comment is on, if applicable.
+          example: '500123'
+        pageId:
+          type: string
+          description: The ID of the page the comment is on, if applicable.
+          example: '500123'
+        parentCommentId:
+          type: string
+          description: The ID of the parent comment, if this is a reply.
+          example: '500123'
+        authorId:
+          type: string
+          description: The Atlassian account ID of the comment author.
+          example: '500123'
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the comment was created.
+          example: '2026-01-15T10:30:00Z'
+        version:
+          $ref: '#/components/schemas/Version'
+        body:
+          $ref: '#/components/schemas/Body'
+        resolutionStatus:
+          type: string
+          description: Resolution status for inline comments.
+          enum:
+          - open
+          - resolved
+          - reopened
+          example: open
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties'
+        _links:
+          $ref: '#/components/schemas/CommentLinks'
+    CommentBulk:
+      type: object
+      description: A paginated list of comments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    CommentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the comment.
+          example: example_value
+    Body:
+      type: object
+      description: The body content in various representations.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    CommentCreateRequest:
+      type: object
+      required:
+      - body
+      properties:
+        blogPostId:
+          type: string
+          description: The ID of the blog post to comment on.
+          example: '500123'
+        pageId:
+          type: string
+          description: The ID of the page to comment on.
+          example: '500123'
+        parentCommentId:
+          type: string
+          description: The ID of the parent comment for replies.
+          example: '500123'
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+    VersionWrite:
+      type: object
+      required:
+      - number
+      properties:
+        number:
+          type: integer
+          description: The new version number. Must be incremented by 1.
+          example: 10
+        message:
+          type: string
+          description: An optional message associated with this version.
+          example: example_value
+    InlineCommentProperties:
+      type: object
+      description: Properties specific to inline comments.
+      properties:
+        textSelection:
+          type: string
+          description: The selected text that this inline comment is anchored to.
+          example: example_value
+        textSelectionMatchCount:
+          type: integer
+          description: The match index of the text selection, if the same text appears multiple times.
+          example: 10
+    BodyWrite:
+      type: object
+      required:
+      - representation
+      - value
+      properties:
+        representation:
+          type: string
+          description: The representation format of the body content.
+          enum:
+          - storage
+          - atlas_doc_format
+          - wiki
+          - editor
+          example: storage
+        value:
+          type: string
+          description: The body content in the specified representation.
+          example: example_value
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+          example: example_value
+        value:
+          type: string
+          description: The body content in this representation.
+          example: example_value
+  parameters:
+    BodyFormatParam:
+      name: body-format
+      in: query
+      description: The representation format for the content body.
+      schema:
+        type: string
+        enum:
+        - storage
+        - atlas_doc_format
+        - view
+        - export_view
+        - anonymous_export_view
+        - editor
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    VersionParam:
+      name: version
+      in: query
+      description: The version number of the content to retrieve.
+      schema:
+        type: integer
+        format: int32
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Returned if the request is malformed or contains invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication using email and API token. Provide your Atlassian account email as the username and an API token as the password.
+    oAuth2:
+      type: oauth2
+      description: OAuth 2.0 (3LO) for Confluence Cloud apps.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read Confluence content
+            read:confluence-content.summary: Read Confluence content summaries
+            write:confluence-content: Create and update Confluence content
+            read:confluence-space.summary: Read Confluence space summaries
+            write:confluence-space: Create and update Confluence spaces
+            read:confluence-user: Read Confluence user information
+            read:confluence-groups: Read Confluence groups
+            write:confluence-file: Upload attachments to Confluence
+            delete:confluence-content: Delete Confluence content
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token or OAuth 2.0 Bearer token.
+externalDocs:
+  description: Confluence Cloud REST API v2 Documentation
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
