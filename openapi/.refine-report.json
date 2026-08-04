@@ -1,0 +1,24 @@
+{
+  "provider": "confluence",
+  "sources": [
+    "confluence-attachment-api-openapi.yml",
+    "confluence-blog-post-api-openapi.yml",
+    "confluence-comment-api-openapi.yml",
+    "confluence-label-api-openapi.yml",
+    "confluence-page-api-openapi.yml",
+    "confluence-space-api-openapi.yml"
+  ],
+  "outputs": [
+    "confluence-attachment-api-openapi.yml",
+    "confluence-blog-post-api-openapi.yml",
+    "confluence-comment-api-openapi.yml",
+    "confluence-label-api-openapi.yml",
+    "confluence-page-api-openapi.yml",
+    "confluence-space-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

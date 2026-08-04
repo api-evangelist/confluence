@@ -1,0 +1,679 @@
+{
+  "info": {
+    "_postman_id": "a36bfe16-873f-4026-969d-7a8d257ae7a4",
+    "name": "Confluence Cloud REST API v2 Attachment API",
+    "description": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:25:18.000Z",
+    "updatedAt": "2026-07-28T01:25:18.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-a36bfe16-873f-4026-969d-7a8d257ae7a4"
+  },
+  "item": [
+    {
+      "name": "attachments",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Get Attachment by Id",
+              "id": "90588c5f-78ee-46eb-a728-aaf714b7c502",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/attachments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "2c1ba8e4-cf6c-4a1d-81d2-08e05587eaea",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the content."
+                    }
+                  ]
+                },
+                "description": "Returns a specific attachment by id."
+              },
+              "response": [
+                {
+                  "id": "e375a38a-a024-42a4-91d9-ca7e25be3f13",
+                  "name": "Returned if the attachment is returned.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/attachments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "attachments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"trashed\",\n  \"title\": \"<string>\",\n  \"mediaType\": \"<string>\",\n  \"mediaTypeDescription\": \"<string>\",\n  \"comment\": \"<string>\",\n  \"fileSize\": \"<long>\",\n  \"webuiLink\": \"<string>\",\n  \"downloadLink\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"blogPostId\": \"<string>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-e375a38a-a024-42a4-91d9-ca7e25be3f13"
+                },
+                {
+                  "id": "92b3e4ed-eda6-4734-88f3-d528a8365a4d",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/attachments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "attachments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-92b3e4ed-eda6-4734-88f3-d528a8365a4d"
+                },
+                {
+                  "id": "d3d77c2f-ea28-4729-b118-16198bd960cc",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/attachments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "attachments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-d3d77c2f-ea28-4729-b118-16198bd960cc"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:19.000Z",
+              "updatedAt": "2026-07-28T01:25:19.000Z",
+              "uid": "35240-90588c5f-78ee-46eb-a728-aaf714b7c502"
+            },
+            {
+              "name": "Delete Attachment",
+              "id": "e26f97e2-11ac-4191-8d6a-96743ff3fc69",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/attachments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "233bc9a8-89c9-413e-a880-e95453acf7c6",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the content."
+                    }
+                  ]
+                },
+                "description": "Deletes an attachment by id."
+              },
+              "response": [
+                {
+                  "id": "c07c7843-af0f-4656-a1ae-7024af92bace",
+                  "name": "Returned if the attachment was deleted successfully.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/attachments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "attachments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-c07c7843-af0f-4656-a1ae-7024af92bace"
+                },
+                {
+                  "id": "6a92918b-37fd-4071-aefb-0074958d7be1",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/attachments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "attachments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-6a92918b-37fd-4071-aefb-0074958d7be1"
+                },
+                {
+                  "id": "a40a4bda-fc60-433f-b00a-25aa249e7c6f",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/attachments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "attachments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-a40a4bda-fc60-433f-b00a-25aa249e7c6f"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:19.000Z",
+              "updatedAt": "2026-07-28T01:25:19.000Z",
+              "uid": "35240-e26f97e2-11ac-4191-8d6a-96743ff3fc69"
+            }
+          ],
+          "id": "f789601c-9621-4e8d-9547-3ecea24d71c5",
+          "createdAt": "2026-07-28T01:25:19.000Z",
+          "updatedAt": "2026-07-28T01:25:19.000Z",
+          "uid": "35240-f789601c-9621-4e8d-9547-3ecea24d71c5"
+        }
+      ],
+      "id": "6bba4aa2-fe07-4175-b36b-e1c3eca42130",
+      "createdAt": "2026-07-28T01:25:19.000Z",
+      "updatedAt": "2026-07-28T01:25:19.000Z",
+      "uid": "35240-6bba4aa2-fe07-4175-b36b-e1c3eca42130"
+    },
+    {
+      "name": "pages",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "attachments",
+              "item": [
+                {
+                  "name": "Get Attachments for Page",
+                  "id": "358b59b2-b2d4-439e-b41a-888bc2754df3",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pages/:id/attachments?cursor=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pages",
+                        ":id",
+                        "attachments"
+                      ],
+                      "query": [
+                        {
+                          "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return.",
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "da279754-230f-4f70-a052-9723a48bf714",
+                          "key": "id",
+                          "value": "<long>",
+                          "description": "(Required) The ID of the content."
+                        }
+                      ]
+                    },
+                    "description": "Returns the attachments of a specific page."
+                  },
+                  "response": [
+                    {
+                      "id": "92197426-5718-4eb8-90da-edb0e4cbab38",
+                      "name": "Returned if the attachments are returned.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/attachments?cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "attachments"
+                          ],
+                          "query": [
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"trashed\",\n      \"title\": \"<string>\",\n      \"mediaType\": \"<string>\",\n      \"mediaTypeDescription\": \"<string>\",\n      \"comment\": \"<string>\",\n      \"fileSize\": \"<long>\",\n      \"webuiLink\": \"<string>\",\n      \"downloadLink\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"trashed\",\n      \"title\": \"<string>\",\n      \"mediaType\": \"<string>\",\n      \"mediaTypeDescription\": \"<string>\",\n      \"comment\": \"<string>\",\n      \"fileSize\": \"<long>\",\n      \"webuiLink\": \"<string>\",\n      \"downloadLink\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:25:19.000Z",
+                      "updatedAt": "2026-07-28T01:25:19.000Z",
+                      "uid": "35240-92197426-5718-4eb8-90da-edb0e4cbab38"
+                    },
+                    {
+                      "id": "60a90172-cbd8-497f-86c2-02a68145087b",
+                      "name": "Returned if the authentication credentials are missing or invalid.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/attachments?cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "attachments"
+                          ],
+                          "query": [
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:19.000Z",
+                      "updatedAt": "2026-07-28T01:25:19.000Z",
+                      "uid": "35240-60a90172-cbd8-497f-86c2-02a68145087b"
+                    },
+                    {
+                      "id": "7fbe8a03-0e70-4ef2-9065-999ec5094b24",
+                      "name": "Returned if the requested resource is not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/attachments?cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "attachments"
+                          ],
+                          "query": [
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:19.000Z",
+                      "updatedAt": "2026-07-28T01:25:19.000Z",
+                      "uid": "35240-7fbe8a03-0e70-4ef2-9065-999ec5094b24"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:25:19.000Z",
+                  "updatedAt": "2026-07-28T01:25:19.000Z",
+                  "uid": "35240-358b59b2-b2d4-439e-b41a-888bc2754df3"
+                }
+              ],
+              "id": "6a6e57f2-385c-4409-892b-1029e311f1b7",
+              "createdAt": "2026-07-28T01:25:19.000Z",
+              "updatedAt": "2026-07-28T01:25:19.000Z",
+              "uid": "35240-6a6e57f2-385c-4409-892b-1029e311f1b7"
+            }
+          ],
+          "id": "19823734-77c7-43ec-bff0-b1c8e47b44f0",
+          "createdAt": "2026-07-28T01:25:19.000Z",
+          "updatedAt": "2026-07-28T01:25:19.000Z",
+          "uid": "35240-19823734-77c7-43ec-bff0-b1c8e47b44f0"
+        }
+      ],
+      "id": "8966966f-1845-4e08-b7a8-4b5f4b6743a9",
+      "createdAt": "2026-07-28T01:25:19.000Z",
+      "updatedAt": "2026-07-28T01:25:19.000Z",
+      "uid": "35240-8966966f-1845-4e08-b7a8-4b5f4b6743a9"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "domain",
+      "value": "your-domain"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2"
+    }
+  ]
+}

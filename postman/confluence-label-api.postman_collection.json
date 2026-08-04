@@ -1,0 +1,524 @@
+{
+  "info": {
+    "_postman_id": "34f39ce6-f118-4e29-af57-44a3c02d839a",
+    "name": "Confluence Cloud REST API v2 Attachment Label API",
+    "description": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:25:21.000Z",
+    "updatedAt": "2026-07-28T01:25:21.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-34f39ce6-f118-4e29-af57-44a3c02d839a"
+  },
+  "item": [
+    {
+      "name": "pages",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "labels",
+              "item": [
+                {
+                  "name": "Get Labels for Page",
+                  "id": "6fb9222f-ae6b-481b-8ac8-878d0b668105",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pages/:id/labels?prefix=my&cursor=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pages",
+                        ":id",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter labels by prefix (global, my, team).",
+                          "key": "prefix",
+                          "value": "my"
+                        },
+                        {
+                          "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return.",
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "3704eec6-d77c-4362-a5fa-fa8c7c12f52d",
+                          "key": "id",
+                          "value": "<long>",
+                          "description": "(Required) The ID of the content."
+                        }
+                      ]
+                    },
+                    "description": "Returns the labels associated with a specific page."
+                  },
+                  "response": [
+                    {
+                      "id": "de5d5982-7412-4e27-a3d6-3e1dc66fb9e5",
+                      "name": "Returned if the labels are returned.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/labels?prefix=my&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter labels by prefix (global, my, team).",
+                              "key": "prefix",
+                              "value": "my"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"prefix\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"prefix\": \"<string>\"\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:25:22.000Z",
+                      "updatedAt": "2026-07-28T01:25:22.000Z",
+                      "uid": "35240-de5d5982-7412-4e27-a3d6-3e1dc66fb9e5"
+                    },
+                    {
+                      "id": "c2e2fe8c-b531-427e-9f0f-bec3d2c64745",
+                      "name": "Returned if the authentication credentials are missing or invalid.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/labels?prefix=my&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter labels by prefix (global, my, team).",
+                              "key": "prefix",
+                              "value": "my"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:22.000Z",
+                      "updatedAt": "2026-07-28T01:25:22.000Z",
+                      "uid": "35240-c2e2fe8c-b531-427e-9f0f-bec3d2c64745"
+                    },
+                    {
+                      "id": "03a33fa5-350a-4d70-966a-ea23d91a72bf",
+                      "name": "Returned if the requested resource is not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/labels?prefix=my&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "labels"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter labels by prefix (global, my, team).",
+                              "key": "prefix",
+                              "value": "my"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:22.000Z",
+                      "updatedAt": "2026-07-28T01:25:22.000Z",
+                      "uid": "35240-03a33fa5-350a-4d70-966a-ea23d91a72bf"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:25:22.000Z",
+                  "updatedAt": "2026-07-28T01:25:22.000Z",
+                  "uid": "35240-6fb9222f-ae6b-481b-8ac8-878d0b668105"
+                }
+              ],
+              "id": "17b75049-3875-4996-9114-2f6636889b7b",
+              "createdAt": "2026-07-28T01:25:22.000Z",
+              "updatedAt": "2026-07-28T01:25:22.000Z",
+              "uid": "35240-17b75049-3875-4996-9114-2f6636889b7b"
+            }
+          ],
+          "id": "6b9eee30-ca58-4f0f-b038-140ff6c3578f",
+          "createdAt": "2026-07-28T01:25:22.000Z",
+          "updatedAt": "2026-07-28T01:25:22.000Z",
+          "uid": "35240-6b9eee30-ca58-4f0f-b038-140ff6c3578f"
+        }
+      ],
+      "id": "0bdc5af1-9da7-40ec-8f51-b9216a3e0fc2",
+      "createdAt": "2026-07-28T01:25:22.000Z",
+      "updatedAt": "2026-07-28T01:25:22.000Z",
+      "uid": "35240-0bdc5af1-9da7-40ec-8f51-b9216a3e0fc2"
+    },
+    {
+      "name": "labels",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Get Label by Id",
+              "id": "5ec13e4d-2fe9-41b2-9993-a9b070fd0b0d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/labels/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "labels",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "317fa747-538a-422b-b2ac-d7d28337593b",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the label."
+                    }
+                  ]
+                },
+                "description": "Returns a specific label by id."
+              },
+              "response": [
+                {
+                  "id": "29bf9d2d-e049-4c59-8bb4-2670c2bf2d66",
+                  "name": "Returned if the label is returned.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/labels/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "labels",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"prefix\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:22.000Z",
+                  "updatedAt": "2026-07-28T01:25:22.000Z",
+                  "uid": "35240-29bf9d2d-e049-4c59-8bb4-2670c2bf2d66"
+                },
+                {
+                  "id": "0f5b6870-2182-4485-b1c2-0602494b0fc6",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/labels/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "labels",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:22.000Z",
+                  "updatedAt": "2026-07-28T01:25:22.000Z",
+                  "uid": "35240-0f5b6870-2182-4485-b1c2-0602494b0fc6"
+                },
+                {
+                  "id": "9efc390d-01dd-4fd1-9b9d-89857b58bfa7",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/labels/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "labels",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:22.000Z",
+                  "updatedAt": "2026-07-28T01:25:22.000Z",
+                  "uid": "35240-9efc390d-01dd-4fd1-9b9d-89857b58bfa7"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:22.000Z",
+              "updatedAt": "2026-07-28T01:25:22.000Z",
+              "uid": "35240-5ec13e4d-2fe9-41b2-9993-a9b070fd0b0d"
+            }
+          ],
+          "id": "5437d31a-59ce-4be1-8d4d-48d354778b0b",
+          "createdAt": "2026-07-28T01:25:22.000Z",
+          "updatedAt": "2026-07-28T01:25:22.000Z",
+          "uid": "35240-5437d31a-59ce-4be1-8d4d-48d354778b0b"
+        }
+      ],
+      "id": "da52b3dd-2a50-4e4f-9b24-13423ed157c9",
+      "createdAt": "2026-07-28T01:25:22.000Z",
+      "updatedAt": "2026-07-28T01:25:22.000Z",
+      "uid": "35240-da52b3dd-2a50-4e4f-9b24-13423ed157c9"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "domain",
+      "value": "your-domain"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2"
+    }
+  ]
+}

@@ -1,0 +1,1345 @@
+{
+  "info": {
+    "_postman_id": "b3191efd-0e87-4a91-a5fa-eadbbdc32570",
+    "name": "Confluence Cloud REST API v2 Attachment Blog Post API",
+    "description": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:25:19.000Z",
+    "updatedAt": "2026-07-28T01:25:19.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b3191efd-0e87-4a91-a5fa-eadbbdc32570"
+  },
+  "item": [
+    {
+      "name": "blogposts",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Get Blog Post by Id",
+              "id": "4894d3a3-0848-4c03-a970-c02bea3ea21c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts/:id?body-format=atlas_doc_format&version=<integer>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "description": "The representation format for the content body.",
+                      "key": "body-format",
+                      "value": "atlas_doc_format"
+                    },
+                    {
+                      "description": "The version number of the content to retrieve.",
+                      "key": "version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "id": "0497fdaf-cdaa-4d83-8522-44387f9fe836",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the content."
+                    }
+                  ]
+                },
+                "description": "Returns a specific blog post by id."
+              },
+              "response": [
+                {
+                  "id": "9539b462-5f19-4418-bde6-792ec273ed45",
+                  "name": "Returned if the blog post is returned.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id?body-format=atlas_doc_format&version=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "atlas_doc_format"
+                        },
+                        {
+                          "description": "The version number of the content to retrieve.",
+                          "key": "version",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"spaceId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"labels\": {\n    \"results\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      }\n    ],\n    \"_links\": {\n      \"next\": \"<string>\",\n      \"base\": \"<string>\"\n    }\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-9539b462-5f19-4418-bde6-792ec273ed45"
+                },
+                {
+                  "id": "0b1fe7c4-6771-4500-b690-2a5a5eab80ed",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id?body-format=atlas_doc_format&version=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "atlas_doc_format"
+                        },
+                        {
+                          "description": "The version number of the content to retrieve.",
+                          "key": "version",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-0b1fe7c4-6771-4500-b690-2a5a5eab80ed"
+                },
+                {
+                  "id": "a3ef1e0e-dc31-4b24-aa15-6c5292002e73",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id?body-format=atlas_doc_format&version=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "atlas_doc_format"
+                        },
+                        {
+                          "description": "The version number of the content to retrieve.",
+                          "key": "version",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-a3ef1e0e-dc31-4b24-aa15-6c5292002e73"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-4894d3a3-0848-4c03-a970-c02bea3ea21c"
+            },
+            {
+              "name": "Update Blog Post",
+              "id": "b644e93c-224f-4a2e-adbc-71bbf4314205",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "03beb2a9-d910-43d2-819a-1323c46c86e3",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the content."
+                    }
+                  ]
+                },
+                "description": "Updates a blog post by id."
+              },
+              "response": [
+                {
+                  "id": "5a71a054-e4df-4eac-8c77-31a21ede529f",
+                  "name": "Returned if the blog post was updated successfully.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"spaceId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"labels\": {\n    \"results\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      }\n    ],\n    \"_links\": {\n      \"next\": \"<string>\",\n      \"base\": \"<string>\"\n    }\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-5a71a054-e4df-4eac-8c77-31a21ede529f"
+                },
+                {
+                  "id": "daee23c0-aa5d-44c6-8838-a8f03b5a42f0",
+                  "name": "Returned if the request is malformed or contains invalid parameters.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-daee23c0-aa5d-44c6-8838-a8f03b5a42f0"
+                },
+                {
+                  "id": "817ca583-037a-4dc9-885b-a4e6c4eb450e",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-817ca583-037a-4dc9-885b-a4e6c4eb450e"
+                },
+                {
+                  "id": "b1bc08e7-417d-4c00-b9cf-b69c423e6780",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-b1bc08e7-417d-4c00-b9cf-b69c423e6780"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-b644e93c-224f-4a2e-adbc-71bbf4314205"
+            },
+            {
+              "name": "Delete Blog Post",
+              "id": "7a4c411d-88d6-4b63-8a27-876060643d83",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "73b66ef2-ff75-4d69-8aa7-3b0ca72264dc",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the content."
+                    }
+                  ]
+                },
+                "description": "Deletes a blog post by id."
+              },
+              "response": [
+                {
+                  "id": "4a03e0cb-51e7-4def-8e2c-082a79ae8aa7",
+                  "name": "Returned if the blog post was deleted successfully.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-4a03e0cb-51e7-4def-8e2c-082a79ae8aa7"
+                },
+                {
+                  "id": "15f939ed-03d1-4735-90ed-a38c717a0393",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-15f939ed-03d1-4735-90ed-a38c717a0393"
+                },
+                {
+                  "id": "94436973-4139-4a7a-b89c-b0819f7d673c",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/blogposts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "blogposts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:20.000Z",
+                  "updatedAt": "2026-07-28T01:25:20.000Z",
+                  "uid": "35240-94436973-4139-4a7a-b89c-b0819f7d673c"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-7a4c411d-88d6-4b63-8a27-876060643d83"
+            }
+          ],
+          "id": "0c5a7e7a-d6cb-415a-a42d-208ed51c75d8",
+          "createdAt": "2026-07-28T01:25:20.000Z",
+          "updatedAt": "2026-07-28T01:25:20.000Z",
+          "uid": "35240-0c5a7e7a-d6cb-415a-a42d-208ed51c75d8"
+        },
+        {
+          "name": "Get Blog Posts",
+          "id": "bd4f9dfc-1830-4f74-a73b-ca8edaf3a209",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/blogposts?space-id=<long>&space-id=<long>&status=draft&title=<string>&body-format=atlas_doc_format&sort=-modified-date&cursor=<string>&limit=25",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "blogposts"
+              ],
+              "query": [
+                {
+                  "description": "Filter by space ID. Multiple IDs can be specified.",
+                  "key": "space-id",
+                  "value": "<long>"
+                },
+                {
+                  "description": "Filter by space ID. Multiple IDs can be specified.",
+                  "key": "space-id",
+                  "value": "<long>"
+                },
+                {
+                  "description": "Filter by content status.",
+                  "key": "status",
+                  "value": "draft"
+                },
+                {
+                  "description": "Filter by content title. Supports exact match.",
+                  "key": "title",
+                  "value": "<string>"
+                },
+                {
+                  "description": "The representation format for the content body.",
+                  "key": "body-format",
+                  "value": "atlas_doc_format"
+                },
+                {
+                  "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                  "key": "sort",
+                  "value": "-modified-date"
+                },
+                {
+                  "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                  "key": "cursor",
+                  "value": "<string>"
+                },
+                {
+                  "description": "Maximum number of results to return.",
+                  "key": "limit",
+                  "value": "25"
+                }
+              ]
+            },
+            "description": "Returns all blog posts. Results can be filtered by space, status, and title."
+          },
+          "response": [
+            {
+              "id": "e823416f-c17a-4f44-ac0f-097dfbd942ff",
+              "name": "Returned if the blog posts are returned.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts?space-id=<long>&status=draft&title=<string>&body-format=atlas_doc_format&sort=-modified-date&cursor=<string>&limit=25",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by space ID. Multiple IDs can be specified.",
+                      "key": "space-id",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by content status.",
+                      "key": "status",
+                      "value": "draft"
+                    },
+                    {
+                      "description": "Filter by content title. Supports exact match.",
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The representation format for the content body.",
+                      "key": "body-format",
+                      "value": "atlas_doc_format"
+                    },
+                    {
+                      "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                      "key": "sort",
+                      "value": "-modified-date"
+                    },
+                    {
+                      "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Maximum number of results to return.",
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"draft\",\n      \"title\": \"<string>\",\n      \"spaceId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"labels\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"draft\",\n      \"title\": \"<string>\",\n      \"spaceId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"labels\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-e823416f-c17a-4f44-ac0f-097dfbd942ff"
+            },
+            {
+              "id": "063679d0-0485-4cdc-a916-194cb734863f",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts?space-id=<long>&status=draft&title=<string>&body-format=atlas_doc_format&sort=-modified-date&cursor=<string>&limit=25",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by space ID. Multiple IDs can be specified.",
+                      "key": "space-id",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by content status.",
+                      "key": "status",
+                      "value": "draft"
+                    },
+                    {
+                      "description": "Filter by content title. Supports exact match.",
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The representation format for the content body.",
+                      "key": "body-format",
+                      "value": "atlas_doc_format"
+                    },
+                    {
+                      "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                      "key": "sort",
+                      "value": "-modified-date"
+                    },
+                    {
+                      "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Maximum number of results to return.",
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-063679d0-0485-4cdc-a916-194cb734863f"
+            },
+            {
+              "id": "6a928bfb-dd16-4e81-9ef5-ceceefa73554",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts?space-id=<long>&status=draft&title=<string>&body-format=atlas_doc_format&sort=-modified-date&cursor=<string>&limit=25",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by space ID. Multiple IDs can be specified.",
+                      "key": "space-id",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by content status.",
+                      "key": "status",
+                      "value": "draft"
+                    },
+                    {
+                      "description": "Filter by content title. Supports exact match.",
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The representation format for the content body.",
+                      "key": "body-format",
+                      "value": "atlas_doc_format"
+                    },
+                    {
+                      "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                      "key": "sort",
+                      "value": "-modified-date"
+                    },
+                    {
+                      "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Maximum number of results to return.",
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-6a928bfb-dd16-4e81-9ef5-ceceefa73554"
+            }
+          ],
+          "createdAt": "2026-07-28T01:25:20.000Z",
+          "updatedAt": "2026-07-28T01:25:20.000Z",
+          "uid": "35240-bd4f9dfc-1830-4f74-a73b-ca8edaf3a209"
+        },
+        {
+          "name": "Create Blog Post",
+          "id": "bef835c9-8a2b-4728-b57a-7c1f5892b689",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spaceId\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/blogposts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "blogposts"
+              ]
+            },
+            "description": "Creates a blog post in the specified space."
+          },
+          "response": [
+            {
+              "id": "c7749ff5-6286-4ddf-9f77-d58e60fe65c0",
+              "name": "Returned if the blog post was created successfully.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spaceId\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"spaceId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"labels\": {\n    \"results\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      }\n    ],\n    \"_links\": {\n      \"next\": \"<string>\",\n      \"base\": \"<string>\"\n    }\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-c7749ff5-6286-4ddf-9f77-d58e60fe65c0"
+            },
+            {
+              "id": "ba34ce3f-abfa-4095-899f-b7e0d8aa9eff",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spaceId\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-ba34ce3f-abfa-4095-899f-b7e0d8aa9eff"
+            },
+            {
+              "id": "002c20b2-94d6-4c06-bf05-b692b8515452",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spaceId\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-002c20b2-94d6-4c06-bf05-b692b8515452"
+            },
+            {
+              "id": "e3f7ce7c-af35-4922-85bb-6c95b5feba1a",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spaceId\": \"<string>\",\n  \"status\": \"current\",\n  \"title\": \"<string>\",\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/blogposts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "blogposts"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:20.000Z",
+              "updatedAt": "2026-07-28T01:25:20.000Z",
+              "uid": "35240-e3f7ce7c-af35-4922-85bb-6c95b5feba1a"
+            }
+          ],
+          "createdAt": "2026-07-28T01:25:20.000Z",
+          "updatedAt": "2026-07-28T01:25:20.000Z",
+          "uid": "35240-bef835c9-8a2b-4728-b57a-7c1f5892b689"
+        }
+      ],
+      "id": "68865515-bdb6-47e8-b88c-c69b58834d43",
+      "createdAt": "2026-07-28T01:25:20.000Z",
+      "updatedAt": "2026-07-28T01:25:20.000Z",
+      "uid": "35240-68865515-bdb6-47e8-b88c-c69b58834d43"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "domain",
+      "value": "your-domain"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2"
+    }
+  ]
+}

@@ -1,0 +1,2135 @@
+{
+  "info": {
+    "_postman_id": "0ae31644-d9b4-4c7e-909b-35043d600351",
+    "name": "Confluence Cloud REST API v2 Attachment Comment API",
+    "description": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:25:20.000Z",
+    "updatedAt": "2026-07-28T01:25:20.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0ae31644-d9b4-4c7e-909b-35043d600351"
+  },
+  "item": [
+    {
+      "name": "pages",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "footer-comments",
+              "item": [
+                {
+                  "name": "Get Footer Comments for Page",
+                  "id": "99738862-f213-4b27-b6a1-8c2a1a35a499",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pages/:id/footer-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pages",
+                        ":id",
+                        "footer-comments"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return.",
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "b6e56a17-2d1e-4042-934c-1be3ddb9d62c",
+                          "key": "id",
+                          "value": "<long>",
+                          "description": "(Required) The ID of the content."
+                        }
+                      ]
+                    },
+                    "description": "Returns the footer comments of a specific page."
+                  },
+                  "response": [
+                    {
+                      "id": "fc85171f-15a9-44c3-8f9f-7a9c3c1c9f81",
+                      "name": "Returned if the footer comments are returned.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/footer-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "footer-comments"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"current\",\n      \"title\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"parentCommentId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"resolutionStatus\": \"open\",\n      \"properties\": {\n        \"textSelection\": \"<string>\",\n        \"textSelectionMatchCount\": \"<integer>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"draft\",\n      \"title\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"parentCommentId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"resolutionStatus\": \"resolved\",\n      \"properties\": {\n        \"textSelection\": \"<string>\",\n        \"textSelectionMatchCount\": \"<integer>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-fc85171f-15a9-44c3-8f9f-7a9c3c1c9f81"
+                    },
+                    {
+                      "id": "fa8e578d-6ff4-40ad-8ba1-6d69bb3e1a19",
+                      "name": "Returned if the authentication credentials are missing or invalid.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/footer-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "footer-comments"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-fa8e578d-6ff4-40ad-8ba1-6d69bb3e1a19"
+                    },
+                    {
+                      "id": "a698a2fd-7543-48a9-8f44-385fa402489c",
+                      "name": "Returned if the requested resource is not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/footer-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "footer-comments"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-a698a2fd-7543-48a9-8f44-385fa402489c"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-99738862-f213-4b27-b6a1-8c2a1a35a499"
+                }
+              ],
+              "id": "b42fd216-469f-41a6-bf71-4bc0647e4d1a",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-b42fd216-469f-41a6-bf71-4bc0647e4d1a"
+            },
+            {
+              "name": "inline-comments",
+              "item": [
+                {
+                  "name": "Get Inline Comments for Page",
+                  "id": "513c8fb8-e3f0-4537-9d1e-90c2a95dfa03",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pages/:id/inline-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pages",
+                        ":id",
+                        "inline-comments"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return.",
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "32cc99a6-daf7-49de-ab56-6c5f94c75c52",
+                          "key": "id",
+                          "value": "<long>",
+                          "description": "(Required) The ID of the content."
+                        }
+                      ]
+                    },
+                    "description": "Returns the inline comments of a specific page."
+                  },
+                  "response": [
+                    {
+                      "id": "f0b63a49-beb3-434b-ba8c-19be6ba687a5",
+                      "name": "Returned if the inline comments are returned.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/inline-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "inline-comments"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"current\",\n      \"title\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"parentCommentId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"resolutionStatus\": \"open\",\n      \"properties\": {\n        \"textSelection\": \"<string>\",\n        \"textSelectionMatchCount\": \"<integer>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"draft\",\n      \"title\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"parentCommentId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"resolutionStatus\": \"resolved\",\n      \"properties\": {\n        \"textSelection\": \"<string>\",\n        \"textSelectionMatchCount\": \"<integer>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-f0b63a49-beb3-434b-ba8c-19be6ba687a5"
+                    },
+                    {
+                      "id": "ee2ca75c-5574-4005-8220-54a9598c8625",
+                      "name": "Returned if the authentication credentials are missing or invalid.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/inline-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "inline-comments"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-ee2ca75c-5574-4005-8220-54a9598c8625"
+                    },
+                    {
+                      "id": "73162859-e3fe-4485-a829-7cf9a2c8df36",
+                      "name": "Returned if the requested resource is not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pages/:id/inline-comments?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pages",
+                            ":id",
+                            "inline-comments"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-73162859-e3fe-4485-a829-7cf9a2c8df36"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-513c8fb8-e3f0-4537-9d1e-90c2a95dfa03"
+                }
+              ],
+              "id": "9fcc7cc3-bf60-4c97-a772-b22664b78cb1",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-9fcc7cc3-bf60-4c97-a772-b22664b78cb1"
+            }
+          ],
+          "id": "2c297bd3-5886-4ed6-aff1-0497adaf06b7",
+          "createdAt": "2026-07-28T01:25:21.000Z",
+          "updatedAt": "2026-07-28T01:25:21.000Z",
+          "uid": "35240-2c297bd3-5886-4ed6-aff1-0497adaf06b7"
+        }
+      ],
+      "id": "5c1fecdb-203c-4cee-b2e3-334abdd66090",
+      "createdAt": "2026-07-28T01:25:21.000Z",
+      "updatedAt": "2026-07-28T01:25:21.000Z",
+      "uid": "35240-5c1fecdb-203c-4cee-b2e3-334abdd66090"
+    },
+    {
+      "name": "footer-comments",
+      "item": [
+        {
+          "name": "Create Footer Comment",
+          "id": "f8aa90ea-caf4-4bab-904c-1fcfd9d4b7ab",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/footer-comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "footer-comments"
+              ]
+            },
+            "description": "Creates a footer comment on a page or blog post."
+          },
+          "response": [
+            {
+              "id": "d27153bc-8fa3-41cc-b231-a3536abd2c95",
+              "name": "Returned if the comment was created successfully.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/footer-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "footer-comments"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"trashed\",\n  \"title\": \"<string>\",\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"resolutionStatus\": \"resolved\",\n  \"properties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-d27153bc-8fa3-41cc-b231-a3536abd2c95"
+            },
+            {
+              "id": "9b063aab-4acd-41af-a7ba-0ef435c7bed9",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/footer-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "footer-comments"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-9b063aab-4acd-41af-a7ba-0ef435c7bed9"
+            },
+            {
+              "id": "500a3cfa-5ef9-429c-9262-a305516a705e",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/footer-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "footer-comments"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-500a3cfa-5ef9-429c-9262-a305516a705e"
+            },
+            {
+              "id": "531becc5-59e0-4cf4-ac1a-d4b846ce57aa",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/footer-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "footer-comments"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-531becc5-59e0-4cf4-ac1a-d4b846ce57aa"
+            }
+          ],
+          "createdAt": "2026-07-28T01:25:21.000Z",
+          "updatedAt": "2026-07-28T01:25:21.000Z",
+          "uid": "35240-f8aa90ea-caf4-4bab-904c-1fcfd9d4b7ab"
+        }
+      ],
+      "id": "8b481441-80da-46a0-81b1-2e001b1a771a",
+      "createdAt": "2026-07-28T01:25:21.000Z",
+      "updatedAt": "2026-07-28T01:25:21.000Z",
+      "uid": "35240-8b481441-80da-46a0-81b1-2e001b1a771a"
+    },
+    {
+      "name": "inline-comments",
+      "item": [
+        {
+          "name": "Create Inline Comment",
+          "id": "37e9fddf-bd14-4ee4-ae1c-e86802250c4c",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inline-comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inline-comments"
+              ]
+            },
+            "description": "Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection."
+          },
+          "response": [
+            {
+              "id": "5a86706d-5976-42f8-b494-d5a7e252a4f9",
+              "name": "Returned if the inline comment was created successfully.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/inline-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "inline-comments"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"trashed\",\n  \"title\": \"<string>\",\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"resolutionStatus\": \"resolved\",\n  \"properties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-5a86706d-5976-42f8-b494-d5a7e252a4f9"
+            },
+            {
+              "id": "cb1f8a88-a279-49a0-903d-299f3d60ea9b",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/inline-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "inline-comments"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-cb1f8a88-a279-49a0-903d-299f3d60ea9b"
+            },
+            {
+              "id": "54d1e9d3-c601-44d0-8f15-33e5f0d45dfc",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/inline-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "inline-comments"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-54d1e9d3-c601-44d0-8f15-33e5f0d45dfc"
+            },
+            {
+              "id": "e0c6de97-f8ad-4a5d-9a55-895da30536af",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"atlas_doc_format\",\n    \"value\": \"<string>\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/inline-comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "inline-comments"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-e0c6de97-f8ad-4a5d-9a55-895da30536af"
+            }
+          ],
+          "createdAt": "2026-07-28T01:25:21.000Z",
+          "updatedAt": "2026-07-28T01:25:21.000Z",
+          "uid": "35240-37e9fddf-bd14-4ee4-ae1c-e86802250c4c"
+        }
+      ],
+      "id": "9aee9160-89c7-4f57-88f6-06a13e6693ff",
+      "createdAt": "2026-07-28T01:25:21.000Z",
+      "updatedAt": "2026-07-28T01:25:21.000Z",
+      "uid": "35240-9aee9160-89c7-4f57-88f6-06a13e6693ff"
+    },
+    {
+      "name": "comments",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "children",
+              "item": [
+                {
+                  "name": "Get Child Comments",
+                  "id": "7d611921-9f28-4d5b-92bc-433fdc066c48",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id/children?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id",
+                        "children"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return.",
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "1d70e11c-e3dc-4045-9398-02213b33478e",
+                          "key": "id",
+                          "value": "<long>",
+                          "description": "(Required) The ID of the parent comment."
+                        }
+                      ]
+                    },
+                    "description": "Returns the child (reply) comments of a specific comment."
+                  },
+                  "response": [
+                    {
+                      "id": "9f04c7ea-34a2-4fe6-a82c-7a05aec0d0c2",
+                      "name": "Returned if the child comments are returned.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/comments/:id/children?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "comments",
+                            ":id",
+                            "children"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"current\",\n      \"title\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"parentCommentId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"resolutionStatus\": \"open\",\n      \"properties\": {\n        \"textSelection\": \"<string>\",\n        \"textSelectionMatchCount\": \"<integer>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"draft\",\n      \"title\": \"<string>\",\n      \"blogPostId\": \"<string>\",\n      \"pageId\": \"<string>\",\n      \"parentCommentId\": \"<string>\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"resolutionStatus\": \"resolved\",\n      \"properties\": {\n        \"textSelection\": \"<string>\",\n        \"textSelectionMatchCount\": \"<integer>\"\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-9f04c7ea-34a2-4fe6-a82c-7a05aec0d0c2"
+                    },
+                    {
+                      "id": "282e2142-68cc-4ec2-9826-114f1b60f43f",
+                      "name": "Returned if the authentication credentials are missing or invalid.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/comments/:id/children?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "comments",
+                            ":id",
+                            "children"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-282e2142-68cc-4ec2-9826-114f1b60f43f"
+                    },
+                    {
+                      "id": "6912bcc9-2df7-4ebc-a894-df6382ef7a60",
+                      "name": "Returned if the requested resource is not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/comments/:id/children?body-format=anonymous_export_view&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "comments",
+                            ":id",
+                            "children"
+                          ],
+                          "query": [
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:21.000Z",
+                      "updatedAt": "2026-07-28T01:25:21.000Z",
+                      "uid": "35240-6912bcc9-2df7-4ebc-a894-df6382ef7a60"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-7d611921-9f28-4d5b-92bc-433fdc066c48"
+                }
+              ],
+              "id": "f78947a1-b7d7-4a57-b010-ce11bea8a5d6",
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-f78947a1-b7d7-4a57-b010-ce11bea8a5d6"
+            },
+            {
+              "name": "Get Comment by Id",
+              "id": "ae280bcb-dbe4-4515-a1ef-70a01bd0af47",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/comments/:id?body-format=anonymous_export_view&version=<integer>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "description": "The representation format for the content body.",
+                      "key": "body-format",
+                      "value": "anonymous_export_view"
+                    },
+                    {
+                      "description": "The version number of the content to retrieve.",
+                      "key": "version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "id": "38f7016e-8134-489b-a199-0eb66d926a93",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the comment."
+                    }
+                  ]
+                },
+                "description": "Returns a specific comment by id."
+              },
+              "response": [
+                {
+                  "id": "2fc08cb6-9cf4-487d-b5f1-083901b3468a",
+                  "name": "Returned if the comment is returned.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id?body-format=anonymous_export_view&version=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "The version number of the content to retrieve.",
+                          "key": "version",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"trashed\",\n  \"title\": \"<string>\",\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"resolutionStatus\": \"resolved\",\n  \"properties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-2fc08cb6-9cf4-487d-b5f1-083901b3468a"
+                },
+                {
+                  "id": "d13566ae-e36b-48f2-b21b-adbeea39ed0a",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id?body-format=anonymous_export_view&version=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "The version number of the content to retrieve.",
+                          "key": "version",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-d13566ae-e36b-48f2-b21b-adbeea39ed0a"
+                },
+                {
+                  "id": "5f5ed7f1-6012-4ae9-b186-83ad474339ed",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id?body-format=anonymous_export_view&version=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "The version number of the content to retrieve.",
+                          "key": "version",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-5f5ed7f1-6012-4ae9-b186-83ad474339ed"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-ae280bcb-dbe4-4515-a1ef-70a01bd0af47"
+            },
+            {
+              "name": "Update Comment",
+              "id": "706c69dd-b5b0-40ba-8cf1-f87ae3815a8b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/comments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "e7506f70-47e5-4dbc-afdd-bc722e7e8d52",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the comment."
+                    }
+                  ]
+                },
+                "description": "Updates a comment by id. The version number must be incremented."
+              },
+              "response": [
+                {
+                  "id": "4e273e52-9a6b-45c6-bef8-75e674fc3747",
+                  "name": "Returned if the comment was updated successfully.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"trashed\",\n  \"title\": \"<string>\",\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"version\": {\n    \"createdAt\": \"<dateTime>\",\n    \"message\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"minorEdit\": \"<boolean>\",\n    \"authorId\": \"<string>\"\n  },\n  \"body\": {\n    \"storage\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"atlas_doc_format\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"resolutionStatus\": \"resolved\",\n  \"properties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-4e273e52-9a6b-45c6-bef8-75e674fc3747"
+                },
+                {
+                  "id": "65e75ec0-f286-4a85-b6dd-4493eafc494a",
+                  "name": "Returned if the request is malformed or contains invalid parameters.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-65e75ec0-f286-4a85-b6dd-4493eafc494a"
+                },
+                {
+                  "id": "4aa6b7fd-533a-443b-b208-8930dd3db099",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-4aa6b7fd-533a-443b-b208-8930dd3db099"
+                },
+                {
+                  "id": "f838bb13-272a-4057-8f74-025a8dd215f2",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"body\": {\n    \"representation\": \"editor\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-f838bb13-272a-4057-8f74-025a8dd215f2"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-706c69dd-b5b0-40ba-8cf1-f87ae3815a8b"
+            },
+            {
+              "name": "Delete Comment",
+              "id": "3dbbd0be-26a8-4cdb-bfa0-cd17c13b5e5c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/comments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "8e58d3f7-783d-4cf8-b5f0-c10b47151ca4",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the comment."
+                    }
+                  ]
+                },
+                "description": "Deletes a comment by id."
+              },
+              "response": [
+                {
+                  "id": "5e7c7efe-1322-4778-9cf3-a02c487295ac",
+                  "name": "Returned if the comment was deleted successfully.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-5e7c7efe-1322-4778-9cf3-a02c487295ac"
+                },
+                {
+                  "id": "ee06e5a5-989d-4b3a-805a-355a0864c1a3",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-ee06e5a5-989d-4b3a-805a-355a0864c1a3"
+                },
+                {
+                  "id": "45e523fb-017e-4a3f-b5ab-af17dc297fdf",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:21.000Z",
+                  "updatedAt": "2026-07-28T01:25:21.000Z",
+                  "uid": "35240-45e523fb-017e-4a3f-b5ab-af17dc297fdf"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:21.000Z",
+              "updatedAt": "2026-07-28T01:25:21.000Z",
+              "uid": "35240-3dbbd0be-26a8-4cdb-bfa0-cd17c13b5e5c"
+            }
+          ],
+          "id": "de35184b-e920-40d1-ae65-b2461638970c",
+          "createdAt": "2026-07-28T01:25:21.000Z",
+          "updatedAt": "2026-07-28T01:25:21.000Z",
+          "uid": "35240-de35184b-e920-40d1-ae65-b2461638970c"
+        }
+      ],
+      "id": "6748bba8-72a9-4503-86cb-053cb69ab739",
+      "createdAt": "2026-07-28T01:25:21.000Z",
+      "updatedAt": "2026-07-28T01:25:21.000Z",
+      "uid": "35240-6748bba8-72a9-4503-86cb-053cb69ab739"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "domain",
+      "value": "your-domain"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2"
+    }
+  ]
+}

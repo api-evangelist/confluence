@@ -1,0 +1,1035 @@
+{
+  "info": {
+    "_postman_id": "bc0e3362-21da-4a5a-938f-146d2e483c14",
+    "name": "Confluence Cloud REST API v2 Attachment Space API",
+    "description": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:25:24.000Z",
+    "updatedAt": "2026-07-28T01:25:24.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-bc0e3362-21da-4a5a-938f-146d2e483c14"
+  },
+  "item": [
+    {
+      "name": "spaces",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "pages",
+              "item": [
+                {
+                  "name": "Get Pages in Space",
+                  "id": "54d7372a-29ff-4918-9a32-55cc90a23bfe",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/spaces/:id/pages?depth=root&status=current&body-format=anonymous_export_view&sort=modified-date&cursor=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "spaces",
+                        ":id",
+                        "pages"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by depth in the page tree. Use root to get only top-level pages.",
+                          "key": "depth",
+                          "value": "root"
+                        },
+                        {
+                          "description": "Filter by content status.",
+                          "key": "status",
+                          "value": "current"
+                        },
+                        {
+                          "description": "The representation format for the content body.",
+                          "key": "body-format",
+                          "value": "anonymous_export_view"
+                        },
+                        {
+                          "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                          "key": "sort",
+                          "value": "modified-date"
+                        },
+                        {
+                          "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Maximum number of results to return.",
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "e3a3f9c6-894f-4b98-8ddf-c1565031f238",
+                          "key": "id",
+                          "value": "<long>",
+                          "description": "(Required) The ID of the space."
+                        }
+                      ]
+                    },
+                    "description": "Returns all pages in a specific space. Supports filtering by status and depth."
+                  },
+                  "response": [
+                    {
+                      "id": "1710b311-3f5a-4d3e-8a33-208b13791e82",
+                      "name": "Returned if the pages in the space are returned.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/spaces/:id/pages?depth=root&status=current&body-format=anonymous_export_view&sort=modified-date&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "spaces",
+                            ":id",
+                            "pages"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter by depth in the page tree. Use root to get only top-level pages.",
+                              "key": "depth",
+                              "value": "root"
+                            },
+                            {
+                              "description": "Filter by content status.",
+                              "key": "status",
+                              "value": "current"
+                            },
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                              "key": "sort",
+                              "value": "modified-date"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"current\",\n      \"title\": \"<string>\",\n      \"spaceId\": \"<string>\",\n      \"parentId\": \"<string>\",\n      \"parentType\": \"space\",\n      \"position\": \"<integer>\",\n      \"authorId\": \"<string>\",\n      \"ownerId\": \"<string>\",\n      \"lastOwnerId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"labels\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"properties\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"operations\": {\n        \"results\": [\n          {\n            \"operation\": \"administer\",\n            \"targetType\": \"<string>\"\n          },\n          {\n            \"operation\": \"administer\",\n            \"targetType\": \"<string>\"\n          }\n        ]\n      },\n      \"likes\": {\n        \"results\": [\n          {\n            \"accountId\": \"<string>\"\n          },\n          {\n            \"accountId\": \"<string>\"\n          }\n        ]\n      },\n      \"versions\": {\n        \"results\": [\n          {\n            \"createdAt\": \"<dateTime>\",\n            \"message\": \"<string>\",\n            \"number\": \"<integer>\",\n            \"minorEdit\": \"<boolean>\",\n            \"authorId\": \"<string>\"\n          },\n          {\n            \"createdAt\": \"<dateTime>\",\n            \"message\": \"<string>\",\n            \"number\": \"<integer>\",\n            \"minorEdit\": \"<boolean>\",\n            \"authorId\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"_links\": {\n        \"webui\": \"<string>\",\n        \"editui\": \"<string>\",\n        \"tinyui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"trashed\",\n      \"title\": \"<string>\",\n      \"spaceId\": \"<string>\",\n      \"parentId\": \"<string>\",\n      \"parentType\": \"page\",\n      \"position\": \"<integer>\",\n      \"authorId\": \"<string>\",\n      \"ownerId\": \"<string>\",\n      \"lastOwnerId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"version\": {\n        \"createdAt\": \"<dateTime>\",\n        \"message\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"minorEdit\": \"<boolean>\",\n        \"authorId\": \"<string>\"\n      },\n      \"body\": {\n        \"storage\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"atlas_doc_format\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"labels\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"properties\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"operations\": {\n        \"results\": [\n          {\n            \"operation\": \"administer\",\n            \"targetType\": \"<string>\"\n          },\n          {\n            \"operation\": \"delete\",\n            \"targetType\": \"<string>\"\n          }\n        ]\n      },\n      \"likes\": {\n        \"results\": [\n          {\n            \"accountId\": \"<string>\"\n          },\n          {\n            \"accountId\": \"<string>\"\n          }\n        ]\n      },\n      \"versions\": {\n        \"results\": [\n          {\n            \"createdAt\": \"<dateTime>\",\n            \"message\": \"<string>\",\n            \"number\": \"<integer>\",\n            \"minorEdit\": \"<boolean>\",\n            \"authorId\": \"<string>\"\n          },\n          {\n            \"createdAt\": \"<dateTime>\",\n            \"message\": \"<string>\",\n            \"number\": \"<integer>\",\n            \"minorEdit\": \"<boolean>\",\n            \"authorId\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"_links\": {\n        \"webui\": \"<string>\",\n        \"editui\": \"<string>\",\n        \"tinyui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:25:24.000Z",
+                      "updatedAt": "2026-07-28T01:25:24.000Z",
+                      "uid": "35240-1710b311-3f5a-4d3e-8a33-208b13791e82"
+                    },
+                    {
+                      "id": "9d23d715-1a16-4060-998d-f04c1ee0bf35",
+                      "name": "Returned if the request is malformed or contains invalid parameters.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/spaces/:id/pages?depth=root&status=current&body-format=anonymous_export_view&sort=modified-date&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "spaces",
+                            ":id",
+                            "pages"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter by depth in the page tree. Use root to get only top-level pages.",
+                              "key": "depth",
+                              "value": "root"
+                            },
+                            {
+                              "description": "Filter by content status.",
+                              "key": "status",
+                              "value": "current"
+                            },
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                              "key": "sort",
+                              "value": "modified-date"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:24.000Z",
+                      "updatedAt": "2026-07-28T01:25:24.000Z",
+                      "uid": "35240-9d23d715-1a16-4060-998d-f04c1ee0bf35"
+                    },
+                    {
+                      "id": "6dbb7100-f090-4c1b-8d95-c80fed3ce505",
+                      "name": "Returned if the authentication credentials are missing or invalid.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/spaces/:id/pages?depth=root&status=current&body-format=anonymous_export_view&sort=modified-date&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "spaces",
+                            ":id",
+                            "pages"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter by depth in the page tree. Use root to get only top-level pages.",
+                              "key": "depth",
+                              "value": "root"
+                            },
+                            {
+                              "description": "Filter by content status.",
+                              "key": "status",
+                              "value": "current"
+                            },
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                              "key": "sort",
+                              "value": "modified-date"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:24.000Z",
+                      "updatedAt": "2026-07-28T01:25:24.000Z",
+                      "uid": "35240-6dbb7100-f090-4c1b-8d95-c80fed3ce505"
+                    },
+                    {
+                      "id": "66588067-ac99-4a0d-8dd0-3d1472765a04",
+                      "name": "Returned if the requested resource is not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/spaces/:id/pages?depth=root&status=current&body-format=anonymous_export_view&sort=modified-date&cursor=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "spaces",
+                            ":id",
+                            "pages"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter by depth in the page tree. Use root to get only top-level pages.",
+                              "key": "depth",
+                              "value": "root"
+                            },
+                            {
+                              "description": "Filter by content status.",
+                              "key": "status",
+                              "value": "current"
+                            },
+                            {
+                              "description": "The representation format for the content body.",
+                              "key": "body-format",
+                              "value": "anonymous_export_view"
+                            },
+                            {
+                              "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                              "key": "sort",
+                              "value": "modified-date"
+                            },
+                            {
+                              "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Maximum number of results to return.",
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:25:24.000Z",
+                      "updatedAt": "2026-07-28T01:25:24.000Z",
+                      "uid": "35240-66588067-ac99-4a0d-8dd0-3d1472765a04"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:25:24.000Z",
+                  "updatedAt": "2026-07-28T01:25:24.000Z",
+                  "uid": "35240-54d7372a-29ff-4918-9a32-55cc90a23bfe"
+                }
+              ],
+              "id": "d3c34474-f383-4e43-a721-a15d45246f69",
+              "createdAt": "2026-07-28T01:25:24.000Z",
+              "updatedAt": "2026-07-28T01:25:24.000Z",
+              "uid": "35240-d3c34474-f383-4e43-a721-a15d45246f69"
+            },
+            {
+              "name": "Get Space by Id",
+              "id": "a89764bb-cc30-4537-ada5-5edc0f88a6cc",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/spaces/:id?description-format=plain",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "spaces",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "description": "The format of the space description in the response.",
+                      "key": "description-format",
+                      "value": "plain"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "id": "c00bab63-b83d-4464-b750-a596ed7a5145",
+                      "key": "id",
+                      "value": "<long>",
+                      "description": "(Required) The ID of the space."
+                    }
+                  ]
+                },
+                "description": "Returns a specific space by its id."
+              },
+              "response": [
+                {
+                  "id": "a88aec82-2e37-4ae9-b02b-a0ece472f577",
+                  "name": "Returned if the requested space is returned.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/spaces/:id?description-format=plain",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "spaces",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The format of the space description in the response.",
+                          "key": "description-format",
+                          "value": "plain"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"key\": \"<string>\",\n  \"name\": \"<string>\",\n  \"type\": \"personal\",\n  \"status\": \"archived\",\n  \"authorId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"homepageId\": \"<string>\",\n  \"description\": {\n    \"plain\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    \"view\": {\n      \"representation\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  },\n  \"icon\": {\n    \"path\": \"<string>\",\n    \"apiDownloadLink\": \"<string>\"\n  },\n  \"labels\": {\n    \"results\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"prefix\": \"<string>\"\n      }\n    ],\n    \"_links\": {\n      \"next\": \"<string>\",\n      \"base\": \"<string>\"\n    }\n  },\n  \"properties\": {\n    \"results\": [\n      {\n        \"id\": \"<string>\",\n        \"key\": \"<string>\",\n        \"value\": {\n          \"example\": \"example_value\"\n        },\n        \"version\": {\n          \"createdAt\": \"<dateTime>\",\n          \"message\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"minorEdit\": \"<boolean>\",\n          \"authorId\": \"<string>\"\n        }\n      },\n      {\n        \"id\": \"<string>\",\n        \"key\": \"<string>\",\n        \"value\": {\n          \"example\": \"example_value\"\n        },\n        \"version\": {\n          \"createdAt\": \"<dateTime>\",\n          \"message\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"minorEdit\": \"<boolean>\",\n          \"authorId\": \"<string>\"\n        }\n      }\n    ]\n  },\n  \"operations\": {\n    \"results\": [\n      {\n        \"operation\": \"create\",\n        \"targetType\": \"<string>\"\n      },\n      {\n        \"operation\": \"read\",\n        \"targetType\": \"<string>\"\n      }\n    ]\n  },\n  \"permissions\": {\n    \"results\": [\n      {\n        \"id\": \"<string>\",\n        \"principal\": {\n          \"type\": \"group\",\n          \"id\": \"<string>\"\n        },\n        \"operation\": {\n          \"operation\": \"delete\",\n          \"targetType\": \"<string>\"\n        }\n      },\n      {\n        \"id\": \"<string>\",\n        \"principal\": {\n          \"type\": \"group\",\n          \"id\": \"<string>\"\n        },\n        \"operation\": {\n          \"operation\": \"delete\",\n          \"targetType\": \"<string>\"\n        }\n      }\n    ]\n  },\n  \"_links\": {\n    \"webui\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:25:24.000Z",
+                  "updatedAt": "2026-07-28T01:25:24.000Z",
+                  "uid": "35240-a88aec82-2e37-4ae9-b02b-a0ece472f577"
+                },
+                {
+                  "id": "fe53b8a0-bc21-4bbf-b327-68da36dba0bc",
+                  "name": "Returned if the authentication credentials are missing or invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/spaces/:id?description-format=plain",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "spaces",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The format of the space description in the response.",
+                          "key": "description-format",
+                          "value": "plain"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:24.000Z",
+                  "updatedAt": "2026-07-28T01:25:24.000Z",
+                  "uid": "35240-fe53b8a0-bc21-4bbf-b327-68da36dba0bc"
+                },
+                {
+                  "id": "a3097d78-4e12-4038-b602-4877e872f24a",
+                  "name": "Returned if the requested resource is not found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/spaces/:id?description-format=plain",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "spaces",
+                        ":id"
+                      ],
+                      "query": [
+                        {
+                          "description": "The format of the space description in the response.",
+                          "key": "description-format",
+                          "value": "plain"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:25:24.000Z",
+                  "updatedAt": "2026-07-28T01:25:24.000Z",
+                  "uid": "35240-a3097d78-4e12-4038-b602-4877e872f24a"
+                }
+              ],
+              "createdAt": "2026-07-28T01:25:24.000Z",
+              "updatedAt": "2026-07-28T01:25:24.000Z",
+              "uid": "35240-a89764bb-cc30-4537-ada5-5edc0f88a6cc"
+            }
+          ],
+          "id": "534ccd11-72b6-4aa3-a158-3e7d7f794125",
+          "createdAt": "2026-07-28T01:25:24.000Z",
+          "updatedAt": "2026-07-28T01:25:24.000Z",
+          "uid": "35240-534ccd11-72b6-4aa3-a158-3e7d7f794125"
+        },
+        {
+          "name": "Get Spaces",
+          "id": "0ab9c21f-431f-4d78-859e-e7b712b25c5f",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/spaces?ids=<long>&ids=<long>&keys=<string>&keys=<string>&type=global&status=archived&labels=<string>&labels=<string>&sort=modified-date&description-format=plain&cursor=<string>&limit=25",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "spaces"
+              ],
+              "query": [
+                {
+                  "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values.",
+                  "key": "ids",
+                  "value": "<long>"
+                },
+                {
+                  "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values.",
+                  "key": "ids",
+                  "value": "<long>"
+                },
+                {
+                  "description": "Filter by space keys. Multiple keys can be specified as comma-separated values.",
+                  "key": "keys",
+                  "value": "<string>"
+                },
+                {
+                  "description": "Filter by space keys. Multiple keys can be specified as comma-separated values.",
+                  "key": "keys",
+                  "value": "<string>"
+                },
+                {
+                  "description": "Filter by space type.",
+                  "key": "type",
+                  "value": "global"
+                },
+                {
+                  "description": "Filter by space status.",
+                  "key": "status",
+                  "value": "archived"
+                },
+                {
+                  "description": "Filter by space labels. Multiple labels can be specified.",
+                  "key": "labels",
+                  "value": "<string>"
+                },
+                {
+                  "description": "Filter by space labels. Multiple labels can be specified.",
+                  "key": "labels",
+                  "value": "<string>"
+                },
+                {
+                  "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                  "key": "sort",
+                  "value": "modified-date"
+                },
+                {
+                  "description": "The format of the space description in the response.",
+                  "key": "description-format",
+                  "value": "plain"
+                },
+                {
+                  "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                  "key": "cursor",
+                  "value": "<string>"
+                },
+                {
+                  "description": "Maximum number of results to return.",
+                  "key": "limit",
+                  "value": "25"
+                }
+              ]
+            },
+            "description": "Returns all spaces. The results can be filtered by space type, status, and labels. Pagination is cursor-based."
+          },
+          "response": [
+            {
+              "id": "f65d6ff3-4041-4972-bb18-c49b27c32ba3",
+              "name": "Returned if the requested spaces are returned.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/spaces?ids=<long>&keys=<string>&type=global&status=archived&labels=<string>&sort=modified-date&description-format=plain&cursor=<string>&limit=25",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "spaces"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values.",
+                      "key": "ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by space keys. Multiple keys can be specified as comma-separated values.",
+                      "key": "keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter by space type.",
+                      "key": "type",
+                      "value": "global"
+                    },
+                    {
+                      "description": "Filter by space status.",
+                      "key": "status",
+                      "value": "archived"
+                    },
+                    {
+                      "description": "Filter by space labels. Multiple labels can be specified.",
+                      "key": "labels",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                      "key": "sort",
+                      "value": "modified-date"
+                    },
+                    {
+                      "description": "The format of the space description in the response.",
+                      "key": "description-format",
+                      "value": "plain"
+                    },
+                    {
+                      "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Maximum number of results to return.",
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"type\": \"personal\",\n      \"status\": \"archived\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"homepageId\": \"<string>\",\n      \"description\": {\n        \"plain\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"icon\": {\n        \"path\": \"<string>\",\n        \"apiDownloadLink\": \"<string>\"\n      },\n      \"labels\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"properties\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"operations\": {\n        \"results\": [\n          {\n            \"operation\": \"read\",\n            \"targetType\": \"<string>\"\n          },\n          {\n            \"operation\": \"create\",\n            \"targetType\": \"<string>\"\n          }\n        ]\n      },\n      \"permissions\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"principal\": {\n              \"type\": \"role\",\n              \"id\": \"<string>\"\n            },\n            \"operation\": {\n              \"operation\": \"update\",\n              \"targetType\": \"<string>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"principal\": {\n              \"type\": \"user\",\n              \"id\": \"<string>\"\n            },\n            \"operation\": {\n              \"operation\": \"create\",\n              \"targetType\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"type\": \"personal\",\n      \"status\": \"archived\",\n      \"authorId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"homepageId\": \"<string>\",\n      \"description\": {\n        \"plain\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        \"view\": {\n          \"representation\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      },\n      \"icon\": {\n        \"path\": \"<string>\",\n        \"apiDownloadLink\": \"<string>\"\n      },\n      \"labels\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          },\n          {\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"prefix\": \"<string>\"\n          }\n        ],\n        \"_links\": {\n          \"next\": \"<string>\",\n          \"base\": \"<string>\"\n        }\n      },\n      \"properties\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"key\": \"<string>\",\n            \"value\": {\n              \"example\": \"example_value\"\n            },\n            \"version\": {\n              \"createdAt\": \"<dateTime>\",\n              \"message\": \"<string>\",\n              \"number\": \"<integer>\",\n              \"minorEdit\": \"<boolean>\",\n              \"authorId\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"operations\": {\n        \"results\": [\n          {\n            \"operation\": \"update\",\n            \"targetType\": \"<string>\"\n          },\n          {\n            \"operation\": \"delete\",\n            \"targetType\": \"<string>\"\n          }\n        ]\n      },\n      \"permissions\": {\n        \"results\": [\n          {\n            \"id\": \"<string>\",\n            \"principal\": {\n              \"type\": \"role\",\n              \"id\": \"<string>\"\n            },\n            \"operation\": {\n              \"operation\": \"delete\",\n              \"targetType\": \"<string>\"\n            }\n          },\n          {\n            \"id\": \"<string>\",\n            \"principal\": {\n              \"type\": \"role\",\n              \"id\": \"<string>\"\n            },\n            \"operation\": {\n              \"operation\": \"delete\",\n              \"targetType\": \"<string>\"\n            }\n          }\n        ]\n      },\n      \"_links\": {\n        \"webui\": \"<string>\"\n      }\n    }\n  ],\n  \"_links\": {\n    \"next\": \"<string>\",\n    \"base\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-07-28T01:25:24.000Z",
+              "updatedAt": "2026-07-28T01:25:24.000Z",
+              "uid": "35240-f65d6ff3-4041-4972-bb18-c49b27c32ba3"
+            },
+            {
+              "id": "98fdb999-324b-4b95-9085-0963f62e9970",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/spaces?ids=<long>&keys=<string>&type=global&status=archived&labels=<string>&sort=modified-date&description-format=plain&cursor=<string>&limit=25",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "spaces"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values.",
+                      "key": "ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by space keys. Multiple keys can be specified as comma-separated values.",
+                      "key": "keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter by space type.",
+                      "key": "type",
+                      "value": "global"
+                    },
+                    {
+                      "description": "Filter by space status.",
+                      "key": "status",
+                      "value": "archived"
+                    },
+                    {
+                      "description": "Filter by space labels. Multiple labels can be specified.",
+                      "key": "labels",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                      "key": "sort",
+                      "value": "modified-date"
+                    },
+                    {
+                      "description": "The format of the space description in the response.",
+                      "key": "description-format",
+                      "value": "plain"
+                    },
+                    {
+                      "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Maximum number of results to return.",
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:24.000Z",
+              "updatedAt": "2026-07-28T01:25:24.000Z",
+              "uid": "35240-98fdb999-324b-4b95-9085-0963f62e9970"
+            },
+            {
+              "id": "b6c8c67d-cb45-4d45-aa61-1467f6846892",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: basic",
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/spaces?ids=<long>&keys=<string>&type=global&status=archived&labels=<string>&sort=modified-date&description-format=plain&cursor=<string>&limit=25",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "spaces"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values.",
+                      "key": "ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by space keys. Multiple keys can be specified as comma-separated values.",
+                      "key": "keys",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter by space type.",
+                      "key": "type",
+                      "value": "global"
+                    },
+                    {
+                      "description": "Filter by space status.",
+                      "key": "status",
+                      "value": "archived"
+                    },
+                    {
+                      "description": "Filter by space labels. Multiple labels can be specified.",
+                      "key": "labels",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.",
+                      "key": "sort",
+                      "value": "modified-date"
+                    },
+                    {
+                      "description": "The format of the space description in the response.",
+                      "key": "description-format",
+                      "value": "plain"
+                    },
+                    {
+                      "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Maximum number of results to return.",
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"statusCode\": \"<integer>\",\n  \"data\": {\n    \"authorized\": \"<boolean>\",\n    \"valid\": \"<boolean>\",\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"<string>\",\n          \"args\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"translation\": \"<string>\"\n        }\n      }\n    ],\n    \"successful\": \"<boolean>\"\n  },\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:25:24.000Z",
+              "updatedAt": "2026-07-28T01:25:24.000Z",
+              "uid": "35240-b6c8c67d-cb45-4d45-aa61-1467f6846892"
+            }
+          ],
+          "createdAt": "2026-07-28T01:25:24.000Z",
+          "updatedAt": "2026-07-28T01:25:24.000Z",
+          "uid": "35240-0ab9c21f-431f-4d78-859e-e7b712b25c5f"
+        }
+      ],
+      "id": "74189706-e8cd-4b43-8dba-cf59faef82d4",
+      "createdAt": "2026-07-28T01:25:24.000Z",
+      "updatedAt": "2026-07-28T01:25:24.000Z",
+      "uid": "35240-74189706-e8cd-4b43-8dba-cf59faef82d4"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "domain",
+      "value": "your-domain"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2"
+    }
+  ]
+}
