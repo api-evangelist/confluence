@@ -1300,7 +1300,7 @@ common:
   - name: GitHub
     description: Embed code snippets and link repositories to Confluence documentation.
 - type: OpenAPI
-  url: openapi/confluence-cloud-v2.yml
+  url: openapi/_original/confluence-cloud-v2.yml
 - type: OpenAPI
   url: https://dac-static.atlassian.com/cloud/confluence/swagger.v3.json
 - type: AsyncAPI
