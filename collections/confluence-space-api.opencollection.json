@@ -1,0 +1,172 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluence Cloud REST API v2 Attachment Space API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Space",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Spaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/spaces",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space IDs. Multiple IDs can be specified as comma-separated values."
+              },
+              {
+                "name": "keys",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space keys. Multiple keys can be specified as comma-separated values."
+              },
+              {
+                "name": "type",
+                "value": "global",
+                "type": "query",
+                "description": "Filter by space type."
+              },
+              {
+                "name": "status",
+                "value": "current",
+                "type": "query",
+                "description": "Filter by space status."
+              },
+              {
+                "name": "labels",
+                "value": "",
+                "type": "query",
+                "description": "Filter by space labels. Multiple labels can be specified."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              },
+              {
+                "name": "description-format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the space description in the response."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns all spaces. The results can be filtered by space type, status, and labels. Pagination is cursor-based."
+        },
+        {
+          "info": {
+            "name": "Get Space by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/spaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the space."
+              },
+              {
+                "name": "description-format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the space description in the response."
+              }
+            ]
+          },
+          "docs": "Returns a specific space by its id."
+        },
+        {
+          "info": {
+            "name": "Get Pages in Space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/spaces/:id/pages",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the space."
+              },
+              {
+                "name": "depth",
+                "value": "all",
+                "type": "query",
+                "description": "Filter by depth in the page tree. Use root to get only top-level pages."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by content status."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns all pages in a specific space. Supports filtering by status and depth."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

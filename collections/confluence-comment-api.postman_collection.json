@@ -1,0 +1,2297 @@
+{
+  "item": [
+    {
+      "id": "3119be1d-0766-4af1-a5ba-b465a1c954ed",
+      "name": "Comment",
+      "description": {
+        "content": "Create, retrieve, update, and delete comments on pages and blog posts",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6939cb0d-a734-4ebd-9a1b-576e16e76cb3",
+          "name": "Get Footer Comments for Page",
+          "request": {
+            "name": "Get Footer Comments for Page",
+            "description": {
+              "content": "Returns the footer comments of a specific page.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pages",
+                ":id",
+                "footer-comments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "body-format",
+                  "value": "<string>",
+                  "description": "The representation format for the content body."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the content."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "85ff7d3d-f1f9-44a1-a4f9-dc341f9cfdd7",
+              "name": "Returned if the footer comments are returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"abc123\",\n      \"status\": \"current\",\n      \"title\": \"Example Title\",\n      \"blogPostId\": \"500123\",\n      \"pageId\": \"500123\",\n      \"parentCommentId\": \"500123\",\n      \"authorId\": \"500123\",\n      \"createdAt\": \"2026-01-15T10:30:00Z\",\n      \"resolutionStatus\": \"open\"\n    }\n  ],\n  \"_links\": {\n    \"next\": \"example_value\",\n    \"base\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d78ea8e-e061-4e2e-b2a0-4f3f0bda88ed",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbcc15ff-1d3e-44d0-9956-b2645457d676",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "134552e2-d4ac-4f7e-a0b5-f55d82ed19a6",
+          "name": "Get Inline Comments for Page",
+          "request": {
+            "name": "Get Inline Comments for Page",
+            "description": {
+              "content": "Returns the inline comments of a specific page.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pages",
+                ":id",
+                "inline-comments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "body-format",
+                  "value": "<string>",
+                  "description": "The representation format for the content body."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the content."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d37c9eff-3aba-4613-87db-b35ce4997e06",
+              "name": "Returned if the inline comments are returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"abc123\",\n      \"status\": \"current\",\n      \"title\": \"Example Title\",\n      \"blogPostId\": \"500123\",\n      \"pageId\": \"500123\",\n      \"parentCommentId\": \"500123\",\n      \"authorId\": \"500123\",\n      \"createdAt\": \"2026-01-15T10:30:00Z\",\n      \"resolutionStatus\": \"open\"\n    }\n  ],\n  \"_links\": {\n    \"next\": \"example_value\",\n    \"base\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd9aae49-9b32-4c25-9fa2-7759a03e474b",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1ff86db-d635-489d-bddf-84cc4e1fa3e5",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bcec2ec-1701-4218-ba70-3db36b924de5",
+          "name": "Create Footer Comment",
+          "request": {
+            "name": "Create Footer Comment",
+            "description": {
+              "content": "Creates a footer comment on a page or blog post.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "footer-comments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": {\n    \"representation\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\",\n  \"parentCommentId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "364bce90-60d9-441c-99d8-3be95b45a2a4",
+              "name": "Returned if the comment was created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"abc123\",\n  \"status\": \"current\",\n  \"title\": \"Example Title\",\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"authorId\": \"500123\",\n  \"createdAt\": \"2026-01-15T10:30:00Z\",\n  \"version\": {\n    \"createdAt\": \"2026-01-15T10:30:00Z\",\n    \"message\": \"example_value\",\n    \"number\": 10,\n    \"minorEdit\": true,\n    \"authorId\": \"500123\"\n  },\n  \"body\": {},\n  \"resolutionStatus\": \"open\",\n  \"properties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  },\n  \"_links\": {\n    \"webui\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de972f1b-d093-45b8-9a72-283b5fc9a39e",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35b32e63-6154-4056-be46-dc622ffaef81",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee19f76a-22d0-41ec-91c6-571cde43fa49",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "footer-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2020117a-fc31-41a2-a954-3776f4b98978",
+          "name": "Create Inline Comment",
+          "request": {
+            "name": "Create Inline Comment",
+            "description": {
+              "content": "Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "inline-comments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": {\n    \"representation\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"<string>\",\n    \"textSelectionMatchCount\": \"<integer>\"\n  },\n  \"blogPostId\": \"<string>\",\n  \"pageId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a01e09b6-8881-42ee-a6eb-eece85c6d102",
+              "name": "Returned if the inline comment was created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"abc123\",\n  \"status\": \"current\",\n  \"title\": \"Example Title\",\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"authorId\": \"500123\",\n  \"createdAt\": \"2026-01-15T10:30:00Z\",\n  \"version\": {\n    \"createdAt\": \"2026-01-15T10:30:00Z\",\n    \"message\": \"example_value\",\n    \"number\": 10,\n    \"minorEdit\": true,\n    \"authorId\": \"500123\"\n  },\n  \"body\": {},\n  \"resolutionStatus\": \"open\",\n  \"properties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  },\n  \"_links\": {\n    \"webui\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78e85fb6-7e6b-4eda-8e6f-828a57be28b8",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbbfc8e9-b4b0-419f-aafa-fd52ae03f348",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ca258b3-659f-432a-8c07-6b61a1333858",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "inline-comments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"inlineCommentProperties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b0432768-b408-488e-85b9-c56b2d0dec5a",
+          "name": "Get Comment by Id",
+          "request": {
+            "name": "Get Comment by Id",
+            "description": {
+              "content": "Returns a specific comment by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "comments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "body-format",
+                  "value": "<string>",
+                  "description": "The representation format for the content body."
+                },
+                {
+                  "disabled": false,
+                  "key": "version",
+                  "value": "<integer>",
+                  "description": "The version number of the content to retrieve."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the comment."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "69879fa1-41a7-4965-9ccb-a31cd16f729c",
+              "name": "Returned if the comment is returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"abc123\",\n  \"status\": \"current\",\n  \"title\": \"Example Title\",\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"authorId\": \"500123\",\n  \"createdAt\": \"2026-01-15T10:30:00Z\",\n  \"version\": {\n    \"createdAt\": \"2026-01-15T10:30:00Z\",\n    \"message\": \"example_value\",\n    \"number\": 10,\n    \"minorEdit\": true,\n    \"authorId\": \"500123\"\n  },\n  \"body\": {},\n  \"resolutionStatus\": \"open\",\n  \"properties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  },\n  \"_links\": {\n    \"webui\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ec16a08-153c-45e3-a76a-d715326521fe",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d56f1e0a-3312-45cc-a896-a6e8ca8be102",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "833fad3e-7138-4402-96c7-6fb2d7f61d83",
+          "name": "Update Comment",
+          "request": {
+            "name": "Update Comment",
+            "description": {
+              "content": "Updates a comment by id. The version number must be incremented.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "comments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the comment."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": {\n    \"representation\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"version\": {\n    \"number\": \"<integer>\",\n    \"message\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1f8e70e8-0c09-4e64-b57f-84d4723faf67",
+              "name": "Returned if the comment was updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"version\": {\n    \"number\": 10,\n    \"message\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"abc123\",\n  \"status\": \"current\",\n  \"title\": \"Example Title\",\n  \"blogPostId\": \"500123\",\n  \"pageId\": \"500123\",\n  \"parentCommentId\": \"500123\",\n  \"authorId\": \"500123\",\n  \"createdAt\": \"2026-01-15T10:30:00Z\",\n  \"version\": {\n    \"createdAt\": \"2026-01-15T10:30:00Z\",\n    \"message\": \"example_value\",\n    \"number\": 10,\n    \"minorEdit\": true,\n    \"authorId\": \"500123\"\n  },\n  \"body\": {},\n  \"resolutionStatus\": \"open\",\n  \"properties\": {\n    \"textSelection\": \"example_value\",\n    \"textSelectionMatchCount\": 10\n  },\n  \"_links\": {\n    \"webui\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0742f0ba-796d-4c0c-952b-94920b5c46cc",
+              "name": "Returned if the request is malformed or contains invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"version\": {\n    \"number\": 10,\n    \"message\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddb9e05c-974c-404c-a820-202c2190c884",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"version\": {\n    \"number\": 10,\n    \"message\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9719978a-7ce3-4620-9540-93c6eb509a1e",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"body\": {\n    \"representation\": \"storage\",\n    \"value\": \"example_value\"\n  },\n  \"version\": {\n    \"number\": 10,\n    \"message\": \"example_value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1adb7c4c-950a-4436-b61b-362fb3dd39d7",
+          "name": "Delete Comment",
+          "request": {
+            "name": "Delete Comment",
+            "description": {
+              "content": "Deletes a comment by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "comments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the comment."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "86bf7616-40e7-491a-8b46-a34634b5aa03",
+              "name": "Returned if the comment was deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6d5b7855-2134-4c74-b270-74dde7e38127",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7fe1edbe-3ae4-419a-8f3e-d1b99e8ed046",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ecf9b797-315c-4353-a30f-3d4e51764e76",
+          "name": "Get Child Comments",
+          "request": {
+            "name": "Get Child Comments",
+            "description": {
+              "content": "Returns the child (reply) comments of a specific comment.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "comments",
+                ":id",
+                "children"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "body-format",
+                  "value": "<string>",
+                  "description": "The representation format for the content body."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the parent comment."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0ae7e0ea-d69a-45fc-b11b-d7f3c22a5c35",
+              "name": "Returned if the child comments are returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id",
+                    "children"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the parent comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"abc123\",\n      \"status\": \"current\",\n      \"title\": \"Example Title\",\n      \"blogPostId\": \"500123\",\n      \"pageId\": \"500123\",\n      \"parentCommentId\": \"500123\",\n      \"authorId\": \"500123\",\n      \"createdAt\": \"2026-01-15T10:30:00Z\",\n      \"resolutionStatus\": \"open\"\n    }\n  ],\n  \"_links\": {\n    \"next\": \"example_value\",\n    \"base\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc710b15-b190-4fc1-9552-baecab74ea45",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id",
+                    "children"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the parent comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "232a3002-4c92-429e-a3f7-cbccec7bb0d1",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "comments",
+                    ":id",
+                    "children"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "body-format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the parent comment."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your Atlassian Cloud site domain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "your-domain",
+      "key": "domain"
+    },
+    {
+      "type": "string",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e296a876-70b1-490e-ab5e-c88db7fb4b58",
+    "name": "Confluence Cloud REST API v2 Attachment Comment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+      "type": "text/plain"
+    }
+  }
+}

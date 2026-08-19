@@ -1,0 +1,766 @@
+{
+  "item": [
+    {
+      "id": "2cd13ff4-15e8-4ad6-a332-4694a5c047f8",
+      "name": "Attachment",
+      "description": {
+        "content": "Manage file attachments on content",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3bc2b709-205c-446c-9c8a-6ef0d40f1b08",
+          "name": "Get Attachment by Id",
+          "request": {
+            "name": "Get Attachment by Id",
+            "description": {
+              "content": "Returns a specific attachment by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attachments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the content."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "adc0234d-8651-4b41-a4f7-255e339d69b1",
+              "name": "Returned if the attachment is returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"abc123\",\n  \"status\": \"current\",\n  \"title\": \"Example Title\",\n  \"mediaType\": \"example_value\",\n  \"mediaTypeDescription\": \"example_value\",\n  \"comment\": \"example_value\",\n  \"fileSize\": 10,\n  \"webuiLink\": \"example_value\",\n  \"downloadLink\": \"example_value\",\n  \"pageId\": \"500123\",\n  \"blogPostId\": \"500123\",\n  \"version\": {\n    \"createdAt\": \"2026-01-15T10:30:00Z\",\n    \"message\": \"example_value\",\n    \"number\": 10,\n    \"minorEdit\": true,\n    \"authorId\": \"500123\"\n  },\n  \"_links\": {\n    \"webui\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75ac0f96-ede9-4653-b5ba-a0a40ef7f7bf",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": true,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36b4cbe9-9241-4050-8b92-15d7e15377cb",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": true,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": true\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a9fdc94-7ab7-49b7-ab37-3580d1f7e86c",
+          "name": "Delete Attachment",
+          "request": {
+            "name": "Delete Attachment",
+            "description": {
+              "content": "Deletes an attachment by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attachments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the content."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5f4913b4-0a9c-4652-b05f-6782fb11333b",
+              "name": "Returned if the attachment was deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "210ec113-abf0-4dc5-83ac-6fb1ba33f4a8",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": true,\n    \"valid\": true,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": false\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9e248c0-27e6-49f8-b9b5-4c1720814ab4",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attachments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": true,\n    \"valid\": true,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": false\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a1da121-ce2f-447c-8ebb-81eadfd77876",
+          "name": "Get Attachments for Page",
+          "request": {
+            "name": "Get Attachments for Page",
+            "description": {
+              "content": "Returns the attachments of a specific page.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pages",
+                ":id",
+                "attachments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The ID of the content."
+                },
+                {
+                  "description": "Your Atlassian Cloud site domain",
+                  "type": "any",
+                  "value": "{{domain}}",
+                  "key": "domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "39c957b6-c60e-431b-a09b-67149ea58619",
+              "name": "Returned if the attachments are returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"abc123\",\n      \"status\": \"current\",\n      \"title\": \"Example Title\",\n      \"mediaType\": \"example_value\",\n      \"mediaTypeDescription\": \"example_value\",\n      \"comment\": \"example_value\",\n      \"fileSize\": 10,\n      \"webuiLink\": \"example_value\",\n      \"downloadLink\": \"example_value\",\n      \"pageId\": \"500123\",\n      \"blogPostId\": \"500123\"\n    }\n  ],\n  \"_links\": {\n    \"next\": \"example_value\",\n    \"base\": \"example_value\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ca23c32-bf2f-4cc2-8548-c00f7879de24",
+              "name": "Returned if the authentication credentials are missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": true,\n    \"valid\": true,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": false\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77b0985c-3d78-4b5e-bf0b-59704696896d",
+              "name": "Returned if the requested resource is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pages",
+                    ":id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The ID of the content."
+                    },
+                    {
+                      "description": "Your Atlassian Cloud site domain",
+                      "type": "any",
+                      "value": "{{domain}}",
+                      "key": "domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 10,\n  \"data\": {\n    \"authorized\": true,\n    \"valid\": true,\n    \"errors\": [\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      },\n      {\n        \"message\": {\n          \"key\": \"string\",\n          \"args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"translation\": \"string\"\n        }\n      }\n    ],\n    \"successful\": false\n  },\n  \"message\": \"example_value\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your Atlassian Cloud site domain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "your-domain",
+      "key": "domain"
+    },
+    {
+      "type": "string",
+      "value": "https://{{domain}}.atlassian.net/wiki/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "bb5ab752-1f48-4f6f-a5b4-6d424495b670",
+    "name": "Confluence Cloud REST API v2 Attachment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.\n\nContact Support:\n Name: Atlassian\n Email: ecosystem@atlassian.com",
+      "type": "text/plain"
+    }
+  }
+}

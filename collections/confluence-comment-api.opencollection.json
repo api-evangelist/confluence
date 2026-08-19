@@ -1,0 +1,239 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluence Cloud REST API v2 Attachment Comment API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Comment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Footer Comments for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/footer-comments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the footer comments of a specific page."
+        },
+        {
+          "info": {
+            "name": "Get Inline Comments for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/inline-comments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the inline comments of a specific page."
+        },
+        {
+          "info": {
+            "name": "Create Footer Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/footer-comments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a footer comment on a page or blog post."
+        },
+        {
+          "info": {
+            "name": "Create Inline Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/inline-comments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an inline comment on a page or blog post. Inline comments are anchored to a specific text selection."
+        },
+        {
+          "info": {
+            "name": "Get Comment by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the comment."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the content to retrieve."
+              }
+            ]
+          },
+          "docs": "Returns a specific comment by id."
+        },
+        {
+          "info": {
+            "name": "Update Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a comment by id. The version number must be incremented."
+        },
+        {
+          "info": {
+            "name": "Delete Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the comment."
+              }
+            ]
+          },
+          "docs": "Deletes a comment by id."
+        },
+        {
+          "info": {
+            "name": "Get Child Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/comments/:id/children",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the parent comment."
+              },
+              {
+                "name": "body-format",
+                "value": "",
+                "type": "query",
+                "description": "The representation format for the content body."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the child (reply) comments of a specific comment."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Confluence Cloud REST API v2 Attachment Label API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Label",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Labels for Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/pages/:id/labels",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the content."
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter labels by prefix (global, my, team)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination. The cursor value is returned in the response _links.next when there are more results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              }
+            ]
+          },
+          "docs": "Returns the labels associated with a specific page."
+        },
+        {
+          "info": {
+            "name": "Get Label by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{domain}.atlassian.net/wiki/api/v2/labels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "abc123",
+                "type": "path",
+                "description": "The ID of the label."
+              }
+            ]
+          },
+          "docs": "Returns a specific label by id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
