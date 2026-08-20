@@ -48,6 +48,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-search/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - CQL
+  - Query
+  - Search
+  tags_raw:
   - Cql
   - Query
   - Search
@@ -66,6 +70,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Blog Posts
+  - Content
+  - Pages
+  tags_raw:
   - Blog Posts
   - Content
   - Create
@@ -160,6 +168,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-group/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Group
+  - Membership
+  - User
+  tags_raw:
   - Groups
   - Membership
   - Users
@@ -178,6 +190,10 @@ apis:
   tags:
   - Permissions
   - Profiles
+  - User
+  tags_raw:
+  - Permissions
+  - Profiles
   - Users
   properties:
   - type: Documentation
@@ -192,6 +208,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-states/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content States
+  - Status
+  - Workflows
+  tags_raw:
   - Content States
   - Status
   - Workflow
@@ -239,6 +259,10 @@ apis:
   baseURL: https://your-domain.atlassian.net/gateway/api/graphql
   tags:
   - Cloud
+  - GraphQL
+  - Query
+  tags_raw:
+  - Cloud
   - Graphql
   - Query
   properties:
@@ -256,6 +280,11 @@ apis:
   humanURL: https://developer.atlassian.com/server/confluence/confluence-server-rest-api/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Data-Center
+  - On-Premise
+  - REST
+  - Server
+  tags_raw:
   - Data Center
   - On-Premise
   - Rest
@@ -279,6 +308,10 @@ apis:
     https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content---attachments/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Attachments
+  - File
+  - Uploads
+  tags_raw:
   - Attachments
   - Files
   - Uploads
@@ -373,6 +406,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-watches/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Notification
+  - Subscription
+  - Watches
+  tags_raw:
   - Notifications
   - Subscriptions
   - Watches
@@ -432,6 +469,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-long-running-task/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Async
+  - Long-Running
+  - Task
+  tags_raw:
   - Async
   - Long-Running
   - Tasks
@@ -581,6 +622,10 @@ apis:
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
   - Attachments
+  - File
+  - V2
+  tags_raw:
+  - Attachments
   - Files
   - V2
   properties:
@@ -610,6 +655,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-task/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Action Items
+  - Task
+  - V2
+  tags_raw:
   - Action Items
   - Tasks
   - V2
@@ -835,6 +884,9 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-operation/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Permissions
+  - V2
+  tags_raw:
   - Operations
   - Permissions
   - V2
@@ -850,6 +902,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-user/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Profiles
+  - User
+  - V2
+  tags_raw:
   - Profiles
   - Users
   - V2
@@ -941,6 +997,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-admin-key/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Admin
+  - APIKeys
+  - V2
+  tags_raw:
   - Admin
   - Api Keys
   - V2
