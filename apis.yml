@@ -60,7 +60,7 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-search/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
-  - CQL
+  - Cql
   - Query
   - Search
   tags_raw:
