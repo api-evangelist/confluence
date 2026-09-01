@@ -60,7 +60,7 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-search/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
-  - Cql
+  - CQL
   - Query
   - Search
   tags_raw:
@@ -576,6 +576,10 @@ apis:
   tags:
   - Content
   - Pages
+  - v2
+  tags_raw:
+  - Content
+  - Pages
   - V2
   properties:
   - type: Documentation
@@ -589,6 +593,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-blog-post/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Blog Posts
+  - Content
+  - v2
+  tags_raw:
   - Blog Posts
   - Content
   - V2
@@ -605,6 +613,9 @@ apis:
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
   - Spaces
+  - v2
+  tags_raw:
+  - Spaces
   - V2
   properties:
   - type: Documentation
@@ -618,6 +629,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-comment/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Comments
+  - Discussions
+  - v2
+  tags_raw:
   - Comments
   - Discussions
   - V2
@@ -635,7 +650,7 @@ apis:
   tags:
   - Attachments
   - File
-  - V2
+  - v2
   tags_raw:
   - Attachments
   - Files
@@ -654,6 +669,10 @@ apis:
   tags:
   - Labels
   - Organization
+  - v2
+  tags_raw:
+  - Labels
+  - Organization
   - V2
   properties:
   - type: Documentation
@@ -669,7 +688,7 @@ apis:
   tags:
   - Action Items
   - Task
-  - V2
+  - v2
   tags_raw:
   - Action Items
   - Tasks
@@ -686,6 +705,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-whiteboard/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - v2
+  - Visual Collaboration
+  - Whiteboards
+  tags_raw:
   - V2
   - Visual Collaboration
   - Whiteboards
@@ -703,6 +726,10 @@ apis:
   tags:
   - Custom Content
   - Extensions
+  - v2
+  tags_raw:
+  - Custom Content
+  - Extensions
   - V2
   properties:
   - type: Documentation
@@ -716,6 +743,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-ancestors/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Ancestors
+  - Hierarchy
+  - v2
+  tags_raw:
   - Ancestors
   - Hierarchy
   - V2
@@ -733,6 +764,10 @@ apis:
   tags:
   - Children
   - Hierarchy
+  - v2
+  tags_raw:
+  - Children
+  - Hierarchy
   - V2
   properties:
   - type: Documentation
@@ -748,6 +783,10 @@ apis:
   tags:
   - Descendants
   - Hierarchy
+  - v2
+  tags_raw:
+  - Descendants
+  - Hierarchy
   - V2
   properties:
   - type: Documentation
@@ -761,6 +800,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-version/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - History
+  - v2
+  - Versions
+  tags_raw:
   - History
   - V2
   - Versions
@@ -778,6 +821,10 @@ apis:
   tags:
   - Engagement
   - Likes
+  - v2
+  tags_raw:
+  - Engagement
+  - Likes
   - V2
   properties:
   - type: Documentation
@@ -791,6 +838,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space-permissions/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Access Control
+  - Space Permissions
+  - v2
+  tags_raw:
   - Access Control
   - Space Permissions
   - V2
@@ -808,6 +859,10 @@ apis:
   tags:
   - Metadata
   - Space Properties
+  - v2
+  tags_raw:
+  - Metadata
+  - Space Properties
   - V2
   properties:
   - type: Documentation
@@ -821,6 +876,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space-roles/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Authorization
+  - Space Roles
+  - v2
+  tags_raw:
   - Authorization
   - Space Roles
   - V2
@@ -838,6 +897,10 @@ apis:
   tags:
   - Content Properties
   - Metadata
+  - v2
+  tags_raw:
+  - Content Properties
+  - Metadata
   - V2
   properties:
   - type: Documentation
@@ -851,6 +914,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-folder/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Folders
+  - Organization
+  - v2
+  tags_raw:
   - Folders
   - Organization
   - V2
@@ -868,6 +935,10 @@ apis:
   tags:
   - Databases
   - Structured Data
+  - v2
+  tags_raw:
+  - Databases
+  - Structured Data
   - V2
   properties:
   - type: Documentation
@@ -881,6 +952,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-smart-link/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Previews
+  - Smart Links
+  - v2
+  tags_raw:
   - Previews
   - Smart Links
   - V2
@@ -897,7 +972,7 @@ apis:
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
   - Permissions
-  - V2
+  - v2
   tags_raw:
   - Operations
   - Permissions
@@ -916,7 +991,7 @@ apis:
   tags:
   - Profiles
   - User
-  - V2
+  - v2
   tags_raw:
   - Profiles
   - Users
@@ -935,6 +1010,10 @@ apis:
   tags:
   - App Properties
   - Extensions
+  - v2
+  tags_raw:
+  - App Properties
+  - Extensions
   - V2
   properties:
   - type: Documentation
@@ -949,6 +1028,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-content/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Content
+  - Management
+  - v2
+  tags_raw:
   - Content
   - Management
   - V2
@@ -966,6 +1049,10 @@ apis:
   tags:
   - Data Policies
   - Governance
+  - v2
+  tags_raw:
+  - Data Policies
+  - Governance
   - V2
   properties:
   - type: Documentation
@@ -979,6 +1066,10 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-classification-level/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
+  - Classification
+  - Data Protection
+  - v2
+  tags_raw:
   - Classification
   - Data Protection
   - V2
@@ -996,6 +1087,10 @@ apis:
   tags:
   - Data Protection
   - Redactions
+  - v2
+  tags_raw:
+  - Data Protection
+  - Redactions
   - V2
   properties:
   - type: Documentation
@@ -1011,7 +1106,7 @@ apis:
   tags:
   - Admin
   - APIKeys
-  - V2
+  - v2
   tags_raw:
   - Admin
   - Api Keys
