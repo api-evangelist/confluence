@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Confluence Cloud REST API v2 Attachment API
   description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
@@ -141,89 +141,32 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  parameters:
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
   schemas:
-    Error:
+    Version:
       type: object
-      description: Error response from the Confluence API.
+      description: Version information for content.
       properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
         message:
           type: string
-          description: A human-readable error message.
+          description: The message associated with this version.
           example: example_value
-    ContentLinks:
-      type: object
-      properties:
-        webui:
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
           type: string
-          description: Web UI link for the content.
-          example: example_value
-    AttachmentBulk:
-      type: object
-      description: A paginated list of attachments.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
+          description: The Atlassian account ID of the version author.
+          example: '500123'
     Attachment:
       type: object
       description: Represents a file attachment on Confluence content.
@@ -280,31 +223,52 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/ContentLinks'
-    Version:
+    ContentLinks:
       type: object
-      description: Version information for content.
       properties:
-        createdAt:
+        webui:
           type: string
-          format: date-time
-          description: The ISO 8601 timestamp of this version.
-          example: '2026-01-15T10:30:00Z'
+          description: Web UI link for the content.
+          example: example_value
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
         message:
           type: string
-          description: The message associated with this version.
+          description: A human-readable error message.
           example: example_value
-        number:
-          type: integer
-          description: The version number.
-          example: 10
-        minorEdit:
-          type: boolean
-          description: Whether this was a minor edit.
-          example: true
-        authorId:
-          type: string
-          description: The Atlassian account ID of the version author.
-          example: '500123'
     PaginationLinks:
       type: object
       description: Pagination links for cursor-based pagination.
@@ -317,19 +281,55 @@ components:
           type: string
           description: The base URL of the Confluence instance.
           example: example_value
+    AttachmentBulk:
+      type: object
+      description: A paginated list of attachments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
   responses:
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Returned if the requested resource is not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
   securitySchemes:
     basicAuth:
       type: http

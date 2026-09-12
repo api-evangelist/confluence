@@ -1,0 +1,50 @@
+generated: '2026-09-06'
+method: generated
+source: openapi/atlassian-confluence-rest-v1-openapi.json, openapi/atlassian-confluence-rest-v2-openapi.json, conventions/atlassian-confluence-conventions.yml
+note: Packaged Agent Skills for the marquee Confluence Cloud flows. Every operationId in every skill was verified
+  to exist in a harvested spec in openapi/; none were invented. Atlassian publishes no skills/ or AGENTS.md of its
+  own, so these are generated, not searched.
+skills:
+- file: atlassian-confluence-attach-and-comment.md
+  name: atlassian-confluence-attach-and-comment
+  description: Attach a file to a Confluence page and hold a comment thread on it.
+  operations:
+  - createAttachment
+  - createOrUpdateAttachments
+  - getPageAttachments
+  - getAttachmentById
+  - downloadAttatchment
+  - createFooterComment
+  - createInlineComment
+  - getPageFooterComments
+  - getFooterCommentChildren
+  - updateFooterComment
+- file: atlassian-confluence-publish-page.md
+  name: atlassian-confluence-publish-page
+  description: Create a Confluence Cloud page in a space, label it, and restrict who can edit it.
+  operations:
+  - getSpaces
+  - getSpaceById
+  - createPage
+  - getPageById
+  - addLabelsToContent
+  - addRestrictions
+- file: atlassian-confluence-search-cql.md
+  name: atlassian-confluence-search-cql
+  description: Find Confluence content with CQL and page through the results without losing any.
+  operations:
+  - searchByCQL
+  - searchContentByCQL
+  - getPageById
+  - getPagesInSpace
+  - convertContentIdsToContentTypes
+- file: atlassian-confluence-update-page-safely.md
+  name: atlassian-confluence-update-page-safely
+  description: Edit an existing Confluence page without clobbering someone else's change, and roll back if you do.
+  operations:
+  - getPageById
+  - updatePage
+  - updatePageTitle
+  - getPageVersions
+  - getPageVersionDetails
+  - restoreContentVersion

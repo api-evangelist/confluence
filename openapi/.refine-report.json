@@ -19,6 +19,14 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "confluence-attachment-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "confluence-blog-post-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "confluence-comment-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "confluence-label-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "confluence-page-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "confluence-space-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

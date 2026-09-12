@@ -1,0 +1,56 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Confluence Cloud REST API v1
+  version: 1.0.0
+extends: openapi/atlassian-confluence-rest-v1-openapi.json
+x-generated: '2026-09-06'
+x-method: generated
+x-source: API Evangelist enrichment pipeline; every value here is sourced from this repo's artifacts or from Atlassian
+  documentation cited in them. The original spec is never mutated.
+actions:
+- target: $.info
+  update:
+    contact:
+      name: Atlassian Developer Support
+      url: https://developer.atlassian.com/cloud/confluence/
+      x-community: https://community.developer.atlassian.com/
+    termsOfService: https://atlassian.com/terms/
+    x-provider: Atlassian
+    x-product: Confluence Cloud
+    x-apis-io-slug: atlassian-confluence
+    x-status-page: https://status.atlassian.com/
+    x-changelog: https://developer.atlassian.com/cloud/confluence/changelog/
+    x-rate-limits: https://developer.atlassian.com/cloud/confluence/rate-limiting/
+- target: $
+  update:
+    x-artifacts:
+      authentication: authentication/atlassian-confluence-authentication.yml
+      scopes: scopes/atlassian-confluence-scopes.yml
+      conventions: conventions/atlassian-confluence-conventions.yml
+      errors: errors/atlassian-confluence-problem-types.yml
+      lifecycle: lifecycle/atlassian-confluence-lifecycle.yml
+      rate_limits: rate-limits/atlassian-confluence-rate-limits.yml
+      data_model: data-model/atlassian-confluence-data-model.yml
+      webhooks: asyncapi/atlassian-confluence-webhooks.yml
+      mcp: mcp/atlassian-confluence-mcp.yml
+      tool_crosswalk: mcp/atlassian-confluence-tool-crosswalk.yml
+      skills: skills/_index.yml
+    x-runtime-semantics:
+      idempotency: none - no idempotency key on any operation
+      dry_run: none
+      reversibility: documented - trash-and-restore for content deletes, restoreContentVersion for edits; no retention
+        window published
+      rate_limit_headers:
+      - X-RateLimit-Limit
+      - X-RateLimit-Remaining
+      - X-RateLimit-Reset
+      - X-RateLimit-NearLimit
+      - RateLimit-Reason
+      - Retry-After
+      - RateLimit-Policy
+      - RateLimit
+      error_format: vendor JSON; not RFC 9457
+- target: $.paths['/wiki/rest/api/content/{id}/descendant'].get
+  update:
+    x-deprecation-note: Marked deprecated in the published v1 spec. Use the v2 descendants operations (getPageDescendants,
+      getFolderDescendants, getDatabaseDescendants, getWhiteboardDescendants, getSmartLinkDescendants).

@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Confluence Cloud REST API v2 Attachment Label API
   description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
@@ -107,42 +107,23 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  parameters:
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    LabelPrefixParam:
-      name: prefix
-      in: query
-      description: Filter labels by prefix (global, my, team).
-      schema:
-        type: string
-        enum:
-        - global
-        - my
-        - team
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
   schemas:
+    Label:
+      type: object
+      description: Represents a label applied to Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+          example: example_value
     Error:
       type: object
       description: Error response from the Confluence API.
@@ -205,31 +186,50 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-    Label:
-      type: object
-      description: Represents a label applied to Confluence content.
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the label.
-          example: abc123
-        name:
-          type: string
-          description: The name of the label.
-          example: Example Title
-        prefix:
-          type: string
-          description: The prefix of the label (global, my, team).
-          example: example_value
+  parameters:
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    LabelPrefixParam:
+      name: prefix
+      in: query
+      description: Filter labels by prefix (global, my, team).
+      schema:
+        type: string
+        enum:
+        - global
+        - my
+        - team
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
   responses:
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
+    NotFound:
+      description: Returned if the requested resource is not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Returned if the requested resource is not found.
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
       content:
         application/json:
           schema:

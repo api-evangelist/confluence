@@ -1,0 +1,654 @@
+generated: '2026-09-06'
+method: derived
+source: mcp/atlassian-confluence-mcp.yml, openapi/atlassian-confluence-rest-v1-openapi.json, openapi/atlassian-confluence-rest-v2-openapi.json,
+  graphql/atlassian-confluence-introspection.json
+note: 'Binds each published Confluence tool on the Atlassian Rovo MCP Server to the REST operationId(s) that back
+  it. The live MCP schema is OAuth-gated (tools/list returns 401), so rows are mapped by the provider''s own published
+  tool names and descriptions against the operationIds in the harvested v1 and v2 specs, and confidence is recorded
+  honestly rather than asserted. Nothing here was invented: every operationId appears in a spec in openapi/ and
+  every tool appears in the provider''s Supported tools reference.'
+surfaces:
+  openapi:
+  - file: openapi/atlassian-confluence-rest-v1-openapi.json
+    operations: 130
+    gated: false
+  - file: openapi/atlassian-confluence-rest-v2-openapi.json
+    operations: 218
+    gated: false
+  graphql:
+    endpoint: https://api.atlassian.com/graphql
+    introspection: graphql/atlassian-confluence-introspection.json
+    gated: false
+    note: Anonymous introspection succeeds; 27,710 types, 1,113 Confluence-prefixed types, 3,369 Query fields. Executing
+      most Confluence fields still requires a tenant-scoped token.
+  mcp:
+    endpoint: https://mcp.atlassian.com/v2/mcp
+    gated: true
+    note: tools/list returns HTTP 401 invalid_token; tool inventory taken from the published Supported tools reference.
+coverage:
+  mcp_tools: 60
+  mapped_to_rest: 45
+  mcp_only: 15
+  rest_operations_total: 346
+  rest_operations_bound: 81
+  rest_only: 265
+crosswalk:
+- tool: addConfluenceContentPermissions
+  category: write
+  rest:
+  - addRestrictions
+  - addUserToContentRestriction
+  - addGroupToContentRestrictionByGroupId
+  binding: composite
+  confidence: medium
+- tool: addLabelsToConfluenceContent
+  category: write
+  rest:
+  - addLabelsToContent
+  - addLabelsToSpace
+  binding: composite
+  confidence: high
+- tool: archiveConfluenceContent
+  category: write
+  rest:
+  - archivePages
+  binding: direct
+  confidence: high
+- tool: completeConfluenceTask
+  category: write
+  rest:
+  - updateTask
+  binding: derived
+  confidence: high
+  note: Sets status=complete on the v2 task update operation.
+- tool: copyConfluenceContent
+  category: write
+  rest:
+  - copyPage
+  - copyPageHierarchy
+  binding: composite
+  confidence: high
+- tool: createConfluenceAttachment
+  category: write
+  rest:
+  - createAttachment
+  - createOrUpdateAttachments
+  binding: composite
+  confidence: high
+- tool: createConfluenceComment
+  category: write
+  rest:
+  - createFooterComment
+  - createInlineComment
+  binding: composite
+  confidence: high
+- tool: createConfluenceContent
+  category: write
+  rest:
+  - createPage
+  - createBlogPost
+  - createWhiteboard
+  - createDatabase
+  - createSmartLink
+  - createFolder
+  - createCustomContent
+  binding: composite
+  confidence: high
+- tool: createConfluenceSpace
+  category: write
+  rest:
+  - createSpace
+  binding: direct
+  confidence: high
+  note: Present in both v2 (createSpace) and v1 (createSpace / createPrivateSpace).
+- tool: downloadConfluenceAttachment
+  category: read
+  rest:
+  - downloadAttatchment
+  binding: direct
+  confidence: medium
+  note: Backed by the v1 attachment download operation (operationId spelled downloadAttatchment upstream).
+- tool: getConfluenceAttachment
+  category: read
+  rest:
+  - getAttachmentById
+  binding: direct
+  confidence: high
+- tool: getConfluenceComment
+  category: read
+  rest:
+  - getFooterCommentById
+  - getInlineCommentById
+  binding: composite
+  confidence: high
+- tool: getConfluenceContent
+  category: read
+  rest:
+  - getPageById
+  - getBlogPostById
+  - getFooterCommentById
+  - getInlineCommentById
+  - getWhiteboardById
+  - getDatabaseById
+  - getSmartLinkById
+  - getFolderById
+  - getCustomContentById
+  binding: composite
+  confidence: high
+  note: One tool fans out over the per-type v2 GET-by-id operations.
+- tool: getConfluenceContentPermissions
+  category: read
+  rest:
+  - getRestrictions
+  - getRestrictionsByOperation
+  binding: composite
+  confidence: medium
+  note: Maps onto v1 content restrictions; the MCP tool models grants as operation+principal pairs.
+- tool: getConfluenceContentRestrictionState
+  category: read
+  rest:
+  - getRestrictions
+  binding: derived
+  confidence: medium
+  note: Collapses the v1 restriction set into OPEN / EDIT_RESTRICTED / restricted.
+- tool: getConfluenceContentVersion
+  category: read
+  rest:
+  - getPageVersionDetails
+  - getBlogPostVersionDetails
+  binding: composite
+  confidence: high
+- tool: getConfluencePersonalSpace
+  category: read
+  rest:
+  - getSpaces
+  binding: derived
+  confidence: medium
+  note: Filters the spaces listing to the caller personal space; no dedicated REST operation.
+- tool: getConfluenceSpace
+  category: read
+  rest:
+  - getSpaceById
+  binding: direct
+  confidence: high
+- tool: getConfluenceTask
+  category: read
+  rest:
+  - getTaskById
+  binding: direct
+  confidence: high
+- tool: getConfluenceTemplate
+  category: read
+  rest:
+  - getContentTemplate
+  binding: direct
+  confidence: high
+- tool: listConfluenceAttachments
+  category: read
+  rest:
+  - getPageAttachments
+  - getBlogpostAttachments
+  - getCustomContentAttachments
+  - getAttachments
+  binding: composite
+  confidence: high
+- tool: listConfluenceComments
+  category: read
+  rest:
+  - getPageFooterComments
+  - getPageInlineComments
+  - getBlogPostFooterComments
+  - getBlogPostInlineComments
+  binding: composite
+  confidence: high
+- tool: listConfluenceContent
+  category: read
+  rest:
+  - getPagesInSpace
+  - getBlogPostsInSpace
+  - getCustomContentByTypeInSpace
+  binding: composite
+  confidence: high
+- tool: listConfluenceContentVersions
+  category: read
+  rest:
+  - getPageVersions
+  - getBlogPostVersions
+  - getCustomContentVersions
+  binding: composite
+  confidence: high
+- tool: listConfluenceSpaces
+  category: read
+  rest:
+  - getSpaces
+  binding: direct
+  confidence: high
+- tool: listConfluenceTasks
+  category: read
+  rest:
+  - getTasks
+  binding: direct
+  confidence: high
+- tool: listConfluenceTemplates
+  category: read
+  rest:
+  - getContentTemplates
+  - getBlueprintTemplates
+  binding: composite
+  confidence: high
+- tool: moveConfluenceContent
+  category: write
+  rest:
+  - movePage
+  binding: direct
+  confidence: high
+- tool: removeConfluenceContentPermissions
+  category: write
+  rest:
+  - deleteRestrictions
+  - removeUserFromContentRestriction
+  - removeGroupFromContentRestriction
+  binding: composite
+  confidence: medium
+- tool: reopenConfluenceTask
+  category: write
+  rest:
+  - updateTask
+  binding: derived
+  confidence: high
+  note: Sets status=incomplete on the v2 task update operation.
+- tool: replaceConfluenceContentPermissions
+  category: write
+  rest:
+  - updateRestrictions
+  binding: direct
+  confidence: medium
+- tool: resolveConfluenceContentMacros
+  category: read
+  rest:
+  - getMacroBodyByMacroId
+  - getAndConvertMacroBodyByMacroId
+  binding: composite
+  confidence: medium
+- tool: restoreConfluenceContentVersion
+  category: write
+  rest:
+  - restoreContentVersion
+  binding: direct
+  confidence: high
+- tool: searchConfluence
+  category: search
+  rest:
+  - searchByCQL
+  - searchContentByCQL
+  binding: composite
+  confidence: high
+- tool: setConfluenceContentRestrictionState
+  category: write
+  rest:
+  - updateRestrictions
+  binding: derived
+  confidence: medium
+- tool: setConfluenceContentStatus
+  category: write
+  rest:
+  - setContentState
+  - removeContentState
+  binding: composite
+  confidence: high
+- tool: unwatchConfluenceContent
+  category: write
+  rest:
+  - removeContentWatcher
+  binding: direct
+  confidence: high
+- tool: unwatchConfluenceLabel
+  category: write
+  rest:
+  - removeLabelWatcher
+  binding: direct
+  confidence: high
+- tool: unwatchConfluenceSpace
+  category: write
+  rest:
+  - removeSpaceWatch
+  binding: direct
+  confidence: high
+- tool: updateConfluenceComment
+  category: write
+  rest:
+  - updateFooterComment
+  - updateInlineComment
+  binding: composite
+  confidence: high
+- tool: updateConfluenceCommentResolution
+  category: write
+  rest:
+  - updateInlineComment
+  binding: derived
+  confidence: medium
+  note: Resolution is a field on the v2 inline-comment update body; no dedicated resolve operation.
+- tool: updateConfluenceContent
+  category: write
+  rest:
+  - updatePage
+  - updateBlogPost
+  - updateCustomContent
+  - updatePageTitle
+  binding: composite
+  confidence: high
+- tool: watchConfluenceContent
+  category: write
+  rest:
+  - addContentWatcher
+  binding: direct
+  confidence: high
+- tool: watchConfluenceLabel
+  category: write
+  rest:
+  - addLabelWatcher
+  binding: direct
+  confidence: high
+- tool: watchConfluenceSpace
+  category: write
+  rest:
+  - addSpaceWatcher
+  binding: direct
+  confidence: high
+mcp_only:
+- tool: addConfluenceReaction
+  reason: Emoji reactions have no REST operation; v2 exposes like counts/users, which are a different concept.
+- tool: convertConfluenceContentMode
+  reason: Classic-page / live-doc mode conversion has no operation in the published REST specs.
+- tool: diffConfluenceContentVersions
+  reason: A unified diff between two versions is computed by the server; no REST diff operation exists.
+- tool: disableConfluencePublicLink
+  reason: Public-link (anonymous share) state has no operation in the published REST specs.
+- tool: enableConfluencePublicLink
+  reason: Public-link (anonymous share) state has no operation in the published REST specs.
+- tool: exportConfluenceContent
+  reason: PDF/Word export is a product feature with no operation in the published v1 or v2 REST specs.
+- tool: getConfluencePublicLinkStatus
+  reason: Public-link (anonymous share) state has no operation in the published REST specs.
+- tool: getConfluenceReactions
+  reason: Emoji reactions have no REST operation; v2 exposes like counts/users, which are a different concept.
+- tool: getConfluenceSpaceInstructions
+  reason: Space instructions are an agent-facing feature with no operation in either published REST spec.
+- tool: setConfluenceSpaceInstructions
+  reason: Space instructions are an agent-facing feature with no operation in either published REST spec.
+- tool: starConfluenceContent
+  reason: Stars are a personalization feature with no operation in the published REST specs.
+- tool: starConfluenceSpace
+  reason: Stars are a personalization feature with no operation in the published REST specs.
+- tool: unarchiveConfluenceContent
+  reason: v1 publishes archivePages but no matching unarchive operation.
+- tool: unstarConfluenceContent
+  reason: Stars are a personalization feature with no operation in the published REST specs.
+- tool: unstarConfluenceSpace
+  reason: Stars are a personalization feature with no operation in the published REST specs.
+rest_only:
+- addCustomContentPermissions
+- addPermissionToSpace
+- addUserToGroupByGroupId
+- asyncConvertContentBodyRequest
+- asyncConvertContentBodyResponse
+- bulkAssignSpacePermissionRoles
+- bulkAsyncConvertContentBodyRequest
+- bulkAsyncConvertContentBodyResponse
+- bulkRemoveSpacePermissionAccess
+- checkAccessByEmail
+- checkContentPermission
+- convertContentIdsToContentTypes
+- createAttachmentProperty
+- createAuditRecord
+- createBlogpostProperty
+- createBulkUserLookup
+- createCommentProperty
+- createContentTemplate
+- createCustomContentProperty
+- createDatabaseProperty
+- createFolderProperty
+- createGroup
+- createPageProperty
+- createPrivateSpace
+- createRelationship
+- createSmartLinkProperty
+- createSpaceProperty
+- createSpaceRole
+- createUserProperty
+- createWhiteboardProperty
+- deleteAttachment
+- deleteAttachmentPropertyById
+- deleteBlogPost
+- deleteBlogpostPropertyById
+- deleteCommentPropertyById
+- deleteContentVersion
+- deleteCustomContent
+- deleteCustomContentPropertyById
+- deleteDatabase
+- deleteDatabasePropertyById
+- deleteFolder
+- deleteFolderPropertyById
+- deleteFooterComment
+- deleteForgeAppProperty
+- deleteInlineComment
+- deleteLabelFromSpace
+- deletePage
+- deletePagePropertyById
+- deletePageTree
+- deleteRelationship
+- deleteSmartLink
+- deleteSmartLinkPropertyById
+- deleteSpace
+- deleteSpaceDefaultClassificationLevel
+- deleteSpacePropertyById
+- deleteSpaceRole
+- deleteUserProperty
+- deleteWhiteboard
+- deleteWhiteboardPropertyById
+- disableAdminKey
+- enableAdminKey
+- exportAuditRecords
+- findSourcesForTarget
+- findTargetFromSource
+- generateSpacePermissionCombinations
+- getAdminKey
+- getAllLabelContent
+- getAndAsyncConvertMacroBodyByMacroId
+- getAnonymousUser
+- getAttachmentComments
+- getAttachmentContentProperties
+- getAttachmentContentPropertiesById
+- getAttachmentLabels
+- getAttachmentOperations
+- getAttachmentThumbnailById
+- getAttachmentVersionDetails
+- getAttachmentVersions
+- getAuditRecords
+- getAuditRecordsForTimePeriod
+- getAvailableContentStates
+- getAvailableSpacePermissions
+- getAvailableSpaceRoles
+- getBlogPostClassificationLevel
+- getBlogPostLabels
+- getBlogPostLikeCount
+- getBlogPostLikeUsers
+- getBlogPostOperations
+- getBlogPosts
+- getBlogpostContentProperties
+- getBlogpostContentPropertiesById
+- getBulkUserLookup
+- getChildCustomContent
+- getChildPages
+- getClassificationLevels
+- getCommentContentProperties
+- getCommentContentPropertiesById
+- getContentDescendants
+- getContentRestrictionStatusForUser
+- getContentState
+- getContentStateSettings
+- getContentWatchStatus
+- getContentsWithState
+- getCurrentUser
+- getCustomContentByType
+- getCustomContentByTypeInBlogPost
+- getCustomContentByTypeInPage
+- getCustomContentComments
+- getCustomContentContentProperties
+- getCustomContentContentPropertiesById
+- getCustomContentLabels
+- getCustomContentOperations
+- getCustomContentStates
+- getCustomContentVersionDetails
+- getDataPolicyMetadata
+- getDataPolicySpaces
+- getDatabaseAncestors
+- getDatabaseClassificationLevel
+- getDatabaseContentProperties
+- getDatabaseContentPropertiesById
+- getDatabaseDescendants
+- getDatabaseDirectChildren
+- getDatabaseOperations
+- getDescendantsOfType
+- getFolderAncestors
+- getFolderContentProperties
+- getFolderContentPropertiesById
+- getFolderDescendants
+- getFolderDirectChildren
+- getFolderOperations
+- getFooterCommentChildren
+- getFooterCommentOperations
+- getFooterCommentVersionDetails
+- getFooterCommentVersions
+- getFooterComments
+- getFooterLikeCount
+- getFooterLikeUsers
+- getForgeAppProperties
+- getForgeAppProperty
+- getGlobalTheme
+- getGroupByGroupId
+- getGroupMembersByGroupId
+- getGroupMembershipsForUser
+- getGroups
+- getIndividualGroupRestrictionStatusByGroupId
+- getInlineCommentChildren
+- getInlineCommentOperations
+- getInlineCommentVersionDetails
+- getInlineCommentVersions
+- getInlineComments
+- getInlineLikeCount
+- getInlineLikeUsers
+- getLabelAttachments
+- getLabelBlogPosts
+- getLabelPages
+- getLabels
+- getLabelsForSpace
+- getLookAndFeelSettings
+- getModules
+- getPageAncestors
+- getPageClassificationLevel
+- getPageContentProperties
+- getPageContentPropertiesById
+- getPageDescendants
+- getPageDirectChildren
+- getPageLabels
+- getPageLikeCount
+- getPageLikeUsers
+- getPageOperations
+- getPages
+- getPrivacyUnsafeUserEmail
+- getPrivacyUnsafeUserEmailBulk
+- getRelationship
+- getRestrictionsForOperation
+- getRetentionPeriod
+- getSmartLinkAncestors
+- getSmartLinkContentProperties
+- getSmartLinkContentPropertiesById
+- getSmartLinkDescendants
+- getSmartLinkDirectChildren
+- getSmartLinkOperations
+- getSpaceContentLabels
+- getSpaceContentStates
+- getSpaceDefaultClassificationLevel
+- getSpaceLabels
+- getSpaceOperations
+- getSpacePermissionTransitionTaskStatus
+- getSpacePermissionsAssignments
+- getSpaceProperties
+- getSpacePropertyById
+- getSpaceRoleAssignments
+- getSpaceRoleMode
+- getSpaceRolesById
+- getSpaceSettings
+- getSpaceTheme
+- getSystemInfo
+- getTask
+- getTheme
+- getThemes
+- getUser
+- getUserProperties
+- getUserProperty
+- getViewers
+- getViews
+- getWatchersForSpace
+- getWatchesForPage
+- getWatchesForSpace
+- getWhiteboardAncestors
+- getWhiteboardClassificationLevel
+- getWhiteboardContentProperties
+- getWhiteboardContentPropertiesById
+- getWhiteboardDescendants
+- getWhiteboardDirectChildren
+- getWhiteboardOperations
+- inviteByEmail
+- isWatchingLabel
+- isWatchingSpace
+- listSpacePermissionCombinations
+- postBlogPostClassificationLevel
+- postDatabaseClassificationLevel
+- postPageClassificationLevel
+- postRedactBlog
+- postRedactPage
+- postWhiteboardClassificationLevel
+- publishLegacyDraft
+- publishSharedDraft
+- putBlogPostClassificationLevel
+- putDatabaseClassificationLevel
+- putForgeAppProperty
+- putPageClassificationLevel
+- putSpaceDefaultClassificationLevel
+- putWhiteboardClassificationLevel
+- registerModules
+- removeGroupById
+- removeLabelFromContent
+- removeLabelFromContentUsingQueryParameter
+- removeMemberFromGroupByGroupId
+- removeModules
+- removePermission
+- removeTemplate
+- resetLookAndFeelSettings
+- resetSpaceTheme
+- searchGroups
+- searchUser
+- setRetentionPeriod
+- setSpaceRoleAssignments
+- setSpaceTheme
+- updateAttachmentData
+- updateAttachmentProperties
+- updateAttachmentPropertyById
+- updateBlogpostPropertyById
+- updateCommentPropertyById
+- updateContentTemplate
+- updateCustomContentPropertyById
+- updateDatabasePropertyById
+- updateFolderPropertyById
+- updateLookAndFeel
+- updateLookAndFeelSettings
+- updatePagePropertyById
+- updateSmartLinkPropertyById
+- updateSpace
+- updateSpacePropertyById
+- updateSpaceRole
+- updateSpaceSettings
+- updateUserProperty
+- updateWhiteboardPropertyById
