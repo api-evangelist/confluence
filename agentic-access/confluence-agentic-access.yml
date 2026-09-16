@@ -1,19 +1,3671 @@
-generated: '2026-07-15'
+generated: '2026-09-16'
 method: generated
-source: openapi/confluence-cloud-v2.yml
+source: openapi/confluence-admin-key-api-openapi.yml, openapi/confluence-analytics-api-openapi.yml,
+  openapi/confluence-ancestors-api-openapi.yml, openapi/confluence-app-properties-api-openapi.yml,
+  openapi/confluence-attachment-api-openapi.yml, openapi/confluence-audit-api-openapi.yml, openapi/confluence-blog-post-api-openapi.yml,
+  openapi/confluence-children-api-openapi.yml, openapi/confluence-classification-level-api-openapi.yml,
+  openapi/confluence-comment-api-openapi.yml, openapi/confluence-content-api-openapi.yml, openapi/confluence-content-attachments-api-openapi.yml,
+  openapi/confluence-content-body-api-openapi.yml, openapi/confluence-content-children-and-descendants-api-openapi.yml,
+  openapi/confluence-content-labels-api-openapi.yml, openapi/confluence-content-macro-body-api-openapi.yml,
+  openapi/confluence-content-permissions-api-openapi.yml, openapi/confluence-content-properties-api-openapi.yml,
+  openapi/confluence-content-restrictions-api-openapi.yml, openapi/confluence-content-states-api-openapi.yml,
+  openapi/confluence-content-versions-api-openapi.yml, openapi/confluence-content-watches-api-openapi.yml,
+  openapi/confluence-custom-content-api-openapi.yml, openapi/confluence-data-policies-api-openapi.yml,
+  openapi/confluence-database-api-openapi.yml, openapi/confluence-descendants-api-openapi.yml,
+  openapi/confluence-dynamic-modules-api-openapi.yml, openapi/confluence-experimental-api-openapi.yml,
+  openapi/confluence-folder-api-openapi.yml, openapi/confluence-group-api-openapi.yml, openapi/confluence-label-api-openapi.yml,
+  openapi/confluence-label-info-api-openapi.yml, openapi/confluence-like-api-openapi.yml, openapi/confluence-long-running-task-api-openapi.yml,
+  openapi/confluence-operation-api-openapi.yml, openapi/confluence-page-api-openapi.yml, openapi/confluence-redactions-api-openapi.yml,
+  openapi/confluence-relation-api-openapi.yml, openapi/confluence-search-api-openapi.yml, openapi/confluence-settings-api-openapi.yml,
+  openapi/confluence-smart-link-api-openapi.yml, openapi/confluence-space-api-openapi.yml, openapi/confluence-space-permission-transition-api-openapi.yml,
+  openapi/confluence-space-permissions-api-openapi.yml, openapi/confluence-space-properties-api-openapi.yml,
+  openapi/confluence-space-roles-api-openapi.yml, openapi/confluence-space-settings-api-openapi.yml,
+  openapi/confluence-task-api-openapi.yml, openapi/confluence-template-api-openapi.yml, openapi/confluence-themes-api-openapi.yml,
+  openapi/confluence-user-api-openapi.yml, openapi/confluence-user-properties-api-openapi.yml,
+  openapi/confluence-users-api-openapi.yml, openapi/confluence-version-api-openapi.yml, openapi/confluence-whiteboard-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 27
+  operations: 355
   by_action_class:
-    connected: 16
-    acting: 11
+    connected: 204
+    acting: 151
   by_consequence:
-    read: 16
-    write: 11
-  human_in_the_loop_required: 0
+    read: 204
+    write: 142
+    safety-critical: 7
+    physical: 2
+  human_in_the_loop_required: 7
 operations:
+- path: /admin-key
+  method: get
+  operationId: getAdminKey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /admin-key
+  method: post
+  operationId: enableAdminKey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /admin-key
+  method: delete
+  operationId: disableAdminKey
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /wiki/rest/api/analytics/content/{contentId}/views
+  method: get
+  operationId: getViews
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/analytics/content/{contentId}/viewers
+  method: get
+  operationId: getViewers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{id}/ancestors
+  method: get
+  operationId: getWhiteboardAncestors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content.metadata:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}/ancestors
+  method: get
+  operationId: getDatabaseAncestors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content.metadata:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{id}/ancestors
+  method: get
+  operationId: getSmartLinkAncestors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content.metadata:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{id}/ancestors
+  method: get
+  operationId: getFolderAncestors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content.metadata:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/ancestors
+  method: get
+  operationId: getPageAncestors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content.metadata:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /app/properties
+  method: get
+  operationId: getForgeAppProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:app-data:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /app/properties/{propertyKey}
+  method: get
+  operationId: getForgeAppProperty
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:app-data:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /app/properties/{propertyKey}
+  method: put
+  operationId: putForgeAppProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:app-data:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /app/properties/{propertyKey}
+  method: delete
+  operationId: deleteForgeAppProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:app-data:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /attachments/{id}
+  method: get
+  operationId: getAttachmentById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{id}
+  method: delete
+  operationId: deleteAttachment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{id}/attachments
+  method: get
+  operationId: getPageAttachments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments
+  method: get
+  operationId: getAttachments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/attachments
+  method: get
+  operationId: getBlogpostAttachments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{id}/attachments
+  method: get
+  operationId: getCustomContentAttachments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /labels/{id}/attachments
+  method: get
+  operationId: getLabelAttachments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{id}/thumbnail/download
+  method: get
+  operationId: getAttachmentThumbnailById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/audit
+  method: get
+  operationId: getAuditRecords
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:audit-log:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/audit
+  method: post
+  operationId: createAuditRecord
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:audit-log:confluence
+    - write:audit-log:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/audit/export
+  method: get
+  operationId: exportAuditRecords
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:audit-log:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/audit/retention
+  method: get
+  operationId: getRetentionPeriod
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:audit-log:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/audit/retention
+  method: put
+  operationId: setRetentionPeriod
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:audit-log:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/audit/since
+  method: get
+  operationId: getAuditRecordsForTimePeriod
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:audit-log:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts
+  method: get
+  operationId: getBlogPosts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts
+  method: post
+  operationId: createBlogPost
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{id}
+  method: get
+  operationId: getBlogPostById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}
+  method: put
+  operationId: updateBlogPost
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{id}
+  method: delete
+  operationId: deleteBlogPost
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /labels/{id}/blogposts
+  method: get
+  operationId: getLabelBlogPosts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/blogposts
+  method: get
+  operationId: getBlogPostsInSpace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{id}/direct-children
+  method: get
+  operationId: getWhiteboardDirectChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}/direct-children
+  method: get
+  operationId: getDatabaseDirectChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{id}/direct-children
+  method: get
+  operationId: getSmartLinkDirectChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{id}/direct-children
+  method: get
+  operationId: getFolderDirectChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/children
+  method: get
+  operationId: getChildPages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{id}/children
+  method: get
+  operationId: getChildCustomContent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/direct-children
+  method: get
+  operationId: getPageDirectChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /classification-levels
+  method: get
+  operationId: getClassificationLevels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:configuration:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/classification-level/default
+  method: get
+  operationId: getSpaceDefaultClassificationLevel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/classification-level/default
+  method: put
+  operationId: putSpaceDefaultClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:space:confluence
+    - write:space:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /spaces/{id}/classification-level/default
+  method: delete
+  operationId: deleteSpaceDefaultClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:space:confluence
+    - write:space:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{id}/classification-level
+  method: get
+  operationId: getPageClassificationLevel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/classification-level
+  method: put
+  operationId: putPageClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{id}/classification-level/reset
+  method: post
+  operationId: postPageClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /blogposts/{id}/classification-level
+  method: get
+  operationId: getBlogPostClassificationLevel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/classification-level
+  method: put
+  operationId: putBlogPostClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{id}/classification-level/reset
+  method: post
+  operationId: postBlogPostClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /whiteboards/{id}/classification-level
+  method: get
+  operationId: getWhiteboardClassificationLevel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:whiteboard:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{id}/classification-level
+  method: put
+  operationId: putWhiteboardClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /whiteboards/{id}/classification-level/reset
+  method: post
+  operationId: postWhiteboardClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - write:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /databases/{id}/classification-level
+  method: get
+  operationId: getDatabaseClassificationLevel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:database:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}/classification-level
+  method: put
+  operationId: putDatabaseClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:database:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /databases/{id}/classification-level/reset
+  method: post
+  operationId: postDatabaseClassificationLevel
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - write:database:confluence
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /pages/{id}/footer-comments
+  method: get
+  operationId: getFooterComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/inline-comments
+  method: get
+  operationId: getInlineComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments
+  method: post
+  operationId: createFooterComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /footer-comments
+  method: get
+  operationId: getFooterComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments
+  method: post
+  operationId: createInlineComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inline-comments
+  method: get
+  operationId: getInlineComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /comments/{id}
+  method: get
+  operationId: getCommentById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /comments/{id}
+  method: put
+  operationId: updateComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /comments/{id}
+  method: delete
+  operationId: deleteComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /comments/{id}/children
+  method: get
+  operationId: getChildComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{id}/footer-comments
+  method: get
+  operationId: getAttachmentComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{id}/footer-comments
+  method: get
+  operationId: getCustomContentComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/footer-comments
+  method: get
+  operationId: getBlogPostFooterComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/inline-comments
+  method: get
+  operationId: getBlogPostInlineComments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{comment-id}
+  method: get
+  operationId: getFooterCommentById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{comment-id}
+  method: put
+  operationId: updateFooterComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /footer-comments/{comment-id}
+  method: delete
+  operationId: deleteFooterComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /footer-comments/{id}/children
+  method: get
+  operationId: getFooterCommentChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{comment-id}
+  method: get
+  operationId: getInlineCommentById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{comment-id}
+  method: put
+  operationId: updateInlineComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inline-comments/{comment-id}
+  method: delete
+  operationId: deleteInlineComment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inline-comments/{id}/children
+  method: get
+  operationId: getInlineCommentChildren
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/archive
+  method: post
+  operationId: archivePages
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/blueprint/instance/{draftId}
+  method: put
+  operationId: publishSharedDraft
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/blueprint/instance/{draftId}
+  method: post
+  operationId: publishLegacyDraft
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/search
+  method: get
+  operationId: searchContentByCQL
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - search:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /content/convert-ids-to-types
+  method: post
+  operationId: convertContentIdsToContentTypes
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:content.metadata:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/child/attachment
+  method: put
+  operationId: createOrUpdateAttachments
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-file
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/child/attachment
+  method: post
+  operationId: createAttachment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-file
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/child/attachment/{attachmentId}
+  method: put
+  operationId: updateAttachmentProperties
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-file
+    - write:confluence-props
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/child/attachment/{attachmentId}/data
+  method: post
+  operationId: updateAttachmentData
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-file
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/child/attachment/{attachmentId}/download
+  method: get
+  operationId: downloadAttatchment
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - readonly:content.attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/contentbody/convert/async/{to}
+  method: post
+  operationId: asyncConvertContentBodyRequest
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:confluence-content.all
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/contentbody/convert/async/{id}
+  method: get
+  operationId: asyncConvertContentBodyResponse
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/contentbody/convert/async/bulk/tasks
+  method: post
+  operationId: bulkAsyncConvertContentBodyRequest
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:confluence-content.all
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/contentbody/convert/async/bulk/tasks
+  method: get
+  operationId: bulkAsyncConvertContentBodyResponse
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{pageId}/move/{position}/{targetId}
+  method: put
+  operationId: movePage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/descendant
+  method: get
+  operationId: getContentDescendants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/descendant/{type}
+  method: get
+  operationId: getDescendantsOfType
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/pagehierarchy/copy
+  method: post
+  operationId: copyPageHierarchy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/copy
+  method: post
+  operationId: copyPage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/label
+  method: post
+  operationId: addLabelsToContent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/label
+  method: delete
+  operationId: removeLabelFromContentUsingQueryParameter
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/label/{label}
+  method: delete
+  operationId: removeLabelFromContent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}
+  method: get
+  operationId: getMacroBodyByMacroId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}/convert/{to}
+  method: get
+  operationId: getAndConvertMacroBodyByMacroId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}/convert/async/{to}
+  method: get
+  operationId: getAndAsyncConvertMacroBodyByMacroId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/permission/check
+  method: post
+  operationId: checkContentPermission
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:confluence-content.permission
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /attachments/{attachment-id}/properties
+  method: get
+  operationId: getAttachmentContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{attachment-id}/properties
+  method: post
+  operationId: createAttachmentProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attachment:confluence
+    - write:attachment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /attachments/{attachment-id}/properties/{property-id}
+  method: get
+  operationId: getAttachmentContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{attachment-id}/properties/{property-id}
+  method: put
+  operationId: updateAttachmentPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attachment:confluence
+    - write:attachment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /attachments/{attachment-id}/properties/{property-id}
+  method: delete
+  operationId: deleteAttachmentPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attachment:confluence
+    - write:attachment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{blogpost-id}/properties
+  method: get
+  operationId: getBlogpostContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{blogpost-id}/properties
+  method: post
+  operationId: createBlogpostProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{blogpost-id}/properties/{property-id}
+  method: get
+  operationId: getBlogpostContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{blogpost-id}/properties/{property-id}
+  method: put
+  operationId: updateBlogpostPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{blogpost-id}/properties/{property-id}
+  method: delete
+  operationId: deleteBlogpostPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /custom-content/{custom-content-id}/properties
+  method: get
+  operationId: getCustomContentContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{custom-content-id}/properties
+  method: post
+  operationId: createCustomContentProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:custom-content:confluence
+    - write:custom-content:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /custom-content/{custom-content-id}/properties/{property-id}
+  method: get
+  operationId: getCustomContentContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{custom-content-id}/properties/{property-id}
+  method: put
+  operationId: updateCustomContentPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:custom-content:confluence
+    - write:custom-content:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /custom-content/{custom-content-id}/properties/{property-id}
+  method: delete
+  operationId: deleteCustomContentPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:custom-content:confluence
+    - write:custom-content:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{page-id}/properties
+  method: get
+  operationId: getPageContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{page-id}/properties
+  method: post
+  operationId: createPageProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{page-id}/properties/{property-id}
+  method: get
+  operationId: getPageContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{page-id}/properties/{property-id}
+  method: put
+  operationId: updatePagePropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{page-id}/properties/{property-id}
+  method: delete
+  operationId: deletePagePropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:page:confluence
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /whiteboards/{id}/properties
+  method: get
+  operationId: getWhiteboardContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:whiteboard:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{id}/properties
+  method: post
+  operationId: createWhiteboardProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:whiteboard:confluence
+    - write:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /whiteboards/{whiteboard-id}/properties/{property-id}
+  method: get
+  operationId: getWhiteboardContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:whiteboard:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{whiteboard-id}/properties/{property-id}
+  method: put
+  operationId: updateWhiteboardPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:whiteboard:confluence
+    - write:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /whiteboards/{whiteboard-id}/properties/{property-id}
+  method: delete
+  operationId: deleteWhiteboardPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:whiteboard:confluence
+    - write:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /databases/{id}/properties
+  method: get
+  operationId: getDatabaseContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:database:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}/properties
+  method: post
+  operationId: createDatabaseProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:database:confluence
+    - write:database:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /databases/{database-id}/properties/{property-id}
+  method: get
+  operationId: getDatabaseContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:database:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{database-id}/properties/{property-id}
+  method: put
+  operationId: updateDatabasePropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:database:confluence
+    - write:database:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /databases/{database-id}/properties/{property-id}
+  method: delete
+  operationId: deleteDatabasePropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:database:confluence
+    - write:database:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /embeds/{id}/properties
+  method: get
+  operationId: getSmartLinkContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:embed:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{id}/properties
+  method: post
+  operationId: createSmartLinkProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:embed:confluence
+    - write:embed:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /embeds/{embed-id}/properties/{property-id}
+  method: get
+  operationId: getSmartLinkContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:embed:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{embed-id}/properties/{property-id}
+  method: put
+  operationId: updateSmartLinkPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:embed:confluence
+    - write:embed:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /embeds/{embed-id}/properties/{property-id}
+  method: delete
+  operationId: deleteSmartLinkPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:embed:confluence
+    - write:embed:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders/{id}/properties
+  method: get
+  operationId: getFolderContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:folder:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{id}/properties
+  method: post
+  operationId: createFolderProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:folder:confluence
+    - write:folder:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders/{folder-id}/properties/{property-id}
+  method: get
+  operationId: getFolderContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:folder:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{folder-id}/properties/{property-id}
+  method: put
+  operationId: updateFolderPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:folder:confluence
+    - write:folder:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders/{folder-id}/properties/{property-id}
+  method: delete
+  operationId: deleteFolderPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:folder:confluence
+    - write:folder:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /comments/{comment-id}/properties
+  method: get
+  operationId: getCommentContentProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /comments/{comment-id}/properties
+  method: post
+  operationId: createCommentProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:comment:confluence
+    - write:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /comments/{comment-id}/properties/{property-id}
+  method: get
+  operationId: getCommentContentPropertiesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /comments/{comment-id}/properties/{property-id}
+  method: put
+  operationId: updateCommentPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:comment:confluence
+    - write:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /comments/{comment-id}/properties/{property-id}
+  method: delete
+  operationId: deleteCommentPropertyById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:comment:confluence
+    - write:comment:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction
+  method: get
+  operationId: getRestrictions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/restriction
+  method: put
+  operationId: updateRestrictions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction
+  method: post
+  operationId: addRestrictions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction
+  method: delete
+  operationId: deleteRestrictions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction/byOperation
+  method: get
+  operationId: getRestrictionsByOperation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}
+  method: get
+  operationId: getRestrictionsForOperation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}
+  method: get
+  operationId: getIndividualGroupRestrictionStatusByGroupId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}
+  method: put
+  operationId: addGroupToContentRestrictionByGroupId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}
+  method: delete
+  operationId: removeGroupFromContentRestriction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/user
+  method: get
+  operationId: getContentRestrictionStatusForUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/user
+  method: put
+  operationId: addUserToContentRestriction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/user
+  method: delete
+  operationId: removeUserFromContentRestriction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/state
+  method: get
+  operationId: getContentState
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/state
+  method: put
+  operationId: setContentState
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/state
+  method: delete
+  operationId: removeContentState
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/state/available
+  method: get
+  operationId: getAvailableContentStates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - write:confluence-content
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content-states
+  method: get
+  operationId: getCustomContentStates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:user.property:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/state
+  method: get
+  operationId: getSpaceContentStates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-space.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/state/settings
+  method: get
+  operationId: getContentStateSettings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-space.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/state/content
+  method: get
+  operationId: getContentsWithState
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/version
+  method: post
+  operationId: restoreContentVersion
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/version/{versionNumber}
+  method: delete
+  operationId: deleteContentVersion
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/notification/child-created
+  method: get
+  operationId: getWatchesForPage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/content/{id}/notification/created
+  method: get
+  operationId: getWatchesForSpace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/watch
+  method: get
+  operationId: getWatchersForSpace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:user:confluence
+    - read:watcher:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/watch/content/{contentId}
+  method: get
+  operationId: getContentWatchStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/watch/content/{contentId}
+  method: post
+  operationId: addContentWatcher
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/watch/content/{contentId}
+  method: delete
+  operationId: removeContentWatcher
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/watch/label/{labelName}
+  method: get
+  operationId: isWatchingLabel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/watch/label/{labelName}
+  method: post
+  operationId: addLabelWatcher
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/watch/label/{labelName}
+  method: delete
+  operationId: removeLabelWatcher
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/watch/space/{spaceKey}
+  method: get
+  operationId: isWatchingSpace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/watch/space/{spaceKey}
+  method: post
+  operationId: addSpaceWatcher
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/watch/space/{spaceKey}
+  method: delete
+  operationId: removeSpaceWatch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{id}/custom-content
+  method: get
+  operationId: getCustomContentByTypeInBlogPost
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content
+  method: get
+  operationId: getCustomContentByType
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content
+  method: post
+  operationId: createCustomContent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:custom-content:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /custom-content/{id}
+  method: get
+  operationId: getCustomContentById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{id}
+  method: put
+  operationId: updateCustomContent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:custom-content:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /custom-content/{id}
+  method: delete
+  operationId: deleteCustomContent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:custom-content:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{id}/custom-content
+  method: get
+  operationId: getCustomContentByTypeInPage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/custom-content
+  method: get
+  operationId: getCustomContentByTypeInSpace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /data-policies/metadata
+  method: get
+  operationId: getDataPolicyMetadata
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:configuration:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /data-policies/spaces
+  method: get
+  operationId: getDataPolicySpaces
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases
+  method: post
+  operationId: createDatabase
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:database:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /databases/{id}
+  method: get
+  operationId: getDatabaseById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:database:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}
+  method: delete
+  operationId: deleteDatabase
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:database:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /whiteboards/{id}/descendants
+  method: get
+  operationId: getWhiteboardDescendants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}/descendants
+  method: get
+  operationId: getDatabaseDescendants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{id}/descendants
+  method: get
+  operationId: getSmartLinkDescendants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{id}/descendants
+  method: get
+  operationId: getFolderDescendants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/descendants
+  method: get
+  operationId: getPageDescendants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:hierarchical-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/atlassian-connect/1/app/module/dynamic
+  method: get
+  operationId: getModules
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/atlassian-connect/1/app/module/dynamic
+  method: post
+  operationId: registerModules
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/atlassian-connect/1/app/module/dynamic
+  method: delete
+  operationId: removeModules
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/content/{id}/pageTree
+  method: delete
+  operationId: deletePageTree
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/space/{spaceKey}/label
+  method: get
+  operationId: getLabelsForSpace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-space.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/label
+  method: post
+  operationId: addLabelsToSpace
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-space
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/space/{spaceKey}/label
+  method: delete
+  operationId: deleteLabelFromSpace
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-space
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders
+  method: post
+  operationId: createFolder
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:folder:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /folders/{id}
+  method: get
+  operationId: getFolderById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:folder:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{id}
+  method: delete
+  operationId: deleteFolder
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:folder:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/group
+  method: get
+  operationId: getGroups
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-groups
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/group
+  method: post
+  operationId: createGroup
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-groups
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/group/by-id
+  method: get
+  operationId: getGroupByGroupId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-groups
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/group/by-id
+  method: delete
+  operationId: removeGroupById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-groups
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/group/picker
+  method: get
+  operationId: searchGroups
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-groups
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/group/{groupId}/membersByGroupId
+  method: get
+  operationId: getGroupMembersByGroupId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-groups
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/group/userByGroupId
+  method: post
+  operationId: addUserToGroupByGroupId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-groups
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/group/userByGroupId
+  method: delete
+  operationId: removeMemberFromGroupByGroupId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-groups
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{id}/labels
+  method: get
+  operationId: getPageLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /labels/{id}
+  method: get
+  operationId: getLabelById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{id}/labels
+  method: get
+  operationId: getAttachmentLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/labels
+  method: get
+  operationId: getBlogPostLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{id}/labels
+  method: get
+  operationId: getCustomContentLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /labels
+  method: get
+  operationId: getLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:label:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/labels
+  method: get
+  operationId: getSpaceLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/content/labels
+  method: get
+  operationId: getSpaceContentLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/label
+  method: get
+  operationId: getAllLabelContent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/likes/count
+  method: get
+  operationId: getBlogPostLikeCount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/likes/users
+  method: get
+  operationId: getBlogPostLikeUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/likes/count
+  method: get
+  operationId: getPageLikeCount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/likes/users
+  method: get
+  operationId: getPageLikeUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{id}/likes/count
+  method: get
+  operationId: getFooterLikeCount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{id}/likes/users
+  method: get
+  operationId: getFooterLikeUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{id}/likes/count
+  method: get
+  operationId: getInlineLikeCount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{id}/likes/users
+  method: get
+  operationId: getInlineLikeUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/longtask
+  method: get
+  operationId: getTasks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content.metadata:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/longtask/{id}
+  method: get
+  operationId: getTask
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-space.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{id}/operations
+  method: get
+  operationId: getAttachmentOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/operations
+  method: get
+  operationId: getBlogPostOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{id}/operations
+  method: get
+  operationId: getCustomContentOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/operations
+  method: get
+  operationId: getPageOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{id}/operations
+  method: get
+  operationId: getWhiteboardOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:whiteboard:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /databases/{id}/operations
+  method: get
+  operationId: getDatabaseOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:database:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{id}/operations
+  method: get
+  operationId: getSmartLinkOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:embed:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /folders/{id}/operations
+  method: get
+  operationId: getFolderOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:folder:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/operations
+  method: get
+  operationId: getSpaceOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{id}/operations
+  method: get
+  operationId: getFooterCommentOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{id}/operations
+  method: get
+  operationId: getInlineCommentOperations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /pages
   method: get
   operationId: getPages
@@ -92,9 +3744,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /pages/{id}/labels
+- path: /spaces/{id}/pages
   method: get
-  operationId: getPageLabels
+  operationId: getPagesInSpace
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -102,6 +3754,298 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /labels/{id}/pages
+  method: get
+  operationId: getLabelPages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/title
+  method: put
+  operationId: updatePageTitle
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /pages/{id}/redact
+  method: post
+  operationId: postRedactPage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /blogposts/{id}/redact
+  method: post
+  operationId: postRedactBlog
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:page:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/relation/{relationName}/from/{sourceType}/{sourceKey}/to/{targetType}
+  method: get
+  operationId: findTargetFromSource
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/relation/{relationName}/from/{sourceType}/{sourceKey}/to/{targetType}/{targetKey}
+  method: get
+  operationId: getRelationship
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/relation/{relationName}/from/{sourceType}/{sourceKey}/to/{targetType}/{targetKey}
+  method: put
+  operationId: createRelationship
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/relation/{relationName}/from/{sourceType}/{sourceKey}/to/{targetType}/{targetKey}
+  method: delete
+  operationId: deleteRelationship
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/relation/{relationName}/to/{targetType}/{targetKey}/from/{sourceType}
+  method: get
+  operationId: findSourcesForTarget
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/search
+  method: get
+  operationId: searchByCQL
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - search:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/search/user
+  method: get
+  operationId: searchUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:content-details:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/settings/lookandfeel
+  method: get
+  operationId: getLookAndFeelSettings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - manage:confluence-configuration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/settings/lookandfeel
+  method: put
+  operationId: updateLookAndFeel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - manage:confluence-configuration
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/settings/lookandfeel/custom
+  method: post
+  operationId: updateLookAndFeelSettings
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - manage:confluence-configuration
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/settings/lookandfeel/custom
+  method: delete
+  operationId: resetLookAndFeelSettings
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - manage:confluence-configuration
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /wiki/rest/api/settings/systemInfo
+  method: get
+  operationId: getSystemInfo
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - manage:confluence-configuration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds
+  method: post
+  operationId: createSmartLink
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:embed:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /embeds/{id}
+  method: get
+  operationId: getSmartLinkById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:embed:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /embeds/{id}
+  method: delete
+  operationId: deleteSmartLink
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:embed:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /spaces
   method: get
   operationId: getSpaces
@@ -112,6 +4056,24 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /spaces
+  method: post
+  operationId: createSpace
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:space:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /spaces/{id}
   method: get
   operationId: getSpaceById
@@ -132,33 +4094,15 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /pages/{id}/footer-comments
-  method: get
-  operationId: getFooterComments
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /pages/{id}/inline-comments
-  method: get
-  operationId: getInlineComments
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /footer-comments
+- path: /wiki/rest/api/space
   method: post
-  operationId: createFooterComment
+  operationId: createSpace
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - write:confluence-space
     audience: null
     token:
       max-ttl: 900
@@ -168,13 +4112,15 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /inline-comments
+- path: /wiki/rest/api/space/_private
   method: post
-  operationId: createInlineComment
+  operationId: createPrivateSpace
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - write:confluence-space
     audience: null
     token:
       max-ttl: 900
@@ -184,23 +4130,15 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /comments/{id}
-  method: get
-  operationId: getCommentById
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /comments/{id}
+- path: /wiki/rest/api/space/{spaceKey}
   method: put
-  operationId: updateComment
+  operationId: updateSpace
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - write:confluence-space
     audience: null
     token:
       max-ttl: 900
@@ -210,13 +4148,15 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /comments/{id}
+- path: /wiki/rest/api/space/{spaceKey}
   method: delete
-  operationId: deleteComment
+  operationId: deleteSpace
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - write:confluence-space
     audience: null
     token:
       max-ttl: 900
@@ -226,33 +4166,27 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /comments/{id}/children
+- path: /space-permissions/transition/combinations
   method: get
-  operationId: getChildComments
+  operationId: listSpacePermissionCombinations
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
+    scope:
+    - read:configuration:confluence
     token:
       max-ttl: 3600
     audit: none
-- path: /blogposts
-  method: get
-  operationId: getBlogPosts
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /blogposts
+- path: /space-permissions/transition/combinations
   method: post
-  operationId: createBlogPost
+  operationId: generateSpacePermissionCombinations
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - write:configuration:confluence
     audience: null
     token:
       max-ttl: 900
@@ -262,23 +4196,187 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /blogposts/{id}
+- path: /space-permissions/transition/role-assignments
+  method: post
+  operationId: bulkAssignSpacePermissionRoles
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:configuration:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /space-permissions/transition/access-removals
+  method: post
+  operationId: bulkRemoveSpacePermissionAccess
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:configuration:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /space-permissions/transition/tasks/{taskId}
   method: get
-  operationId: getBlogPostById
+  operationId: getSpacePermissionTransitionTaskStatus
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
+    scope:
+    - read:configuration:confluence
     token:
       max-ttl: 3600
     audit: none
-- path: /blogposts/{id}
+- path: /wiki/rest/api/space/{spaceKey}/permission
+  method: post
+  operationId: addPermissionToSpace
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:space.permission:confluence
+    - write:space.permission:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/space/{spaceKey}/permission/custom-content
+  method: post
+  operationId: addCustomContentPermissions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:space.permission:confluence
+    - write:space.permission:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/space/{spaceKey}/permission/{id}
+  method: delete
+  operationId: removePermission
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:space.permission:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /spaces/{id}/permissions
+  method: get
+  operationId: getSpacePermissionsAssignments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /space-permissions
+  method: get
+  operationId: getAvailableSpacePermissions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space.permission:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{space-id}/properties
+  method: get
+  operationId: getSpaceProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{space-id}/properties
+  method: post
+  operationId: createSpaceProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:space:confluence
+    - write:space:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /spaces/{space-id}/properties/{property-id}
+  method: get
+  operationId: getSpacePropertyById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{space-id}/properties/{property-id}
   method: put
-  operationId: updateBlogPost
+  operationId: updateSpacePropertyById
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - read:space:confluence
+    - write:space:confluence
     audience: null
     token:
       max-ttl: 900
@@ -288,13 +4386,16 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /blogposts/{id}
+- path: /spaces/{space-id}/properties/{property-id}
   method: delete
-  operationId: deleteBlogPost
+  operationId: deleteSpacePropertyById
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - read:space:confluence
+    - write:space:confluence
     audience: null
     token:
       max-ttl: 900
@@ -304,23 +4405,75 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /attachments/{id}
+- path: /space-roles
   method: get
-  operationId: getAttachmentById
+  operationId: getAvailableSpaceRoles
   x-agentic-access:
     action-class: connected
     consequence: read
     subject: optional
+    scope:
+    - read:space.permission:confluence
     token:
       max-ttl: 3600
     audit: none
-- path: /attachments/{id}
+- path: /space-roles
+  method: post
+  operationId: createSpaceRole
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:configuration:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /space-roles/{id}
+  method: get
+  operationId: getSpaceRolesById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space.permission:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /space-roles/{id}
+  method: put
+  operationId: updateSpaceRole
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:configuration:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /space-roles/{id}
   method: delete
-  operationId: deleteAttachment
+  operationId: deleteSpaceRole
   x-agentic-access:
     action-class: acting
     consequence: write
     subject: required
+    scope:
+    - write:configuration:confluence
     audience: null
     token:
       max-ttl: 900
@@ -330,9 +4483,489 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /pages/{id}/attachments
+- path: /space-role-mode
   method: get
-  operationId: getPageAttachments
+  operationId: getSpaceRoleMode
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:configuration:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/role-assignments
+  method: get
+  operationId: getSpaceRoleAssignments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:space.permission:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{id}/role-assignments
+  method: post
+  operationId: setSpaceRoleAssignments
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:space.permission:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/space/{spaceKey}/settings
+  method: get
+  operationId: getSpaceSettings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-space.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/settings
+  method: put
+  operationId: updateSpaceSettings
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-space
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tasks
+  method: get
+  operationId: getTasks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:task:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks/{id}
+  method: get
+  operationId: getTaskById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:task:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks/{id}
+  method: put
+  operationId: updateTask
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:task:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/template
+  method: put
+  operationId: updateContentTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/template
+  method: post
+  operationId: createContentTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/template/blueprint
+  method: get
+  operationId: getBlueprintTemplates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/template/page
+  method: get
+  operationId: getContentTemplates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/template/{contentTemplateId}
+  method: get
+  operationId: getContentTemplate
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-content.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/template/{contentTemplateId}
+  method: delete
+  operationId: removeTemplate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-content
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/settings/theme
+  method: get
+  operationId: getThemes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - manage:confluence-configuration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/settings/theme/selected
+  method: get
+  operationId: getGlobalTheme
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - manage:confluence-configuration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/settings/theme/{themeKey}
+  method: get
+  operationId: getTheme
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - manage:confluence-configuration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/theme
+  method: get
+  operationId: getSpaceTheme
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-space.summary
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/space/{spaceKey}/theme
+  method: put
+  operationId: setSpaceTheme
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:confluence-space
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/space/{spaceKey}/theme
+  method: delete
+  operationId: resetSpaceTheme
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - write:confluence-space
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /users-bulk
+  method: post
+  operationId: createBulkUserLookup
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:user:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /user/access/check-access-by-email
+  method: post
+  operationId: checkAccessByEmail
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:configuration:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /user/access/invite-by-email
+  method: post
+  operationId: inviteByEmail
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:configuration:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/{userId}/property
+  method: get
+  operationId: getUserProperties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:user.property:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/{userId}/property/{key}
+  method: get
+  operationId: getUserProperty
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:user.property:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/{userId}/property/{key}
+  method: put
+  operationId: updateUserProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:user.property:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/{userId}/property/{key}
+  method: post
+  operationId: createUserProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:user.property:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user/{userId}/property/{key}
+  method: delete
+  operationId: deleteUserProperty
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:user.property:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /wiki/rest/api/user
+  method: get
+  operationId: getUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-user
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/anonymous
+  method: get
+  operationId: getAnonymousUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-user
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/current
+  method: get
+  operationId: getCurrentUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-user
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/memberof
+  method: get
+  operationId: getGroupMembershipsForUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-user
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/bulk
+  method: get
+  operationId: getBulkUserLookup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:confluence-user
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /wiki/rest/api/user/email
+  method: get
+  operationId: getPrivacyUnsafeUserEmail
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -340,9 +4973,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /labels/{id}
+- path: /wiki/rest/api/user/email/bulk
   method: get
-  operationId: getLabelById
+  operationId: getPrivacyUnsafeUserEmailBulk
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -350,3 +4983,195 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /attachments/{id}/versions
+  method: get
+  operationId: getAttachmentVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attachments/{attachment-id}/versions/{version-number}
+  method: get
+  operationId: getAttachmentVersionDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attachment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{id}/versions
+  method: get
+  operationId: getBlogPostVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /blogposts/{blogpost-id}/versions/{version-number}
+  method: get
+  operationId: getBlogPostVersionDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{id}/versions
+  method: get
+  operationId: getPageVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /pages/{page-id}/versions/{version-number}
+  method: get
+  operationId: getPageVersionDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:page:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{custom-content-id}/versions
+  method: get
+  operationId: getCustomContentVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /custom-content/{custom-content-id}/versions/{version-number}
+  method: get
+  operationId: getCustomContentVersionDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:custom-content:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{id}/versions
+  method: get
+  operationId: getFooterCommentVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /footer-comments/{id}/versions/{version-number}
+  method: get
+  operationId: getFooterCommentVersionDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{id}/versions
+  method: get
+  operationId: getInlineCommentVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inline-comments/{id}/versions/{version-number}
+  method: get
+  operationId: getInlineCommentVersionDetails
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:comment:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards
+  method: post
+  operationId: createWhiteboard
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /whiteboards/{id}
+  method: get
+  operationId: getWhiteboardById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:whiteboard:confluence
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /whiteboards/{id}
+  method: delete
+  operationId: deleteWhiteboard
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - delete:whiteboard:confluence
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
