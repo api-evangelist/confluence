@@ -105,6 +105,10 @@ apis:
   tags:
   - Permissions
   - Settings
+  - Space
+  tags_raw:
+  - Permissions
+  - Settings
   - Spaces
   properties:
   - type: Documentation
@@ -293,9 +297,9 @@ apis:
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
   - Data-Center
-  - On-Premise
+  - On-Premises
   - REST
-  - Server
+  - Servers
   tags_raw:
   - Data Center
   - On-Premise
@@ -612,7 +616,7 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
-  - Spaces
+  - Space
   - v2
   tags_raw:
   - Spaces
@@ -933,7 +937,7 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-database/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
-  - Databases
+  - Database
   - Structured Data
   - v2
   tags_raw:
@@ -1308,6 +1312,11 @@ apis:
   - GraphQL
   - Content
   - Pages
+  - Space
+  tags_raw:
+  - GraphQL
+  - Content
+  - Pages
   - Spaces
   properties:
   - type: GraphQL
@@ -1587,6 +1596,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content - Attachments
+  tags_raw:
   - Content - attachments
   properties:
   - type: OpenAPI
@@ -1615,6 +1626,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content Body
+  tags_raw:
   - Content body
   properties:
   - type: OpenAPI
@@ -1645,6 +1658,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content - Children and Descendants
+  tags_raw:
   - Content - children and descendants
   properties:
   - type: OpenAPI
@@ -1673,6 +1688,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content Labels
+  tags_raw:
   - Content labels
   properties:
   - type: OpenAPI
@@ -1701,6 +1718,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content - Macro Body
+  tags_raw:
   - Content - macro body
   properties:
   - type: OpenAPI
@@ -1729,6 +1748,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content Permissions
+  tags_raw:
   - Content permissions
   properties:
   - type: OpenAPI
@@ -1785,6 +1806,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content Restrictions
+  tags_raw:
   - Content restrictions
   properties:
   - type: OpenAPI
@@ -1813,6 +1836,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content States
+  tags_raw:
   - Content states
   properties:
   - type: OpenAPI
@@ -1841,6 +1866,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content Versions
+  tags_raw:
   - Content versions
   properties:
   - type: OpenAPI
@@ -1869,6 +1896,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Content Watches
+  tags_raw:
   - Content watches
   properties:
   - type: OpenAPI
@@ -2009,6 +2038,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Dynamic Modules
+  tags_raw:
   - Dynamic modules
   properties:
   - type: OpenAPI
@@ -2125,6 +2156,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Label Info
+  tags_raw:
   - Label info
   properties:
   - type: OpenAPI
@@ -2181,6 +2214,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Long-Running Task
+  tags_raw:
   - Long-running task
   properties:
   - type: OpenAPI
@@ -2406,6 +2441,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Space Permissions
+  tags_raw:
   - Space permissions
   properties:
   - type: OpenAPI
@@ -2490,6 +2527,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Space Settings
+  tags_raw:
   - Space settings
   properties:
   - type: OpenAPI
@@ -2546,6 +2585,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - Templates
+  tags_raw:
   - Template
   properties:
   - type: OpenAPI
@@ -2630,6 +2671,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - User Properties
+  tags_raw:
   - User properties
   properties:
   - type: OpenAPI
@@ -2658,6 +2701,8 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-content-properties/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
