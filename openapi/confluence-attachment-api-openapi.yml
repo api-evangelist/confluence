@@ -1,18 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Confluence Cloud REST API v2 Attachment API
-  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  title: Confluence Attachment API
   version: 2.0.0
-  contact:
-    name: Atlassian
-    url: https://developer.atlassian.com/cloud/confluence/
-    email: ecosystem@atlassian.com
-  license:
-    name: Atlassian Developer Terms
-    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
-  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
-  x-logo:
-    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Attachment across 2 of this provider''s published API definitions: confluence-cloud-v2.yml, confluence-rest-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://{domain}.atlassian.net/wiki/api/v2
   description: Confluence Cloud
@@ -20,10 +12,11 @@ servers:
     domain:
       default: your-domain
       description: Your Atlassian Cloud site domain
-security:
-- basicAuth: []
-- oAuth2: []
-- bearerAuth: []
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
 tags:
 - name: Attachment
   description: Manage file attachments on content
@@ -77,6 +70,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
     delete:
       operationId: deleteAttachment
       summary: Delete Attachment
@@ -95,6 +92,17 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /pages/{id}/attachments:
     get:
       operationId: getPageAttachments
@@ -140,33 +148,591 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
+  /attachments:
+    get:
+      tags:
+      - Attachment
+      operationId: getAttachments
+      summary: Get attachments
+      description: 'Returns all attachments. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the container of the attachment.'
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/AttachmentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Filter the results to attachments based on their status. By default, `current` and `archived` are used.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - current
+            - archived
+            - trashed
+      - name: mediaType
+        in: query
+        required: false
+        description: Filters on the mediaType of attachments. Only one may be specified.
+        schema:
+          type: string
+      - name: filename
+        in: query
+        required: false
+        description: Filters on the file-name of attachments. Only one may be specified.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of attachments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 50
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested attachments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<Attachment>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttachmentBulk_2'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information.  Example response header format: `Link: </wiki/api/v2/attachments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:attachment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:attachment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /blogposts/{id}/attachments:
+    get:
+      tags:
+      - Attachment
+      operationId: getBlogpostAttachments
+      summary: Get attachments for blog post
+      description: 'Returns the attachments of specific blog post. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the blog post and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the blog post for which attachments should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/AttachmentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Filter the results to attachments based on their status. By default, `current` and `archived` are used.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - current
+            - archived
+            - trashed
+      - name: mediaType
+        in: query
+        required: false
+        description: Filters on the mediaType of attachments. Only one may be specified.
+        schema:
+          type: string
+      - name: filename
+        in: query
+        required: false
+        description: Filters on the file-name of attachments. Only one may be specified.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of attachments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 50
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested attachments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<Attachment>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttachmentBulk_2'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/blogposts/<id>/attachments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested blog post or the blog post was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:attachment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:attachment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /custom-content/{id}/attachments:
+    get:
+      tags:
+      - Attachment
+      operationId: getCustomContentAttachments
+      summary: Get attachments for custom content
+      description: 'Returns the attachments of specific custom content. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the custom content and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the custom content for which attachments should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/AttachmentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Filter the results to attachments based on their status. By default, `current` and `archived` are used.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - current
+            - archived
+            - trashed
+      - name: mediaType
+        in: query
+        required: false
+        description: Filters on the mediaType of attachments. Only one may be specified.
+        schema:
+          type: string
+      - name: filename
+        in: query
+        required: false
+        description: Filters on the file-name of attachments. Only one may be specified.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of attachments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 50
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested attachments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<Attachment>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttachmentBulk_2'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/custom-content/<id>/attachments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested custom content or the custom content was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:attachment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:attachment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /labels/{id}/attachments:
+    get:
+      tags:
+      - Attachment
+      operationId: getLabelAttachments
+      summary: Get attachments for label
+      description: 'Returns the attachments of specified label. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the attachment and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the label for which attachments should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/AttachmentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of pages per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested attachments for specified label were successfully fetched.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<Attachment>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttachmentBulk_2'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/labels/<id>/attachment?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested label or label was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:attachment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:attachment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /attachments/{id}/thumbnail/download:
+    get:
+      tags:
+      - Attachment
+      operationId: getAttachmentThumbnailById
+      summary: Download attachment thumbnail by id
+      description: 'Redirects the client to a URL that serves an attachment thumbnail''s binary data.
+
+
+        **Permissions required**:
+
+        Permission to view the attachment''s container.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the attachment to be returned. If you don't know the attachment's ID, use Get attachments for page/blogpost/custom content.
+        schema:
+          type: string
+          pattern: (att)?[0-9]+
+      - name: version
+        in: query
+        description: Allows you to retrieve a previously published version. Specify the previous version's number to retrieve its details.
+        schema:
+          type: integer
+      - name: height
+        in: query
+        description: Allows you to define the thumbnail height.
+        schema:
+          type: integer
+      - name: width
+        in: query
+        description: Allows you to define the thumbnail width.
+        schema:
+          type: integer
+      responses:
+        '302':
+          description: Returned if download URL is found.
+          content: {}
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested attachment or the attachment was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:attachment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:attachment:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+      x-atlassian-connect-scope: INACCESSIBLE
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
 components:
   schemas:
-    Version:
+    Error:
       type: object
-      description: Version information for content.
+      description: Error response from the Confluence API.
       properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: The ISO 8601 timestamp of this version.
-          example: '2026-01-15T10:30:00Z'
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
         message:
           type: string
-          description: The message associated with this version.
+          description: A human-readable error message.
           example: example_value
-        number:
-          type: integer
-          description: The version number.
-          example: 10
-        minorEdit:
-          type: boolean
-          description: Whether this was a minor edit.
-          example: true
-        authorId:
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
           type: string
-          description: The Atlassian account ID of the version author.
-          example: '500123'
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    ContentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the content.
+          example: example_value
     Attachment:
       type: object
       description: Represents a file attachment on Confluence content.
@@ -223,64 +789,6 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/ContentLinks'
-    ContentLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link for the content.
-          example: example_value
-    Error:
-      type: object
-      description: Error response from the Confluence API.
-      properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
-        message:
-          type: string
-          description: A human-readable error message.
-          example: example_value
-    PaginationLinks:
-      type: object
-      description: Pagination links for cursor-based pagination.
-      properties:
-        next:
-          type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
-        base:
-          type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
     AttachmentBulk:
       type: object
       description: A paginated list of attachments.
@@ -292,30 +800,302 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-  responses:
-    NotFound:
-      description: Returned if the requested resource is not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Version:
+      type: object
+      description: Version information for content.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
+        message:
+          type: string
+          description: The message associated with this version.
+          example: example_value
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
+          type: string
+          description: The Atlassian account ID of the version author.
+          example: '500123'
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the label.
+        name:
+          type: string
+          description: Name of the label.
+        prefix:
+          type: string
+          description: Prefix of the label.
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    AttachmentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        download:
+          type: string
+          description: Download link of the content.
+    AttachmentSingle:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the attachment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the attachment was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        pageId:
+          type: string
+          description: 'ID of the containing page.
+
+
+            Note: This is only returned if the attachment has a container that is a page.'
+        blogPostId:
+          type: string
+          description: 'ID of the containing blog post.
+
+
+            Note: This is only returned if the attachment has a container that is a blog post.'
+        customContentId:
+          type: string
+          description: 'ID of the containing custom content.
+
+
+            Note: This is only returned if the attachment has a container that is custom content.'
+        mediaType:
+          type: string
+          description: Media Type for the attachment.
+        mediaTypeDescription:
+          type: string
+          description: Media Type description for the attachment.
+        comment:
+          type: string
+          description: Comment for the attachment.
+        fileId:
+          type: string
+          description: File ID of the attachment. This is the ID referenced in `atlas_doc_format` bodies and is distinct from the attachment ID.
+        fileSize:
+          format: int64
+          type: integer
+          description: File size of the attachment.
+        webuiLink:
+          type: string
+          description: WebUI link of the attachment.
+        downloadLink:
+          type: string
+          description: Download link of the attachment.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        labels:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Label'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        properties:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/ContentProperty'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        operations:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        versions:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Version_2'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        _links:
+          $ref: '#/components/schemas/AttachmentLinks'
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    Operation:
+      type: object
+      properties:
+        operation:
+          description: The type of operation.
+          type: string
+        targetType:
+          description: The type of entity the operation type targets.
+          type: string
+    AttachmentBulk_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the attachment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the attachment was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        pageId:
+          type: string
+          description: 'ID of the containing page.
+
+
+            Note: This is only returned if the attachment has a container that is a page.'
+        blogPostId:
+          type: string
+          description: 'ID of the containing blog post.
+
+
+            Note: This is only returned if the attachment has a container that is a blog post.'
+        customContentId:
+          type: string
+          description: 'ID of the containing custom content.
+
+
+            Note: This is only returned if the attachment has a container that is custom content.'
+        mediaType:
+          type: string
+          description: Media Type for the attachment.
+        mediaTypeDescription:
+          type: string
+          description: Media Type description for the attachment.
+        comment:
+          type: string
+          description: Comment for the attachment.
+        fileId:
+          type: string
+          description: File ID of the attachment. This is the ID referenced in `atlas_doc_format` bodies and is distinct from the attachment ID.
+        fileSize:
+          format: int64
+          type: integer
+          description: File size of the attachment.
+        webuiLink:
+          type: string
+          description: WebUI link of the attachment.
+        downloadLink:
+          type: string
+          description: Download link of the attachment.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        _links:
+          $ref: '#/components/schemas/AttachmentLinks'
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version_2'
+    AttachmentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for attachments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    Version_2:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
+          type: string
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
   parameters:
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
     CursorParam:
       name: cursor
       in: query
@@ -330,6 +1110,29 @@ components:
       schema:
         type: integer
         format: int64
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http
@@ -356,6 +1159,41 @@ components:
       type: http
       scheme: bearer
       description: Personal Access Token or OAuth 2.0 Bearer token.
-externalDocs:
-  description: Confluence Cloud REST API v2 Documentation
-  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+x-refined-from:
+- confluence-cloud-v2.yml
+- confluence-rest-v2-openapi.json

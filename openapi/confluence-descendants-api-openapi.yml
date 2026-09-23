@@ -1,0 +1,765 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST API v2 Descendants API
+  description: This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+  termsOfService: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  version: 2.0.0
+servers:
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
+tags:
+- name: Descendants
+  description: ''
+paths:
+  /whiteboards/{id}/descendants:
+    get:
+      tags:
+      - Descendants
+      operationId: getWhiteboardDescendants
+      summary: Get descendants of a whiteboard
+      description: 'Returns descendants in the content tree for a given whiteboard by ID in top-to-bottom order (that is, the highest descendant is the first
+
+        item in the response payload). The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available by calling this endpoint with the cursor in the response payload. There is also a `depth` parameter specifying depth
+
+        of descendants to be fetched.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each descendant. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Permission to view the whiteboard and its corresponding space'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the whiteboard.
+        schema:
+          format: int64
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, call the endpoint with the cursor to fetch the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: depth
+        in: query
+        description: Maximum depth of descendants to return. If more results are required, use the endpoint corresponding to the content type of the deepest descendant to fetch more descendants.
+        schema:
+          format: int32
+          default: 2
+          minimum: 1
+          maximum: 10
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned if the requested descendants are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<DescendantsResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DescendantsResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified whiteboard or the whiteboard was not found.
+
+            content: { }'
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /databases/{id}/descendants:
+    get:
+      tags:
+      - Descendants
+      operationId: getDatabaseDescendants
+      summary: Get descendants of a database
+      description: 'Returns descendants in the content tree for a given database by ID in top-to-bottom order (that is, the highest descendant is the first
+
+        item in the response payload). The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available by calling this endpoint with the cursor in the response payload. There is also a `depth` parameter specifying depth
+
+        of descendants to be fetched.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each descendant. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Permission to view the database and its corresponding space'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the database.
+        schema:
+          format: int64
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, call the endpoint with the cursor to fetch the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: depth
+        in: query
+        description: Maximum depth of descendants to return. If more results are required, use the endpoint corresponding to the content type of the deepest descendant to fetch more descendants.
+        schema:
+          format: int32
+          default: 2
+          minimum: 1
+          maximum: 10
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned if the requested descendants are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<DescendantsResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DescendantsResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified database or the database was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /embeds/{id}/descendants:
+    get:
+      tags:
+      - Descendants
+      operationId: getSmartLinkDescendants
+      summary: Get descendants of a smart link
+      description: 'Returns descendants in the content tree for a given smart link by ID in top-to-bottom order (that is, the highest descendant is the first
+
+        item in the response payload). The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available by calling this endpoint with the cursor in the response payload. There is also a `depth` parameter specifying depth
+
+        of descendants to be fetched.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each descendant. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Permission to view the smart link and its corresponding space'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the smart link.
+        schema:
+          format: int64
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, call the endpoint with the cursor to fetch the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: depth
+        in: query
+        description: Maximum depth of descendants to return. If more results are required, use the endpoint corresponding to the content type of the deepest descendant to fetch more descendants.
+        schema:
+          format: int32
+          default: 2
+          minimum: 1
+          maximum: 10
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned if the requested descendants are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<DescendantsResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DescendantsResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified smart link or the smart link was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /folders/{id}/descendants:
+    get:
+      tags:
+      - Descendants
+      operationId: getFolderDescendants
+      summary: Get descendants of folder
+      description: 'Returns descendants in the content tree for a given folder by ID in top-to-bottom order (that is, the highest descendant is the first
+
+        item in the response payload). The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available by calling this endpoint with the cursor in the response payload. There is also a `depth` parameter specifying depth
+
+        of descendants to be fetched.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each descendant. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Permission to view the and its corresponding space'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the folder.
+        schema:
+          format: int64
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, call the endpoint with the cursor to fetch the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: depth
+        in: query
+        description: Maximum depth of descendants to return. If more results are required, use the endpoint corresponding to the content type of the deepest descendant to fetch more descendants.
+        schema:
+          format: int32
+          default: 2
+          minimum: 1
+          maximum: 10
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned if the requested descendants are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<DescendantsResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DescendantsResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified folder or the folder was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /pages/{id}/descendants:
+    get:
+      tags:
+      - Descendants
+      operationId: getPageDescendants
+      summary: Get descendants of page
+      description: 'Returns descendants in the content tree for a given page by ID in top-to-bottom order (that is, the highest descendant is the first
+
+        item in the response payload). The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available by calling this endpoint with the cursor in the response payload. There is also a `depth` parameter specifying depth
+
+        of descendants to be fetched.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each descendant. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Permission to view the page and its corresponding space'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the page.
+        schema:
+          format: int64
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, call the endpoint with the cursor to fetch the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: depth
+        in: query
+        description: Maximum depth of descendants to return. If more results are required, use the endpoint corresponding to the content type of the deepest descendant to fetch more descendants.
+        schema:
+          format: int32
+          default: 2
+          minimum: 1
+          maximum: 10
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned if the requested descendants are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<DescendantsResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DescendantsResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified page or the page was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+components:
+  schemas:
+    OnlyArchivedAndCurrentContentStatus:
+      enum:
+      - current
+      - archived
+      type: string
+      description: The status of the content.
+    DescendantsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the descendant.
+        status:
+          $ref: '#/components/schemas/OnlyArchivedAndCurrentContentStatus'
+        title:
+          type: string
+          description: Title of the descendant.
+        type:
+          type: string
+          description: Hierarchical content type (database/embed/folder/page/whiteboard).
+        parentId:
+          type: string
+          description: ID of the parent content.
+        depth:
+          format: int32
+          type: integer
+          description: Depth of the descendant in the content tree relative to the content specified in the request.
+        childPosition:
+          format: int32
+          type:
+          - integer
+          - 'null'
+          description: 'Numerical value indicating position of the content relative to its siblings (with the same parentId) within the content tree.
+
+            If the content is sorted by childPosition, it will reflect the default content ordering within the content tree.'
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: This is the reference for the Confluence Cloud REST API v2, with definitions and performance intended to be an improvement over v1. You can click on the meatball menu in the upper right to download the spec or Postman collection.
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or Oauth 2.0, depending on what you''re building (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Using the REST API
+    anchor: using
+    body: "**Pagination:** The Confluence REST API v2 uses cursor-based pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.\n\nUse the 'limit' and 'cursor' parameters on endpoints that return multiple objects to work with pagination. First, make a request with your desired limit in the 'limit' parameter, then observe the `Link` header in the response. If there are additional entities to be retrieved, the `next` URL in the `Link` header will allow you to retrieve the next set of results. This relative URL will also be available under the `_links.next` property of paginated responses. \n\nFor example, the following request will return 5 page objects (if there are 5 present in the target site).\n```\nGET /wiki/api/v2/pages?limit=5\n```\n\nIf there are additional pages available, the `Link` header will look like:\n```\n</wiki/api/v2/pages?limit=5&cursor=<cursor token>>; rel=\"next\"\n```\nThe URL within the `Link` header will allow you to access the next 5 pages, while the `rel=\"next\"` denotes that the URL refers to the \"next\" set of pages. Relations for a single URL are separated by semicolons (;) and URLs are separated by commas (,)\nIf there are no related URLs, the `Link` header will not be present in the response and neither will the `next` property for `_links` in the response body."

@@ -1,0 +1,643 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST User properties API
+  description: This document describes the REST API and resources provided by Confluence.
+  termsOfService: https://atlassian.com/terms/
+  version: 1.0.0
+servers:
+- url: //your-domain.atlassian.net
+tags:
+- name: User Properties
+  description: ''
+paths:
+  /wiki/rest/api/user/{userId}/property:
+    get:
+      tags:
+      - User Properties
+      summary: Get user properties
+      description: 'Returns the properties for a user as list of property keys. For more information
+
+        about user properties, see Confluence entity properties.
+
+        `Note`, these properties stored against a user are on a Confluence site level and not space/content level.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: getUserProperties
+      parameters:
+      - name: userId
+        in: path
+        description: The account ID of the user to be queried for its properties.
+        required: true
+        schema:
+          type: string
+      - name: start
+        in: query
+        description: The starting index of the returned properties.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: 'The maximum number of properties to return per page.
+
+          Note, this may be restricted by fixed system limits.'
+        schema:
+          minimum: 0
+          maximum: 25
+          type: integer
+          format: int32
+          default: 5
+      responses:
+        '200':
+          description: Returned if the requested properties are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPropertyKeyArray'
+        '400':
+          description: Returned if request has malformed syntax or userId is not a valid user id.
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '403':
+          description: Returned if the user does not have the correct permissions.
+          content: {}
+        '404':
+          description: Returned if there is no user with the given user ID.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:user.property:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:user.property:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: READ
+  /wiki/rest/api/user/{userId}/property/{key}:
+    get:
+      tags:
+      - User Properties
+      summary: Get user property
+      description: 'Returns the property corresponding to `key` for a user. For more information
+
+        about user properties, see Confluence entity properties.
+
+        `Note`, these properties stored against a user are on a Confluence site level and not space/content level.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: getUserProperty
+      parameters:
+      - name: userId
+        in: path
+        description: The account ID of the user to be queried for its properties.
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: The key of the user property.
+        required: true
+        schema:
+          type: string
+          pattern: ^[-_a-zA-Z0-9]+$
+      responses:
+        '200':
+          description: Returned if the requested properties are returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProperty'
+        '400':
+          description: 'Returned if;
+
+
+            - The key is too long.
+
+            - Request has malformed syntax or userId is not a valid user id.'
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '403':
+          description: Returned if the user does not have the correct permissions.
+          content: {}
+        '404':
+          description: 'Returned if;
+
+
+            - There is no user with the given user ID
+
+            - There is no user property with the given key'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:user.property:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:user.property:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: READ
+    put:
+      tags:
+      - User Properties
+      summary: Update user property
+      description: 'Updates a property for the given user. Note, you cannot update the key of a user property, only the value.
+
+        For more information about user properties, see
+
+        Confluence entity properties.
+
+        `Note`, these properties stored against a user are on a Confluence site level and not space/content level.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: updateUserProperty
+      parameters:
+      - name: userId
+        in: path
+        description: 'The account ID of the user. The accountId uniquely identifies the user across all Atlassian
+
+          products. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: The key of the user property.
+        required: true
+        schema:
+          type: string
+          pattern: ^[-_a-zA-Z0-9]+$
+      requestBody:
+        description: The user property to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPropertyUpdate'
+        required: true
+      responses:
+        '204':
+          description: Returned if the user property is updated.
+        '400':
+          description: 'Returned if;
+
+
+            - The key is too long.
+
+            - The value is empty.
+
+            - The value is too long.
+
+            - Request has malformed syntax or userId is not a valid user id.'
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '403':
+          description: Returned if the user does not have the correct permissions.
+          content: {}
+        '404':
+          description: 'Returned if;
+
+
+            - There is no user property with the given key.
+
+            - There is no user with the given user id.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:user.property:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:user.property:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-codegen-request-body-name: body
+      x-atlassian-connect-scope: WRITE
+    post:
+      tags:
+      - User Properties
+      summary: Create user property by key
+      description: 'Creates a property for a user. For more information about user properties, see [Confluence entity properties]
+
+        (https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+        `Note`, these properties stored against a user are on a Confluence site level and not space/content level.
+
+
+        `Note:` the number of properties which could be created per app in a tenant for each user might be
+
+        restricted by fixed system limits.
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: createUserProperty
+      parameters:
+      - name: userId
+        in: path
+        description: 'The account ID of the user. The accountId uniquely identifies the user across all Atlassian
+
+          products. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: The key of the user property.
+        required: true
+        schema:
+          type: string
+          pattern: ^[-_a-zA-Z0-9]+$
+      requestBody:
+        description: The user property to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPropertyCreate'
+        required: true
+      responses:
+        '201':
+          description: Returned if the user property is created.
+        '400':
+          description: 'Returned if;
+
+
+            - The key is too long.
+
+            - The value is empty.
+
+            - The value is too long.
+
+            - Request has malformed syntax or userId is not a valid user id.'
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '403':
+          description: Returned if the user does not have the correct permissions.
+          content: {}
+        '404':
+          description: Returned if there is no user with the given user id.
+          content: {}
+        '409':
+          description: Returned if the key already exists for the user.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:user.property:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:user.property:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-codegen-request-body-name: body
+      x-atlassian-connect-scope: WRITE
+    delete:
+      tags:
+      - User Properties
+      summary: Delete user property
+      description: 'Deletes a property for the given user.
+
+        For more information about user properties, see
+
+        Confluence entity properties.
+
+        `Note`, these properties stored against a user are on a Confluence site level and not space/content level.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: deleteUserProperty
+      parameters:
+      - name: userId
+        in: path
+        description: 'The account ID of the user. The accountId uniquely identifies the user across all Atlassian
+
+          products. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: The key of the user property.
+        required: true
+        schema:
+          type: string
+          pattern: ^[-_a-zA-Z0-9]+$
+      responses:
+        '204':
+          description: Returned if the user property is deleted.
+        '400':
+          description: 'Returned if;
+
+
+            - The key is too long.
+
+            - Request has malformed syntax or userId is not a valid user id.'
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '403':
+          description: Returned if the user does not have the correct permissions.
+          content: {}
+        '404':
+          description: 'Returned if;
+
+
+            - There is no user property with the given key
+
+            - There is no user with the given user id'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:user.property:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:user.property:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: WRITE
+components:
+  schemas:
+    UserPropertyUpdate:
+      required:
+      - value
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: object
+          additionalProperties: true
+          properties: {}
+          description: The value of the user property.
+    UserProperty:
+      required:
+      - key
+      - value
+      - id
+      - lastModifiedDate
+      - createdDate
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+          additionalProperties: true
+          properties: {}
+          description: The value of the content property.
+        id:
+          type: string
+          description: a unique identifier for the user property
+        lastModifiedDate:
+          type: string
+          format: date-time
+          description: datetime when the property was last modified such as `2022-02-01T12:00:00.111Z`
+        createdDate:
+          type: string
+          format: date-time
+          description: datetime when the property was created such as `2022-01-01T12:00:00.111Z`
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    UserPropertyKeyArray:
+      required:
+      - results
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    UserPropertyCreate:
+      required:
+      - value
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: object
+          additionalProperties: true
+          properties: {}
+          description: The value of the user property.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read all content, including content body (expansions permitted). Note, APIs using this scope may also return data allowed by read:confluence-space.summary. However, this scope is not a substitute for read:confluence-space.summary.
+            read:confluence-content.permission: Read content permissions.
+            read:confluence-content.summary: Read a summary of the content, which is the content without expansions. Note, APIs using this scope may also return data allowed by read:confluence-space.summary. However, this scope is not a substitute for read:confluence-space.summary.
+            write:confluence-content: Permits the creation of pages, blogs, comments and questions.
+            read:confluence-space.summary: Read a summary of space information without expansions.
+            write:confluence-space: Create, update and delete space information.
+            write:confluence-file: Upload attachments.
+            read:confluence-props: Read content properties.
+            write:confluence-props: Write content properties.
+            search:confluence: Search Confluence. Note, APIs using this scope may also return data allowed by read:confluence-space.summary and read:confluence-content.summary. However, this scope is not a substitute for read:confluence-space.summary or read:confluence-content.summary.
+            manage:confluence-configuration: Manage global settings.
+            read:confluence-groups: Read user groups.
+            write:confluence-groups: Create, remove and update user groups.
+            read:confluence-user: Read users.
+            readonly:content.attachment:confluence: Download attachments of a Confluence page or blogpost that you have access to.
+            read:content:confluence: View content.
+            read:content-details:confluence: View content details.
+            write:content:confluence: Create and update content.
+            delete:content:confluence: Delete content.
+            read:space-details:confluence: View space details.
+            read:analytics.content:confluence: View analytics for content.
+            read:audit-log:confluence: View audit records.
+            write:audit-log:confluence: Create audit records.
+            read:configuration:confluence: View Confluence settings.
+            write:configuration:confluence: Update Confluence settings.
+            read:page:confluence: View pages.
+            write:page:confluence: Create and update pages.
+            delete:page:confluence: Delete pages.
+            read:blogpost:confluence: View blogposts.
+            write:blogpost:confluence: Create and update blogposts.
+            delete:blogpost:confluence: Delete blogposts.
+            read:whiteboard:confluence: View whiteboards.
+            write:whiteboard:confluence: Create and update whiteboards.
+            delete:whiteboard:confluence: Delete whiteboards.
+            read:custom-content:confluence: View custom content.
+            write:custom-content:confluence: Create and update custom content.
+            delete:custom-content:confluence: Delete custom content.
+            read:attachment:confluence: View and download content attachments.
+            write:attachment:confluence: Create and update attachments.
+            delete:attachment:confluence: Delete attachments.
+            read:comment:confluence: View comments.
+            write:comment:confluence: Create and update comments.
+            delete:comment:confluence: Delete comments.
+            read:template:confluence: View content templates.
+            write:template:confluence: Create, update and delete content templates.
+            read:label:confluence: View labels.
+            write:label:confluence: Add and remove labels.
+            read:content.permission:confluence: Check content permissions.
+            read:content.property:confluence: View content properties.
+            write:content.property:confluence: Create, update and delete content properties.
+            read:content.restriction:confluence: View content restrictions.
+            write:content.restriction:confluence: Update content restrictions.
+            read:content.metadata:confluence: View content summaries.
+            read:watcher:confluence: View content watchers.
+            write:watcher:confluence: Add and remove content watchers.
+            read:group:confluence: View groups.
+            write:group:confluence: Create and delete groups.
+            read:inlinetask:confluence: View tasks.
+            write:inlinetask:confluence: Update tasks.
+            read:relation:confluence: View entity relationships.
+            write:relation:confluence: Create and update entity relationships.
+            read:space:confluence: View spaces.
+            write:space:confluence: Create and update spaces.
+            delete:space:confluence: Delete spaces.
+            read:space.permission:confluence: View space permissions.
+            write:space.permission:confluence: Update space permissions.
+            read:space.property:confluence: View space properties.
+            write:space.property:confluence: Create, update and delete space properties.
+            read:user.property:confluence: View user properties.
+            write:user.property:confluence: Create, update and delete user properties.
+            read:space.setting:confluence: View space settings.
+            write:space.setting:confluence: Update space settings.
+            read:user:confluence: View user details.
+            moderate:core-content:confluence: Moderate core contents
+            moderate:comment:confluence: Moderate comments
+            read:email-address:confluence: View email addresses of all users regardless of the user’s profile visibility settings.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: 'This is the reference for the Confluence Cloud REST API. This API is the primary way to get and
+
+      modify data in Confluence Cloud, whether you are developing an app or any other integration.
+
+      Use it to interact with Confluence entities, like pages and blog posts, spaces, users, groups,
+
+      and more.'
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or OAuth 2.0, depending on what you are building (see [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Status codes
+    anchor: status-code
+    body: "The Confluence REST API uses the [standard HTTP status codes](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html).\n\nResponses that return an error status code will also return a response body, similar to the following:\n```json\n{\n  \"statusCode\": 404,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"translation\": \"This is an example error message.\",\n          \"args\": []\n        }\n      }\n    ],\n    \"successful\": false\n  },\n  \"message\": \"This is an example error message.\"\n}\n```"
+  - title: Using the REST API
+    anchor: using
+    body: '**Expansion:** The Confluence REST API uses resource expansion: some parts of a resource are not returned unless explicitly specified. This simplifies responses and minimizes network traffic.
+
+
+      To expand part of a resource in a request, use the `expand` query parameter and specify the entities to be expanded. If you need to expand nested entities, use the `.` dot notation. For example, the following request will expand information about the requested content''s space and labels:
+
+      ```
+
+      GET /wiki/rest/api/content/{id}?expand=space,metadata.labels
+
+      ```
+
+
+      For bulk endpoints, when using the expand query parameter to request `body.export_view` and/or `body.styled_view` content representations, the response will be limited to a maximum of 25 results. If you require more than 25 results, use pagination to retrieve additional results.
+
+
+      **Pagination:** The Confluence REST API uses pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.
+
+
+      Use the ''limit'' and ''start'' query parameters to specify pagination:
+
+
+      - `limit` is the number of objects to return per page. This may be restricted by system limits.
+
+      - `start` is the index of the first item returned in the page of results. The base index is 0.
+
+
+      For example, the following request will return ten content objects, starting from the fifth object.
+
+      ```
+
+      GET /wiki/rest/api/content?start=4&limit=10
+
+      ```
+
+      **Special headers:**
+
+
+      - `X-Atlassian-Token: no-check` request header must be specified for methods
+
+      that are protected from Cross Site Request Forgery (XSRF/CSRF) attacks. This is
+
+      stated in the method description, if required. For more information, see this
+
+      [KB article](https://confluence.atlassian.com/cloudkb/xsrf-check-failed-when-calling-cloud-apis-826874382.html).'
+  - title: Capabilities
+    anchor: capabilities
+    body: '**Webhooks:** A webhook is a user-defined callback over HTTP. You can use Confluence webhooks to notify your app or web application when certain events occur in Confluence. For example, when a page is created or updated. To learn more, see [Webhooks](https://developer.atlassian.com/cloud/confluence/modules/webhook/).
+
+
+      **Content properties:** Content properties are a key-value storage associated with a piece of Confluence content. If you are building an app, this is one form of persistence that you can use. You can use the Confluence REST API to get, update, and delete content properties. To learn more, see [Content properties in the REST API](https://developer.atlassian.com/cloud/confluence/content-properties/).
+
+
+      **CQL:** The Confluence Query Language (CQL) allows you to perform complex searches for content using an SQL-like syntax in the `search` resource. To learn more, see [Advanced searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).'

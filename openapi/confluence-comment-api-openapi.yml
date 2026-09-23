@@ -1,18 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Confluence Cloud REST API v2 Attachment Comment API
-  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  title: Confluence Comment API
   version: 2.0.0
-  contact:
-    name: Atlassian
-    url: https://developer.atlassian.com/cloud/confluence/
-    email: ecosystem@atlassian.com
-  license:
-    name: Atlassian Developer Terms
-    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
-  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
-  x-logo:
-    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Comment across 2 of this provider''s published API definitions: confluence-cloud-v2.yml, confluence-rest-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://{domain}.atlassian.net/wiki/api/v2
   description: Confluence Cloud
@@ -20,10 +12,11 @@ servers:
     domain:
       default: your-domain
       description: Your Atlassian Cloud site domain
-security:
-- basicAuth: []
-- oAuth2: []
-- bearerAuth: []
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
 tags:
 - name: Comment
   description: Create, retrieve, update, and delete comments on pages and blog posts
@@ -74,6 +67,17 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /pages/{id}/inline-comments:
     get:
       operationId: getInlineComments
@@ -118,6 +122,17 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /footer-comments:
     post:
       operationId: createFooterComment
@@ -184,6 +199,100 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    get:
+      tags:
+      - Comment
+      operationId: getFooterComments
+      summary: Get footer comments
+      description: 'Returns all footer comments. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the container and its corresponding space.'
+      parameters:
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested footer comments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<FooterCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FooterCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/footer-comments/<id>/children?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /inline-comments:
     post:
       operationId: createInlineComment
@@ -252,6 +361,100 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    get:
+      tags:
+      - Comment
+      operationId: getInlineComments
+      summary: Get inline comments
+      description: 'Returns all inline comments. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page and its corresponding space.'
+      parameters:
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested inline comments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<InlineCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InlineCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/inline-comments/<id>/children?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /comments/{id}:
     get:
       operationId: getCommentById
@@ -310,6 +513,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
     put:
       operationId: updateComment
       summary: Update Comment
@@ -384,6 +591,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
     delete:
       operationId: deleteComment
       summary: Delete Comment
@@ -409,6 +620,17 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /comments/{id}/children:
     get:
       operationId: getChildComments
@@ -460,53 +682,1193 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
+  /attachments/{id}/footer-comments:
+    get:
+      tags:
+      - Comment
+      operationId: getAttachmentComments
+      summary: Get attachment comments
+      description: 'Returns the comments of the specific attachment.
+
+        The number of results is limited by the `limit` parameter and additional results (if available) will be available through
+
+        the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the attachment and its corresponding containers.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the attachment for which comments should be returned.
+        schema:
+          type: string
+          pattern: (att)?[0-9]+
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: version
+        in: query
+        required: false
+        description: Version number of the attachment to retrieve comments for. If no version provided, retrieves comments for the latest version.
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '200':
+          description: Returned if the attachment comments were successfully retrieved
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<AttachmentCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttachmentCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/attachments/<id>/comments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            attachment or associated containers.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /custom-content/{id}/footer-comments:
+    get:
+      tags:
+      - Comment
+      operationId: getCustomContentComments
+      summary: Get custom content comments
+      description: 'Returns the comments of the specific custom content.
+
+        The number of results is limited by the `limit` parameter and additional results (if available) will be available through
+
+        the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the custom content and its corresponding containers.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the custom content for which comments should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      responses:
+        '200':
+          description: Returned if the custom content comments were successfully retrieved
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<CustomContentCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomContentCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/custom-content/<id>/footer-comments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            custom content or associated containers.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /blogposts/{id}/footer-comments:
+    get:
+      tags:
+      - Comment
+      operationId: getBlogPostFooterComments
+      summary: Get footer comments for blog post
+      description: 'Returns the root footer comments of specific blog post. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the blog post and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the blog post for which footer comments should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: status
+        in: query
+        description: Filter the footer comment being retrieved by its status.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - current
+            - deleted
+            - trashed
+            - historical
+            - draft
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested footer comments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<BlogPostCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlogPostCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/blogposts/<id>/footer-comments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested blog post or the blog post was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /blogposts/{id}/inline-comments:
+    get:
+      tags:
+      - Comment
+      operationId: getBlogPostInlineComments
+      summary: Get inline comments for blog post
+      description: 'Returns the root inline comments of specific blog post. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the blog post and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the blog post for which inline comments should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: status
+        in: query
+        description: Filter the inline comment being retrieved by its status.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - current
+            - deleted
+            - trashed
+            - historical
+            - draft
+      - name: resolution-status
+        in: query
+        required: false
+        description: Filter the inline comment being retrieved by its resolution status.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - resolved
+            - open
+            - dangling
+            - reopened
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of inline comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested inline comments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<BlogPostInlineCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlogPostInlineCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/blogposts/<id>/inline-comments?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested blog post or the blog post was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /footer-comments/{comment-id}:
+    get:
+      tags:
+      - Comment
+      operationId: getFooterCommentById
+      summary: Get footer comment by id
+      description: 'Retrieves a footer comment by id
+
+
+        **Permissions required**:
+
+        Permission to view the content of the container and its corresponding space.'
+      parameters:
+      - name: comment-id
+        in: path
+        required: true
+        description: The ID of the comment to be retrieved.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentationSingle'
+      - name: version
+        in: query
+        description: Allows you to retrieve a previously published version. Specify the previous version's number to retrieve its details.
+        schema:
+          type: integer
+      - name: include-properties
+        in: query
+        description: "Includes content properties associated with this footer comment in the response.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-operations
+        in: query
+        description: "Includes operations associated with this footer comment in the response, as defined in the `Operation` object.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-likes
+        in: query
+        description: "Includes likes associated with this footer comment in the response.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-versions
+        in: query
+        description: "Includes versions associated with this footer comment in the response.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-version
+        in: query
+        description: 'Includes the current version associated with this footer comment in the response.
+
+          By default this is included and can be omitted by setting the value to `false`.'
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Returned if the footer comment is successfully retrieved.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/FooterCommentModel'
+                - type: object
+                  properties:
+                    _links:
+                      type: object
+                      properties:
+                        base:
+                          type: string
+                          description: Base url of the Confluence site.
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            comment or the comment was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    put:
+      tags:
+      - Comment
+      operationId: updateFooterComment
+      summary: Update footer comment
+      description: 'Update a footer comment. This can be used to update the body text of a comment.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page or blogpost and its corresponding space. Permission to create comments in the space.'
+      parameters:
+      - name: comment-id
+        in: path
+        required: true
+        description: The ID of the comment to be retrieved.
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        description: The footer comment to be created
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateFooterCommentModel'
+              - type: object
+                properties:
+                  _links:
+                    type: object
+                    properties:
+                      base:
+                        type: string
+                        description: Base url of the Confluence site.
+        required: true
+      responses:
+        '200':
+          description: Returned if the footer comment is updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FooterCommentModel'
+        '400':
+          description: Returned if an invalid request is provided
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if:
+
+            - The comment was not found
+
+            - The calling user does not have permission to view the comment
+
+            - The user is forbidden from updating a comment tied to a resource they are allowed to view'
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:comment:confluence
+      x-atlassian-connect-scope: WRITE
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    delete:
+      tags:
+      - Comment
+      operationId: deleteFooterComment
+      summary: Delete footer comment
+      description: 'Deletes a footer comment. This is a permanent deletion and cannot be reverted.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page or blogpost and its corresponding space. Permission to delete comments in the space.'
+      parameters:
+      - name: comment-id
+        in: path
+        required: true
+        description: The ID of the comment to be retrieved.
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '204':
+          description: Returned if the footer comment is deleted.
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if:
+
+            - The comment was not found
+
+            - The calling user does not have permission to view the comment
+
+            - The user is forbidden from deleting a comment tied to a resource they are allowed to view'
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - delete:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - delete:comment:confluence
+      x-atlassian-connect-scope: DELETE
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /footer-comments/{id}/children:
+    get:
+      tags:
+      - Comment
+      operationId: getFooterCommentChildren
+      summary: Get children footer comments
+      description: 'Returns the children footer comments of specific comment. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent comment for which footer comment children should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested footer comments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildrenCommentModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildrenCommentModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/footer-comments/<id>/children?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            parent page/blog post or the page/blog post was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /inline-comments/{comment-id}:
+    get:
+      tags:
+      - Comment
+      operationId: getInlineCommentById
+      summary: Get inline comment by id
+      description: 'Retrieves an inline comment by id
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page or blogpost and its corresponding space.'
+      parameters:
+      - name: comment-id
+        in: path
+        required: true
+        description: The ID of the comment to be retrieved.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentationSingle'
+      - name: version
+        in: query
+        description: Allows you to retrieve a previously published version. Specify the previous version's number to retrieve its details.
+        schema:
+          type: integer
+      - name: include-properties
+        in: query
+        description: "Includes content properties associated with this inline comment in the response.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-operations
+        in: query
+        description: "Includes operations associated with this inline comment in the response, as defined in the `Operation` object.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-likes
+        in: query
+        description: "Includes likes associated with this inline comment in the response.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-versions
+        in: query
+        description: "Includes versions associated with this inline comment in the response.\nThe number of results will be limited to 50 and sorted in the default sort order. \nA `meta` and `_links` property will be present to indicate if more results are available and a link to retrieve the rest of the results."
+        schema:
+          type: boolean
+          default: false
+      - name: include-version
+        in: query
+        description: 'Includes the current version associated with this inline comment in the response.
+
+          By default this is included and can be omitted by setting the value to `false`.'
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Returned if the inline comment is successfully retrieved.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/InlineCommentModel'
+                - type: object
+                  properties:
+                    _links:
+                      type: object
+                      properties:
+                        base:
+                          type: string
+                          description: Base url of the Confluence site.
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            comment or the comment was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    put:
+      tags:
+      - Comment
+      operationId: updateInlineComment
+      summary: Update inline comment
+      description: 'Update an inline comment. This can be used to update the body text of a comment and/or to resolve the comment
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page or blogpost and its corresponding space. Permission to create comments in the space.'
+      parameters:
+      - name: comment-id
+        in: path
+        required: true
+        description: The ID of the comment to be retrieved.
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        description: The inline comment to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInlineCommentModel'
+        required: true
+      responses:
+        '200':
+          description: Returned if the inline comment is updated successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/InlineCommentModel'
+                - type: object
+                  properties:
+                    _links:
+                      type: object
+                      properties:
+                        base:
+                          type: string
+                          description: Base url of the Confluence site.
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if:
+
+            - The comment was not found
+
+            - The calling user does not have permission to view the comment
+
+            - The user is forbidden from updating a comment tied to a resource they are allowed to view'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:comment:confluence
+      x-atlassian-connect-scope: WRITE
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    delete:
+      tags:
+      - Comment
+      operationId: deleteInlineComment
+      summary: Delete inline comment
+      description: 'Deletes an inline comment. This is a permanent deletion and cannot be reverted.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page or blogpost and its corresponding space. Permission to delete comments in the space.'
+      parameters:
+      - name: comment-id
+        in: path
+        required: true
+        description: The ID of the comment to be deleted.
+        schema:
+          format: int64
+          type: integer
+      responses:
+        '204':
+          description: Returned if the inline comment is deleted.
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if:
+
+            - The comment was not found
+
+            - The calling user does not have permission to view the comment
+
+            - The user is forbidden from deleting a comment tied to a resource they are allowed to view'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - delete:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - delete:comment:confluence
+      x-atlassian-connect-scope: DELETE
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /inline-comments/{id}/children:
+    get:
+      tags:
+      - Comment
+      operationId: getInlineCommentChildren
+      summary: Get children inline comments
+      description: 'Returns the children inline comments of specific comment. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent comment for which inline comment children should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: body-format
+        in: query
+        required: false
+        description: The content format type to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/CommentSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of footer comments per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested footer comments are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<InlineCommentChildrenModel>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InlineCommentChildrenModel'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/inline-comments/<id>/children?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            parent page/blog post or the page/blog post was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:comment:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:comment:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
 components:
-  parameters:
-    VersionParam:
-      name: version
-      in: query
-      description: The version number of the content to retrieve.
-      schema:
-        type: integer
-        format: int32
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    BodyFormatParam:
-      name: body-format
-      in: query
-      description: The representation format for the content body.
-      schema:
-        type: string
-        enum:
-        - storage
-        - atlas_doc_format
-        - view
-        - export_view
-        - anonymous_export_view
-        - editor
   schemas:
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+          example: example_value
+        value:
+          type: string
+          description: The body content in this representation.
+          example: example_value
     Version:
       type: object
       description: Version information for content.
@@ -532,26 +1894,31 @@ components:
           type: string
           description: The Atlassian account ID of the version author.
           example: '500123'
-    Body:
+    CommentLinks:
       type: object
-      description: The body content in various representations.
       properties:
-        storage:
-          $ref: '#/components/schemas/BodyRepresentation'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyRepresentation'
-        view:
-          $ref: '#/components/schemas/BodyRepresentation'
-    CommentUpdateRequest:
+        webui:
+          type: string
+          description: Web UI link for the comment.
+          example: example_value
+    InlineCommentCreateRequest:
       type: object
       required:
       - body
-      - version
+      - inlineCommentProperties
       properties:
+        blogPostId:
+          type: string
+          description: The ID of the blog post to add an inline comment on.
+          example: '500123'
+        pageId:
+          type: string
+          description: The ID of the page to add an inline comment on.
+          example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
-        version:
-          $ref: '#/components/schemas/VersionWrite'
+        inlineCommentProperties:
+          $ref: '#/components/schemas/InlineCommentProperties'
     Comment:
       type: object
       description: Represents a comment on a Confluence page or blog post.
@@ -609,54 +1976,40 @@ components:
           $ref: '#/components/schemas/InlineCommentProperties'
         _links:
           $ref: '#/components/schemas/CommentLinks'
-    InlineCommentProperties:
+    VersionWrite:
       type: object
-      description: Properties specific to inline comments.
+      required:
+      - number
       properties:
-        textSelection:
-          type: string
-          description: The selected text that this inline comment is anchored to.
-          example: example_value
-        textSelectionMatchCount:
+        number:
           type: integer
-          description: The match index of the text selection, if the same text appears multiple times.
+          description: The new version number. Must be incremented by 1.
           example: 10
-    BodyRepresentation:
-      type: object
-      properties:
-        representation:
+        message:
           type: string
-          description: The name of the representation format.
+          description: An optional message associated with this version.
           example: example_value
-        value:
-          type: string
-          description: The body content in this representation.
-          example: example_value
-    InlineCommentCreateRequest:
+    CommentUpdateRequest:
       type: object
       required:
       - body
-      - inlineCommentProperties
+      - version
       properties:
-        blogPostId:
-          type: string
-          description: The ID of the blog post to add an inline comment on.
-          example: '500123'
-        pageId:
-          type: string
-          description: The ID of the page to add an inline comment on.
-          example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
-        inlineCommentProperties:
-          $ref: '#/components/schemas/InlineCommentProperties'
-    CommentLinks:
+        version:
+          $ref: '#/components/schemas/VersionWrite'
+    CommentBulk:
       type: object
+      description: A paginated list of comments.
       properties:
-        webui:
-          type: string
-          description: Web UI link for the comment.
-          example: example_value
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
     CommentCreateRequest:
       type: object
       required:
@@ -676,6 +2029,40 @@ components:
           example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    Body:
+      type: object
+      description: The body content in various representations.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    InlineCommentProperties:
+      type: object
+      description: Properties specific to inline comments.
+      properties:
+        textSelection:
+          type: string
+          description: The selected text that this inline comment is anchored to.
+          example: example_value
+        textSelectionMatchCount:
+          type: integer
+          description: The match index of the text selection, if the same text appears multiple times.
+          example: 10
     BodyWrite:
       type: object
       required:
@@ -695,88 +2082,660 @@ components:
           type: string
           description: The body content in the specified representation.
           example: example_value
-    CommentBulk:
+    Like:
       type: object
-      description: A paginated list of comments.
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Comment'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
-    Error:
+        accountId:
+          type: string
+          description: Account ID.
+    FooterCommentModel:
       type: object
-      description: Error response from the Confluence API.
       properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post containing the comment if the comment is on a blog post.
+        pageId:
+          type: string
+          description: ID of the page containing the comment if the comment is on a page.
+        attachmentId:
+          type: string
+          description: ID of the attachment containing the comment if the comment is on an attachment.
+        customContentId:
+          type: string
+          description: ID of the custom content containing the comment if the comment is on a custom content.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment if the comment is a reply.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        properties:
           type: object
           properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
+            results:
               type: array
               items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
+                $ref: '#/components/schemas/ContentProperty'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        operations:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        likes:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Like'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        versions:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Version_2'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        body:
+          $ref: '#/components/schemas/BodySingle'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    CustomContentCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        customContentId:
+          type: string
+          description: ID of the custom content containing the comment.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodySingle'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    CreateFooterCommentModel:
+      type: object
+      properties:
+        blogPostId:
+          type: string
+          description: ID of the containing blog post, if intending to create a top level footer comment. Do not provide if creating a reply.
+        pageId:
+          type: string
+          description: ID of the containing page, if intending to create a top level footer comment. Do not provide if creating a reply.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment, if intending to create a reply. Do not provide if creating a top level comment.
+        attachmentId:
+          type: string
+          description: ID of the attachment, if intending to create a comment against an attachment.
+        customContentId:
+          type: string
+          description: ID of the custom content, if intending to create a comment against a custom content.
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CommentBodyWrite'
+          - $ref: '#/components/schemas/CommentNestedBodyWrite'
+    InlineCommentChildrenModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment the child comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        resolutionStatus:
+          $ref: '#/components/schemas/InlineCommentResolutionStatus'
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties_2'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    PrimaryBodyRepresentationSingle:
+      enum:
+      - storage
+      - atlas_doc_format
+      - view
+      - export_view
+      - anonymous_export_view
+      - styled_view
+      - editor
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    Version_2:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
         message:
           type: string
-          description: A human-readable error message.
-          example: example_value
-    PaginationLinks:
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+    CommentLinks_2:
       type: object
-      description: Pagination links for cursor-based pagination.
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+    ChildrenCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment the child comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    InlineCommentResolutionStatus:
+      enum:
+      - open
+      - reopened
+      - resolved
+      - dangling
+      type: string
+      description: Inline comment resolution status
+    Operation:
+      type: object
+      properties:
+        operation:
+          description: The type of operation.
+          type: string
+        targetType:
+          description: The type of entity the operation type targets.
+          type: string
+    BodyBulk:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+    BlogPostInlineCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post the comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        resolutionStatus:
+          $ref: '#/components/schemas/InlineCommentResolutionStatus'
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties_2'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    UpdateFooterCommentModel:
+      type: object
+      properties:
+        version:
+          type: object
+          properties:
+            number:
+              type: integer
+              description: Number of new version. Should be 1 higher than current version of the comment.
+            message:
+              type: string
+              description: Optional message store for the new version.
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CommentBodyWrite'
+          - $ref: '#/components/schemas/CommentNestedBodyWrite'
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
+    MultiEntityLinks:
+      type: object
       properties:
         next:
           type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
         base:
           type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
-    VersionWrite:
+          description: Base url of the Confluence site.
+    CommentNestedBodyWrite:
       type: object
-      required:
-      - number
+      description: 'Body of the comment. Only one body format should be specified as the property
+
+        for this object, e.g. `storage`.'
       properties:
-        number:
-          type: integer
-          description: The new version number. Must be incremented by 1.
-          example: 10
-        message:
+        storage:
+          $ref: '#/components/schemas/CommentBodyWrite'
+        atlas_doc_format:
+          $ref: '#/components/schemas/CommentBodyWrite'
+        wiki:
+          $ref: '#/components/schemas/CommentBodyWrite'
+    AttachmentCommentModel:
+      type: object
+      properties:
+        id:
           type: string
-          description: An optional message associated with this version.
-          example: example_value
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        attachmentId:
+          type: string
+          description: ID of the attachment containing the comment.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodySingle'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    PrimaryBodyRepresentation:
+      enum:
+      - storage
+      - atlas_doc_format
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    CommentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for comments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    CreateInlineCommentModel:
+      type: object
+      properties:
+        blogPostId:
+          type: string
+          description: ID of the containing blog post, if intending to create a top level footer comment. Do not provide if creating a reply.
+        pageId:
+          type: string
+          description: ID of the containing page, if intending to create a top level footer comment. Do not provide if creating a reply.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment, if intending to create a reply. Do not provide if creating a top level comment.
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CommentBodyWrite'
+          - $ref: '#/components/schemas/CommentNestedBodyWrite'
+        inlineCommentProperties:
+          type: object
+          description: Object describing the text to highlight on the page/blog post. Only applicable for top level inline comments (not replies) and required in that case.
+          properties:
+            textSelection:
+              type: string
+              description: The text to highlight
+            textSelectionMatchCount:
+              type: integer
+              description: The number of matches for the selected text on the page (should be strictly greater than textSelectionMatchIndex)
+            textSelectionMatchIndex:
+              type: integer
+              description: "The match index to highlight. This is zero-based. E.g. if you have 3 occurrences of \"hello world\" on a page \nand you want to highlight the second occurrence, you should pass 1 for textSelectionMatchIndex and 3 for textSelectionMatchCount."
+    CommentBodyWrite:
+      type: object
+      properties:
+        representation:
+          enum:
+          - storage
+          - atlas_doc_format
+          - wiki
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the comment, in the format found in the representation field.
+    BlogPostCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post the comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    InlineCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post containing the comment if the comment is on a blog post.
+        pageId:
+          type: string
+          description: ID of the page containing the comment if the comment is on a page.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment if the comment is a reply.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodySingle'
+        resolutionLastModifierId:
+          type: string
+          description: Atlassian Account ID of last person who modified the resolve state of the comment. Null until comment is resolved or reopened.
+        resolutionLastModifiedAt:
+          type: string
+          format: date-time
+          description: Timestamp of the last modification to the comment's resolution status. Null until comment is resolved or reopened.
+        resolutionStatus:
+          $ref: '#/components/schemas/InlineCommentResolutionStatus'
+        properties:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/ContentProperty'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+            inlineMarkerRef:
+              type: string
+              description: Property value used to reference the highlighted element in DOM.
+            inlineOriginalSelection:
+              type: string
+              description: Text that is highlighted.
+        operations:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        likes:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Like'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        versions:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Version_2'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    PageInlineCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        pageId:
+          type: string
+          description: ID of the page the comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        resolutionStatus:
+          $ref: '#/components/schemas/InlineCommentResolutionStatus'
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties_2'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    UpdateInlineCommentModel:
+      type: object
+      properties:
+        version:
+          type: object
+          properties:
+            number:
+              type: integer
+              description: Number of new version. Should be 1 higher than current version of the comment.
+            message:
+              type: string
+              description: Optional message store for the new version.
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CommentBodyWrite'
+          - $ref: '#/components/schemas/CommentNestedBodyWrite'
+        resolved:
+          type: boolean
+          description: 'Resolved state of the comment. Set to true to resolve the comment, set to false to reopen it. If
+
+            matching the existing state (i.e. true -> resolved or false -> open/reopened) , no change will occur. A dangling
+
+            comment cannot be updated.'
+    PageCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        pageId:
+          type: string
+          description: ID of the page the comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    BodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    InlineCommentProperties_2:
+      type: object
+      properties:
+        inlineMarkerRef:
+          type: string
+          description: Property value used to reference the highlighted element in DOM.
+        inlineOriginalSelection:
+          type: string
+          description: Text that is highlighted.
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version_2'
+  parameters:
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    VersionParam:
+      name: version
+      in: query
+      description: The version number of the content to retrieve.
+      schema:
+        type: integer
+        format: int32
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    BodyFormatParam:
+      name: body-format
+      in: query
+      description: The representation format for the content body.
+      schema:
+        type: string
+        enum:
+        - storage
+        - atlas_doc_format
+        - view
+        - export_view
+        - anonymous_export_view
+        - editor
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
   responses:
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Returned if the request is malformed or contains invalid parameters.
       content:
@@ -785,6 +2744,12 @@ components:
             $ref: '#/components/schemas/Error'
     NotFound:
       description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
       content:
         application/json:
           schema:
@@ -815,6 +2780,41 @@ components:
       type: http
       scheme: bearer
       description: Personal Access Token or OAuth 2.0 Bearer token.
-externalDocs:
-  description: Confluence Cloud REST API v2 Documentation
-  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+x-refined-from:
+- confluence-cloud-v2.yml
+- confluence-rest-v2-openapi.json

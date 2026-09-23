@@ -1,0 +1,301 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST API v2 App Properties API
+  description: This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+  termsOfService: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  version: 2.0.0
+servers:
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
+tags:
+- name: App Properties
+  description: ''
+paths:
+  /app/properties:
+    get:
+      tags:
+      - App Properties
+      summary: Get Forge app properties
+      operationId: getForgeAppProperties
+      description: Gets Forge app properties. This API can only be accessed using **asApp()** requests from Forge.
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor represents the last returned property key. It will be included in the response body as the next link. Use this key to request the next set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: Maximum number of app properties per result to return. If more results exist, use the last returned property key from the Link field in the response body as a cursor to retrieve the next set of results.
+        schema:
+          format: int32
+          default: 50
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Forge app properties returned on success.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<AppProperty>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          description: The key of the property
+                        value:
+                          type: object
+                          description: The value of the property
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+        '401':
+          description: The request did not originate from the Forge app.
+        '403':
+          description: 'Returned when the request is forbidden due to one of the following:
+
+            - The request attempts impersonation. Only requests made using `asApp()` are allowed.
+
+            - The Forge app is not installed.'
+      security:
+      - oAuthDefinitions:
+        - read:app-data:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:app-data:confluence
+      x-experimental: true
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: INACCESSIBLE
+  /app/properties/{propertyKey}:
+    get:
+      tags:
+      - App Properties
+      summary: Get a Forge app property by key
+      operationId: getForgeAppProperty
+      description: Gets a Forge app property by property key. This API can only be accessed using **asApp()** requests from Forge.
+      parameters:
+      - name: propertyKey
+        in: path
+        required: true
+        description: The key of the property
+        schema:
+          type: string
+      responses:
+        '200':
+          description: App property returned on success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: The key of the property
+                  value:
+                    type: object
+                    description: The value of the property
+                example:
+                  key: user-preferences
+                  value:
+                    theme: dark
+                    language: en
+        '400':
+          description: Property key longer than 127 characters.
+        '401':
+          description: The request did not originate from the Forge app.
+        '403':
+          description: 'Returned when the request is forbidden due to one of the following:
+
+            - The request attempts impersonation. Only requests made using `asApp()` are allowed.
+
+            - The Forge app is not installed.'
+        '404':
+          description: App property not found.
+      security:
+      - oAuthDefinitions:
+        - read:app-data:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:app-data:confluence
+      x-experimental: true
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: INACCESSIBLE
+    put:
+      tags:
+      - App Properties
+      summary: Create or update a Forge app property
+      operationId: putForgeAppProperty
+      description: Creates or updates a Forge app property. This API can only be accessed using **asApp()** requests from Forge.
+      parameters:
+      - name: propertyKey
+        in: path
+        required: true
+        description: The key of the property
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Forge app
+                darkMode: true
+                version: 1.0.0
+                buildNumber: 7
+        required: true
+      responses:
+        '200':
+          description: Property updated.
+        '201':
+          description: Property created.
+        '400':
+          description: Property key longer than 127 characters, or request made with invalid JSON.
+        '401':
+          description: The request did not originate from the Forge app.
+        '403':
+          description: 'Returned when the request is forbidden due to one of the following:
+
+            - The request attempts impersonation. Only requests made using `asApp()` are allowed.
+
+            - The Forge app is not installed.'
+      security:
+      - oAuthDefinitions:
+        - write:app-data:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:app-data:confluence
+      x-experimental: true
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: INACCESSIBLE
+    delete:
+      tags:
+      - App Properties
+      summary: Deletes a Forge app property
+      operationId: deleteForgeAppProperty
+      description: Deletes a Forge app property. This API can only be accessed using **asApp()** requests from Forge.
+      parameters:
+      - name: propertyKey
+        in: path
+        required: true
+        description: The key of the property
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Property deleted.
+        '400':
+          description: Property key longer than 127 characters
+        '401':
+          description: The request did not originate from the Forge app.
+        '403':
+          description: 'Returned when the request is forbidden due to one of the following:
+
+            - The request attempts impersonation. Only requests made using `asApp()` are allowed.
+
+            - The Forge app is not installed.'
+      security:
+      - oAuthDefinitions:
+        - write:app-data:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:app-data:confluence
+      x-experimental: true
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-atlassian-connect-scope: INACCESSIBLE
+components:
+  schemas:
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: This is the reference for the Confluence Cloud REST API v2, with definitions and performance intended to be an improvement over v1. You can click on the meatball menu in the upper right to download the spec or Postman collection.
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or Oauth 2.0, depending on what you''re building (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Using the REST API
+    anchor: using
+    body: "**Pagination:** The Confluence REST API v2 uses cursor-based pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.\n\nUse the 'limit' and 'cursor' parameters on endpoints that return multiple objects to work with pagination. First, make a request with your desired limit in the 'limit' parameter, then observe the `Link` header in the response. If there are additional entities to be retrieved, the `next` URL in the `Link` header will allow you to retrieve the next set of results. This relative URL will also be available under the `_links.next` property of paginated responses. \n\nFor example, the following request will return 5 page objects (if there are 5 present in the target site).\n```\nGET /wiki/api/v2/pages?limit=5\n```\n\nIf there are additional pages available, the `Link` header will look like:\n```\n</wiki/api/v2/pages?limit=5&cursor=<cursor token>>; rel=\"next\"\n```\nThe URL within the `Link` header will allow you to access the next 5 pages, while the `rel=\"next\"` denotes that the URL refers to the \"next\" set of pages. Relations for a single URL are separated by semicolons (;) and URLs are separated by commas (,)\nIf there are no related URLs, the `Link` header will not be present in the response and neither will the `next` property for `_links` in the response body."

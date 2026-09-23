@@ -1,18 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Confluence Cloud REST API v2 Attachment Blog Post API
-  description: Next generation REST API for Confluence Cloud providing access to pages, spaces, comments, blog posts, attachments, labels, and other content management operations. This API offers improved performance, consistent pagination, and new features compared to the v1 API.
+  title: Confluence Blog Post API
   version: 2.0.0
-  contact:
-    name: Atlassian
-    url: https://developer.atlassian.com/cloud/confluence/
-    email: ecosystem@atlassian.com
-  license:
-    name: Atlassian Developer Terms
-    url: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
-  termsOfService: https://www.atlassian.com/legal/cloud-terms-of-service
-  x-logo:
-    url: https://www.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-b3f5e2dd5d6c/confluence-icon-gradient-blue.svg
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Blog Post across 2 of this provider''s published API definitions: confluence-cloud-v2.yml, confluence-rest-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://{domain}.atlassian.net/wiki/api/v2
   description: Confluence Cloud
@@ -20,10 +12,11 @@ servers:
     domain:
       default: your-domain
       description: Your Atlassian Cloud site domain
-security:
-- basicAuth: []
-- oAuth2: []
-- bearerAuth: []
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
 tags:
 - name: Blog Post
   description: Create, retrieve, update, and delete blog posts
@@ -74,6 +67,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
     post:
       operationId: createBlogPost
       summary: Create Blog Post
@@ -136,6 +133,17 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
   /blogposts/{id}:
     get:
       operationId: getBlogPostById
@@ -184,6 +192,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
     put:
       operationId: updateBlogPost
       summary: Update Blog Post
@@ -251,6 +263,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
     delete:
       operationId: deleteBlogPost
       summary: Delete Blog Post
@@ -269,23 +285,299 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - basicAuth: []
+      - oAuth2: []
+      - bearerAuth: []
+    servers:
+    - url: https://{domain}.atlassian.net/wiki/api/v2
+      description: Confluence Cloud
+      variables:
+        domain:
+          default: your-domain
+          description: Your Atlassian Cloud site domain
+  /labels/{id}/blogposts:
+    get:
+      tags:
+      - Blog Post
+      operationId: getLabelBlogPosts
+      summary: Get blog posts for label
+      description: 'Returns the blogposts of specified label. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to view the content of the page and its corresponding space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the label for which blog posts should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: space-id
+        in: query
+        required: false
+        description: Filter the results based on space ids. Multiple space ids can be specified as a comma-separated list.
+        schema:
+          type: array
+          maxItems: 100
+          items:
+            type: integer
+            format: int64
+      - name: body-format
+        in: query
+        description: The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/BlogPostSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of blog posts per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested blog posts for specified label were successfully fetched.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<BlogPost>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlogPostBulk_2'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/labels/<id>/blogposts?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            requested label or label was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:page:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:page:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
+  /spaces/{id}/blogposts:
+    get:
+      tags:
+      - Blog Post
+      operationId: getBlogPostsInSpace
+      summary: Get blog posts in space
+      description: 'Returns all blog posts in a space. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission) and view the space.
+
+        Only blog posts that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space for which blog posts should be returned.
+        schema:
+          format: int64
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/BlogPostSortOrder'
+      - name: status
+        in: query
+        required: false
+        description: Filter the results to blog posts based on their status. By default, `current` is used.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - current
+            - deleted
+            - trashed
+      - name: title
+        in: query
+        required: false
+        description: Filter the results to blog posts based on their title.
+        schema:
+          type: string
+      - name: body-format
+        in: query
+        description: The content format types to be returned in the `body` field of the response. If available, the representation will be available under a response field of the same name under the `body` field.
+        schema:
+          $ref: '#/components/schemas/PrimaryBodyRepresentation'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of blog posts per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested blog posts are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<BlogPost>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlogPostBulk_2'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/spaces/<id>/blogposts?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified space or the space was not found.'
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:page:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:page:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+    servers:
+    - url: https://{your-domain}/wiki/api/v2
+      variables:
+        your-domain:
+          default: no-default
+          description: Specific domain of the Confluence site being used. Must be provided.
 components:
   schemas:
-    Label:
+    Error:
       type: object
-      description: Represents a label applied to Confluence content.
+      description: Error response from the Confluence API.
       properties:
-        id:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
           type: string
-          description: The unique identifier of the label.
-          example: abc123
-        name:
+          description: A human-readable error message.
+          example: example_value
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
           type: string
-          description: The name of the label.
-          example: Example Title
-        prefix:
+          description: The name of the representation format.
+          example: example_value
+        value:
           type: string
-          description: The prefix of the label (global, my, team).
+          description: The body content in this representation.
           example: example_value
     Version:
       type: object
@@ -312,6 +604,17 @@ components:
           type: string
           description: The Atlassian account ID of the version author.
           example: '500123'
+    LabelArray:
+      type: object
+      description: A list of labels.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
     BlogPostUpdateRequest:
       type: object
       required:
@@ -340,27 +643,65 @@ components:
           $ref: '#/components/schemas/BodyWrite'
         version:
           $ref: '#/components/schemas/VersionWrite'
-    LabelArray:
+    ContentLinks:
       type: object
-      description: A list of labels.
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the content.
+          example: example_value
+    VersionWrite:
+      type: object
+      required:
+      - number
+      properties:
+        number:
+          type: integer
+          description: The new version number. Must be incremented by 1.
+          example: 10
+        message:
+          type: string
+          description: An optional message associated with this version.
+          example: example_value
+    BlogPostBulk:
+      type: object
+      description: A paginated list of blog posts.
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Label'
+            $ref: '#/components/schemas/BlogPost'
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-    Body:
+    Label:
       type: object
-      description: The body content in various representations.
+      description: Represents a label applied to Confluence content.
       properties:
-        storage:
-          $ref: '#/components/schemas/BodyRepresentation'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyRepresentation'
-        view:
-          $ref: '#/components/schemas/BodyRepresentation'
+        id:
+          type: string
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+          example: example_value
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
     BlogPostCreateRequest:
       type: object
       required:
@@ -386,24 +727,16 @@ components:
           example: Example Title
         body:
           $ref: '#/components/schemas/BodyWrite'
-    ContentLinks:
+    Body:
       type: object
+      description: The body content in various representations.
       properties:
-        webui:
-          type: string
-          description: Web UI link for the content.
-          example: example_value
-    BodyRepresentation:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: The name of the representation format.
-          example: example_value
-        value:
-          type: string
-          description: The body content in this representation.
-          example: example_value
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
     BlogPost:
       type: object
       description: Represents a Confluence blog post.
@@ -464,99 +797,306 @@ components:
           type: string
           description: The body content in the specified representation.
           example: example_value
-    Error:
+    BlogPostNestedBodyWrite:
       type: object
-      description: Error response from the Confluence API.
+      description: 'Body of the blog post. Only one body format should be specified as the property
+
+        for this object, e.g. `storage`.'
       properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
+        storage:
+          $ref: '#/components/schemas/BlogPostBodyWrite'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BlogPostBodyWrite'
+        wiki:
+          $ref: '#/components/schemas/BlogPostBodyWrite'
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Account ID.
+    PrimaryBodyRepresentationSingle:
+      enum:
+      - storage
+      - atlas_doc_format
+      - view
+      - export_view
+      - anonymous_export_view
+      - styled_view
+      - editor
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    Version_2:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
         message:
           type: string
-          description: A human-readable error message.
-          example: example_value
-    PaginationLinks:
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+    OptionalFieldMeta:
       type: object
-      description: Pagination links for cursor-based pagination.
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    BlogPostSingle:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the blog post.
+        status:
+          $ref: '#/components/schemas/BlogPostContentStatus'
+        title:
+          type: string
+          description: Title of the blog post.
+        spaceId:
+          type: string
+          description: ID of the space the blog post is in.
+        authorId:
+          type: string
+          description: The account ID of the user who created this blog post originally.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the blog post was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodySingle'
+        labels:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Label_2'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        properties:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/ContentProperty'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        operations:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        likes:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Like'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        versions:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Version_2'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        isFavoritedByCurrentUser:
+          type: boolean
+          description: Whether the blog post has been favorited by the current user.
+        _links:
+          $ref: '#/components/schemas/AbstractPageLinks'
+    Operation:
+      type: object
+      properties:
+        operation:
+          description: The type of operation.
+          type: string
+        targetType:
+          description: The type of entity the operation type targets.
+          type: string
+    BlogPostContentStatus:
+      enum:
+      - current
+      - draft
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    BodyBulk:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
+    MultiEntityLinks:
+      type: object
       properties:
         next:
           type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
         base:
           type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
-    VersionWrite:
+          description: Base url of the Confluence site.
+    BlogPostBulk_2:
       type: object
-      required:
-      - number
       properties:
-        number:
-          type: integer
-          description: The new version number. Must be incremented by 1.
-          example: 10
-        message:
+        id:
           type: string
-          description: An optional message associated with this version.
-          example: example_value
-    BlogPostBulk:
-      type: object
-      description: A paginated list of blog posts.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BlogPost'
-          example: []
+          description: ID of the blog post.
+        status:
+          $ref: '#/components/schemas/BlogPostContentStatus'
+        title:
+          type: string
+          description: Title of the blog post.
+        spaceId:
+          type: string
+          description: ID of the space the blog post is in.
+        authorId:
+          type: string
+          description: The account ID of the user who created this blog post originally.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the blog post was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
         _links:
-          $ref: '#/components/schemas/PaginationLinks'
+          $ref: '#/components/schemas/AbstractPageLinks'
+    BlogPostSortOrder:
+      enum:
+      - id
+      - -id
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for blog posts. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    PrimaryBodyRepresentation:
+      enum:
+      - storage
+      - atlas_doc_format
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    Label_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the label.
+        name:
+          type: string
+          description: Name of the label.
+        prefix:
+          type: string
+          description: Prefix of the label.
+    BodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    BlogPostBodyWrite:
+      type: object
+      properties:
+        representation:
+          enum:
+          - storage
+          - atlas_doc_format
+          - wiki
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the blog post, in the format found in the representation field.
+    AbstractPageLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        editui:
+          type: string
+          description: Edit UI link of the content.
+        tinyui:
+          type: string
+          description: Web UI link of the content.
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version_2'
   parameters:
-    VersionParam:
-      name: version
-      in: query
-      description: The version number of the content to retrieve.
-      schema:
-        type: integer
-        format: int32
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
     SortParam:
       name: sort
       in: query
@@ -578,14 +1118,49 @@ components:
       description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
       schema:
         type: string
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
+    StatusFilter:
+      name: status
+      in: query
+      description: Filter by content status.
+      schema:
+        type: string
+        enum:
+        - current
+        - archived
+        - draft
+        - trashed
+    TitleFilter:
+      name: title
+      in: query
+      description: Filter by content title. Supports exact match.
+      schema:
+        type: string
+    SpaceIdFilter:
+      name: space-id
+      in: query
+      description: Filter by space ID. Multiple IDs can be specified.
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int64
+    VersionParam:
+      name: version
+      in: query
+      description: The version number of the content to retrieve.
       schema:
         type: integer
-        format: int64
+        format: int32
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
     BodyFormatParam:
       name: body-format
       in: query
@@ -599,39 +1174,15 @@ components:
         - export_view
         - anonymous_export_view
         - editor
-    StatusFilter:
-      name: status
-      in: query
-      description: Filter by content status.
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
       schema:
-        type: string
-        enum:
-        - current
-        - archived
-        - draft
-        - trashed
-    SpaceIdFilter:
-      name: space-id
-      in: query
-      description: Filter by space ID. Multiple IDs can be specified.
-      schema:
-        type: array
-        items:
-          type: integer
-          format: int64
-    TitleFilter:
-      name: title
-      in: query
-      description: Filter by content title. Supports exact match.
-      schema:
-        type: string
+        type: integer
+        format: int64
   responses:
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Returned if the request is malformed or contains invalid parameters.
       content:
@@ -644,6 +1195,94 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  requestBodies:
+    BlogPostCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - spaceId
+            properties:
+              spaceId:
+                type: string
+                description: ID of the space
+              status:
+                enum:
+                - current
+                - draft
+                type: string
+                description: The status of the blog post, specifies if the blog post will be created as a new blog post or a draft
+              title:
+                type: string
+                description: Title of the blog post, required if creating non-draft.
+              body:
+                oneOf:
+                - $ref: '#/components/schemas/BlogPostBodyWrite'
+                - $ref: '#/components/schemas/BlogPostNestedBodyWrite'
+              createdAt:
+                type: string
+                description: Created date of the blog post in the format of "yyyy-MM-ddTHH:mm:ss.SSSZ".
+    BlogPostUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - id
+            - status
+            - title
+            - body
+            - version
+            properties:
+              id:
+                type: string
+                description: Id of the blog post.
+              status:
+                enum:
+                - current
+                - draft
+                type: string
+                description: 'The updated status of the blog post.
+
+
+                  Note, if you change the status of a blog post from ''current'' to ''draft'' and it has an existing draft, the existing draft will be deleted in favor of the updated draft.
+
+                  Additionally, this endpoint can be used to restore a ''trashed'' or ''deleted'' blog post to ''current'' status. For restoration, blog post contents will not be updated and only the blog post status will be changed.'
+              title:
+                type: string
+                description: Title of the blog post.
+              spaceId:
+                type: string
+                description: 'ID of the containing space.
+
+
+                  This currently **does not support moving the blog post to a different space**.'
+              body:
+                oneOf:
+                - $ref: '#/components/schemas/BlogPostBodyWrite'
+                - $ref: '#/components/schemas/BlogPostNestedBodyWrite'
+              version:
+                type: object
+                properties:
+                  number:
+                    format: int32
+                    type: integer
+                    description: "The new version number of the updated blog post. \nSet this to the current version number plus one, unless you are updating the status to 'draft' which requires a version number of 1.\n\nIf you don't know the current version number, use Get blog post by id."
+                  message:
+                    type: string
+                    description: An optional message to be stored with the version.
+              createdAt:
+                type: string
+                description: Created date of the blog post in the format of "yyyy-MM-ddTHH:mm:ss.SSSZ".
   securitySchemes:
     basicAuth:
       type: http
@@ -670,6 +1309,41 @@ components:
       type: http
       scheme: bearer
       description: Personal Access Token or OAuth 2.0 Bearer token.
-externalDocs:
-  description: Confluence Cloud REST API v2 Documentation
-  url: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+x-refined-from:
+- confluence-cloud-v2.yml
+- confluence-rest-v2-openapi.json

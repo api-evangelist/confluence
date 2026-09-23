@@ -1,0 +1,743 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST API v2 Space Roles API
+  description: This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+  termsOfService: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  version: 2.0.0
+servers:
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
+tags:
+- name: Space Roles
+  description: ''
+paths:
+  /space-roles:
+    get:
+      tags:
+      - Space Roles
+      operationId: getAvailableSpaceRoles
+      summary: Get available space roles
+      description: 'Retrieves the available space roles.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site; if requesting a certain space''s roles, permission to view the space.'
+      parameters:
+      - name: space-id
+        in: query
+        required: false
+        description: The space ID for which to filter available space roles; if empty, return all available space roles for the tenant.
+        schema:
+          type: string
+      - name: role-type
+        in: query
+        required: false
+        description: The space role type to filter results by.
+        schema:
+          type: string
+      - name: principal-id
+        in: query
+        required: false
+        description: The principal ID to filter results by. If specified, a principal-type must also be specified. Paired with a `principal-type` of `ACCESS_CLASS`, valid values include [`anonymous-users`, `jsm-project-admins`, `authenticated-users`, `all-licensed-users`, `all-product-admins`]
+        schema:
+          type: string
+      - name: principal-type
+        in: query
+        required: false
+        description: The principal type to filter results by. If specified, a principal-id must also be specified.
+        schema:
+          $ref: '#/components/schemas/PrincipalType'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of space roles to return. If more results exist, use the `Link` response header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested space roles are retrieved.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<SpaceRole>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SpaceRole'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            available space roles.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:space.permission:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:space.permission:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+    post:
+      tags:
+      - Space Roles
+      operationId: createSpaceRole
+      summary: Create a space role
+      description: 'Create a space role.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        User must be an organization or site admin. Connect and Forge app users are not authorized to access this resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              - spacePermissions
+              properties:
+                name:
+                  type: string
+                  description: Name of the space role
+                description:
+                  type: string
+                  description: Description for the space role
+                spacePermissions:
+                  type: array
+                  items:
+                    type: string
+                  description: The ids of the space permissions associated with the space role. Sample value "read/space"; retrieve ids from responses returned by [GET /space-permissions](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space-permissions/#api-space-permissions-get) endpoint
+        required: true
+      responses:
+        '201':
+          description: Returned if the requested space role is created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceRole'
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '404':
+          description: Returned if the calling user does not have permission to create space roles.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:configuration:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:configuration:confluence
+      x-atlassian-connect-scope: ADMIN
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+  /space-roles/{id}:
+    get:
+      tags:
+      - Space Roles
+      operationId: getSpaceRolesById
+      summary: Get space role by ID
+      description: 'Retrieves the space role by ID.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space role to retrieve.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested space role is retrieved.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/SpaceRole'
+                - type: object
+                  properties:
+                    _links:
+                      type: object
+                      properties:
+                        base:
+                          type: string
+                          description: Base url of the Confluence site.
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            space role.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:space.permission:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:space.permission:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+    put:
+      tags:
+      - Space Roles
+      operationId: updateSpaceRole
+      summary: Update a space role
+      description: 'Update a space role.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        User must be an organization or site admin. Connect and Forge app users are not authorized to access this resource.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Id of the space role
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              - spacePermissions
+              properties:
+                name:
+                  type: string
+                  description: Name of the space role
+                description:
+                  type: string
+                  description: Description for the space role
+                spacePermissions:
+                  type: array
+                  items:
+                    type: string
+                  description: The ids of the space permissions associated with the space role. Sample value "read/space"; retrieve ids from responses returned by [GET /space-permissions](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space-permissions/#api-space-permissions-get) endpoint
+                anonymousReassignmentRoleId:
+                  type: string
+                  description: If space anonymous access is assigned to the role being modified, the Id of a role to migrate those assignments to can be specified. Anonymous access role assignments left unchanged if unspecified.
+                guestReassignmentRoleId:
+                  type: string
+                  description: If guests are assigned to the role being modified, the Id of a role to migrate those assignments to can be specified. Guest role assignments left unchanged if unspecified.
+        required: true
+      responses:
+        '202':
+          description: Returned if the update of the space role was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSpaceRoleResponse'
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '404':
+          description: Returned if the calling user does not have permission to update space roles.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:configuration:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:configuration:confluence
+      x-atlassian-connect-scope: ADMIN
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+    delete:
+      tags:
+      - Space Roles
+      operationId: deleteSpaceRole
+      summary: Delete a space role
+      description: 'Delete a space role
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        User must be an organization or site admin. Connect and Forge app users are not authorized to access this resource.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Id of the space role
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Returned if the deletion of the space role was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSpaceRoleResponse'
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '404':
+          description: Returned if the calling user does not have permission to delete space roles.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:configuration:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:configuration:confluence
+      x-atlassian-connect-scope: ADMIN
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+  /space-role-mode:
+    get:
+      tags:
+      - Space Roles
+      operationId: getSpaceRoleMode
+      summary: Get space role mode
+      description: 'Retrieves the space role mode.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      responses:
+        '200':
+          description: Returned if the requested space role mode is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mode:
+                    type: string
+                    description: The space role mode.
+                    enum:
+                    - PRE_ROLES
+                    - ROLES_TRANSITION
+                    - ROLES
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing from the request.
+          content: {}
+        '404':
+          description: Returned if the calling user does not have permission to view the space role mode.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:configuration:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:configuration:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+  /spaces/{id}/role-assignments:
+    get:
+      tags:
+      - Space Roles
+      operationId: getSpaceRoleAssignments
+      summary: Get space role assignments
+      description: 'Retrieves the space role assignments.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        Permission to view the space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space for which to retrieve assignments.
+        schema:
+          type: integer
+      - name: role-id
+        in: query
+        required: false
+        description: Filters the returned role assignments to the provided role ID.
+        schema:
+          type: string
+      - name: role-type
+        in: query
+        required: false
+        description: Filters the returned role assignments to the provided role type.
+        schema:
+          type: string
+      - name: principal-id
+        in: query
+        required: false
+        description: Filters the returned role assignments to the provided principal id. If specified, a principal-type must also be specified. Paired with a `principal-type` of `ACCESS_CLASS`, valid values include [`anonymous-users`, `jsm-project-admins`, `authenticated-users`, `all-licensed-users`, `all-product-admins`]
+        schema:
+          type: string
+      - name: principal-type
+        in: query
+        required: false
+        description: Filters the returned role assignments to the provided principal type. If specified, a principal-id must also be specified.
+        schema:
+          $ref: '#/components/schemas/PrincipalType'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of space roles to return. If more results exist, use the `Link` response header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested space role assignments are retrieved.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<SpaceRoleAssignment>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SpaceRoleAssignment'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            space or the space was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:space.permission:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:space.permission:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+    post:
+      tags:
+      - Space Roles
+      operationId: setSpaceRoleAssignments
+      summary: Set space role assignments
+      description: 'Sets space role assignments as specified in the payload. For each entry, if `roleId` is provided
+
+        the principal is assigned to that role. If `roleId` is omitted, the role assignment for that principal is removed, if it exists.
+
+
+        Available on tenants with Role-Based Access Control.
+
+
+        **Permissions required**:
+
+        Permission to manage roles in the space.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the space for which to retrieve assignments.
+        schema:
+          type: integer
+      requestBody:
+        $ref: '#/components/requestBodies/SetSpaceRoleAssignmentRequest'
+      responses:
+        '200':
+          description: Returned if the requested update to space role assignments succeeds in its entirety.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<SpaceRoleAssignment>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SpaceRoleAssignment'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: Returned if the calling user does not have permission to set roles in the space, or the space was not found.
+          content: {}
+        '413':
+          description: Returned if the request is too large in size (over 5 MB).
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:space.permission:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:space.permission:confluence
+      x-atlassian-connect-scope: SPACE_ADMIN
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+components:
+  schemas:
+    RoleType:
+      type: string
+      description: The role type.
+      enum:
+      - SYSTEM
+      - CUSTOM
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    UpdateSpaceRoleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the space role
+        type:
+          $ref: '#/components/schemas/RoleType'
+        name:
+          type: string
+          description: Name of the space role
+        description:
+          type: string
+          description: Description for the space role
+        taskId:
+          type: string
+          description: Id of the task to update the space permissions associated with the space role
+    PrincipalType:
+      type: string
+      description: The principal type.
+      enum:
+      - USER
+      - GROUP
+      - ACCESS_CLASS
+    SpaceRole:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier for the space role.
+        type:
+          $ref: '#/components/schemas/RoleType'
+        name:
+          type: string
+          description: The name for the space role.
+        description:
+          type: string
+          description: The description for the space role’s usage.
+        spacePermissions:
+          type: array
+          items:
+            type: string
+          description: The space permissions the space role is comprised of.
+    DeleteSpaceRoleResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+          description: Id of the task to update the space permissions associated with the space role
+    SpaceRoleAssignment:
+      type: object
+      properties:
+        principal:
+          $ref: '#/components/schemas/Principal'
+        roleId:
+          type: string
+          description: The role to which the principal is assigned.
+    Principal:
+      type: object
+      description: The principal of the role assignment.
+      properties:
+        principalType:
+          $ref: '#/components/schemas/PrincipalType'
+        principalId:
+          type: string
+          description: The principal ID.
+  requestBodies:
+    SetSpaceRoleAssignmentRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+              - principal
+              properties:
+                principal:
+                  $ref: '#/components/schemas/Principal'
+                roleId:
+                  type: string
+                  description: The role to which the principal is assigned.
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: This is the reference for the Confluence Cloud REST API v2, with definitions and performance intended to be an improvement over v1. You can click on the meatball menu in the upper right to download the spec or Postman collection.
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or Oauth 2.0, depending on what you''re building (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Using the REST API
+    anchor: using
+    body: "**Pagination:** The Confluence REST API v2 uses cursor-based pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.\n\nUse the 'limit' and 'cursor' parameters on endpoints that return multiple objects to work with pagination. First, make a request with your desired limit in the 'limit' parameter, then observe the `Link` header in the response. If there are additional entities to be retrieved, the `next` URL in the `Link` header will allow you to retrieve the next set of results. This relative URL will also be available under the `_links.next` property of paginated responses. \n\nFor example, the following request will return 5 page objects (if there are 5 present in the target site).\n```\nGET /wiki/api/v2/pages?limit=5\n```\n\nIf there are additional pages available, the `Link` header will look like:\n```\n</wiki/api/v2/pages?limit=5&cursor=<cursor token>>; rel=\"next\"\n```\nThe URL within the `Link` header will allow you to access the next 5 pages, while the `rel=\"next\"` denotes that the URL refers to the \"next\" set of pages. Relations for a single URL are separated by semicolons (;) and URLs are separated by commas (,)\nIf there are no related URLs, the `Link` header will not be present in the response and neither will the `next` property for `_links` in the response body."

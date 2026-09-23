@@ -1,0 +1,283 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST API v2 Redactions API
+  description: This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+  termsOfService: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  version: 2.0.0
+servers:
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
+tags:
+- name: Redactions
+  description: ''
+paths:
+  /pages/{id}/redact:
+    post:
+      tags:
+      - Redactions
+      operationId: postRedactPage
+      summary: Redact Content in a Confluence Page
+      description: 'Redacts sensitive content in a Confluence page by replacing specified text ranges with redaction markers.
+
+        Each redaction in the response includes a unique UUID for restoration (except code block redactions).
+
+        The response metadata items maintain the same order as the input redaction pointers, and completely
+
+        overlapping redactions are merged into a single redaction with one UUID.
+
+
+        **Note**: This endpoint requires **Atlassian Guard Premium**.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the page to redact content from.
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      requestBody:
+        $ref: '#/components/requestBodies/RedactionRequest'
+      responses:
+        '202':
+          description: Redaction Accepted. The response contains details about the redactions that were applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedactionResponse'
+        '400':
+          description: "Invalid request. This can be thrown if \n- createdAt field is out of date\n- JSON pointers are invalid"
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:page:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:page:confluence
+      x-atlassian-connect-scope: WRITE
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /blogposts/{id}/redact:
+    post:
+      tags:
+      - Redactions
+      operationId: postRedactBlog
+      summary: Redact Content in a Confluence Blog Post
+      description: 'Redacts sensitive content in a Confluence blog post by replacing specified text ranges with redaction markers.
+
+        Each redaction in the response includes a unique UUID for restoration (except code block redactions).
+
+        The response metadata items maintain the same order as the input redaction pointers, and completely
+
+        overlapping redactions are merged into a single redaction with one UUID.
+
+
+        **Note**: This endpoint requires **Atlassian Guard Premium**.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the blog post to redact content from.
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      requestBody:
+        $ref: '#/components/requestBodies/RedactionRequest'
+      responses:
+        '202':
+          description: Redaction Accepted. The response contains details about the redactions that were applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedactionResponse'
+        '400':
+          description: "Invalid request. This can be thrown if \n- createdAt field is out of date\n- JSON pointers are invalid"
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - write:page:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - write:page:confluence
+      x-atlassian-connect-scope: WRITE
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+components:
+  schemas:
+    RedactionSectionResponse:
+      type: object
+      properties:
+        redactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedactionPointerResponse'
+          description: List of redactions that were applied to this section
+    RedactionResponse:
+      type: object
+      properties:
+        body:
+          $ref: '#/components/schemas/RedactionSectionResponse'
+        title:
+          $ref: '#/components/schemas/RedactionSectionResponse'
+      description: 'Response containing details of all redactions that were applied to the content.
+
+        Each redaction includes a unique ID for restoration, except that code block redactions cannot be restored.
+
+        '
+    RedactionPointerResponse:
+      type: object
+      properties:
+        pointer:
+          type: string
+          description: JSON pointer indicating where the redaction was applied
+        from:
+          type: integer
+          description: Starting character index where redaction was applied
+        to:
+          type: integer
+          description: Ending character index where redaction was applied
+        reason:
+          type: string
+          description: Reason for the redaction
+        redactionId:
+          type: string
+          format: uuid
+          description: 'Unique identifier for this redaction. Can be used to restore the redacted content later.
+
+            '
+    RedactionPointer:
+      type: object
+      required:
+      - pointer
+      properties:
+        pointer:
+          type: string
+          description: "JSON pointer indicating the exact location within the content structure \nwhere redaction should be applied. Points to the text node containing the content to redact.\n"
+        from:
+          type: integer
+          minimum: 0
+          description: 'Starting character index (zero-based) within the target text where redaction begins.
+
+            '
+        to:
+          type: integer
+          minimum: 0
+          description: 'Ending character index (zero-based) within the target text where redaction ends (exclusive).
+
+            Must be greater than or equal to ''from'' value.
+
+            '
+        reason:
+          type:
+          - string
+          - 'null'
+          description: 'Optional human-readable reason for the redaction. Used for audit trails and compliance documentation.
+
+            '
+  requestBodies:
+    RedactionRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - createdAt
+            properties:
+              createdAt:
+                type: string
+                format: date-time
+                description: Timestamp when the content was last updated.
+              cleanHistory:
+                type:
+                - boolean
+                - 'null'
+                description: Whether to clean up previous versions containing the redaction. When true, historical versions of the content that contain the redacted text will be squashed.
+              versionNumber:
+                type:
+                - integer
+                - 'null'
+                format: int32
+                minimum: 1
+                description: "Optional version number of the content to redact. When specified, the redaction will target \na specific historical version of the content rather than the current version.\n\n- If omitted or null, the redaction applies to the current (latest) version of the content.\n- When provided, must be a valid version number that exists for the content.\n\n**Note**: Version numbers start at 1 and increment with each content update.\n"
+              body:
+                type: object
+                properties:
+                  redactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RedactionPointer'
+              title:
+                type: object
+                properties:
+                  redactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RedactionPointer'
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: This is the reference for the Confluence Cloud REST API v2, with definitions and performance intended to be an improvement over v1. You can click on the meatball menu in the upper right to download the spec or Postman collection.
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or Oauth 2.0, depending on what you''re building (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Using the REST API
+    anchor: using
+    body: "**Pagination:** The Confluence REST API v2 uses cursor-based pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.\n\nUse the 'limit' and 'cursor' parameters on endpoints that return multiple objects to work with pagination. First, make a request with your desired limit in the 'limit' parameter, then observe the `Link` header in the response. If there are additional entities to be retrieved, the `next` URL in the `Link` header will allow you to retrieve the next set of results. This relative URL will also be available under the `_links.next` property of paginated responses. \n\nFor example, the following request will return 5 page objects (if there are 5 present in the target site).\n```\nGET /wiki/api/v2/pages?limit=5\n```\n\nIf there are additional pages available, the `Link` header will look like:\n```\n</wiki/api/v2/pages?limit=5&cursor=<cursor token>>; rel=\"next\"\n```\nThe URL within the `Link` header will allow you to access the next 5 pages, while the `rel=\"next\"` denotes that the URL refers to the \"next\" set of pages. Relations for a single URL are separated by semicolons (;) and URLs are separated by commas (,)\nIf there are no related URLs, the `Link` header will not be present in the response and neither will the `next` property for `_links` in the response body."

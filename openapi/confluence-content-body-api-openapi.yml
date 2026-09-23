@@ -1,0 +1,798 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST Content body API
+  description: This document describes the REST API and resources provided by Confluence.
+  termsOfService: https://atlassian.com/terms/
+  version: 1.0.0
+servers:
+- url: //your-domain.atlassian.net
+tags:
+- name: Content Body
+  description: ''
+paths:
+  /wiki/rest/api/contentbody/convert/async/{to}:
+    post:
+      tags:
+      - Content Body
+      summary: Asynchronously convert content body
+      description: 'Converts a content body from one format to another format asynchronously.
+
+        Returns the asyncId for the asynchronous task.
+
+
+        Supported conversions:
+
+
+        - atlas_doc_format: editor, export_view, storage, styled_view, view
+
+        - storage: atlas_doc_format, editor, export_view, styled_view, view
+
+        - editor: storage
+
+
+        No other conversions are supported at the moment.
+
+        Once a conversion is completed, it will be available for 5 minutes at the result endpoint.
+
+
+        **Permissions required**:
+
+        If request specifies ''contentIdContext'', ''View'' permission for the space, and permission to view the content.'
+      operationId: asyncConvertContentBodyRequest
+      parameters:
+      - name: to
+        in: path
+        description: The name of the target format for the content body.
+        required: true
+        schema:
+          type: string
+          enum:
+          - export_view
+      - $ref: '#/components/parameters/bodyConversionExpand'
+      - name: spaceKeyContext
+        in: query
+        description: 'The space key used for resolving embedded content (page includes,
+
+          files, and links) in the content body. For example, if the source content
+
+          contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>`
+
+          and the `spaceKeyContext=TEST` parameter is provided, then the link
+
+          will be converted to a link to the "Example page" page in the "TEST" space.'
+        schema:
+          type: string
+      - name: contentIdContext
+        in: query
+        description: 'The content ID used to find the space for resolving embedded content
+
+          (page includes, files, and links) in the content body. For example,
+
+          if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>`
+
+          and the `contentIdContext=123` parameter is provided, then the link
+
+          will be converted to a link to the "Example page" page in the same space
+
+          that has the content with ID=123. Note, `spaceKeyContext` will be ignored
+
+          if this parameter is provided.'
+        schema:
+          type: string
+      - name: allowCache
+        in: query
+        description: "Controls whether conversion results are cached and reused for identical requests.\n\n- `false`: Each request creates a new conversion task, even if an identical request was made previously.\n- `true`: Enables caching behavior for identical requests from the same user.\n  - If no cached result exists, a new conversion task is created\n  - If a cached result exists, the existing task is marked as RERUNNING and will complete with status COMPLETED\n  - Returns the same task ID for identical requests, allowing you to retrieve the cached result"
+        schema:
+          type: boolean
+          default: false
+      - name: embeddedContentRender
+        in: query
+        description: 'Mode used for rendering embedded content, like attachments.
+
+
+          - `current` renders the embedded content using the latest version.
+
+          - `version-at-save` renders the embedded content using the version at
+
+          the time of save.'
+        schema:
+          type: string
+          default: current
+          enum:
+          - current
+          - version-at-save
+      requestBody:
+        description: The content body to convert.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentBodyCreate'
+        required: true
+      responses:
+        '200':
+          description: Returned if the content is added to the messaging queue for conversion. This id will be available for 5 minutes after the conversion is complete.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncId'
+        '400':
+          description: 'Returned
+
+            - if the content body or conversion context is invalid or null
+
+            - if the value is improperly formed
+
+            - any conversion type other than export_view'
+          content: {}
+        '404':
+          description: Returned if content cannot be found with the provided context.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:confluence-content.all
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:confluence-content.all
+      - scheme: oAuthDefinitions
+        state: Beta
+        scopes:
+        - read:content.metadata:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-codegen-request-body-name: body
+      x-atlassian-connect-scope: READ
+  /wiki/rest/api/contentbody/convert/async/{id}:
+    get:
+      tags:
+      - Content Body
+      summary: Get asynchronously converted content body from the id or the current status of…
+      description: 'Returns the content body for the corresponding `asyncId` of a completed conversion task. If
+
+        the task is not completed, the task status is returned instead.
+
+
+        Once a conversion task is completed, the result can be obtained for up to 5 minutes, or
+
+        until an identical conversion request is made again with the `allowCache` parameter set to
+
+        false.
+
+
+        **Permissions required**:
+
+        If request specifies ''contentIdContext'', ''View'' permission for the space, and permission to view the content.'
+      operationId: asyncConvertContentBodyResponse
+      parameters:
+      - name: id
+        in: path
+        description: The asyncId of the macro task to get the converted body.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returned if successfully found an async conversion task associated with the id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncContentBody'
+        '400':
+          description: Returned if the async id is invalid.
+          content: {}
+        '401':
+          description: Returned if the request was not made by an anonymous user and user is not authenticated.
+          content: {}
+        '403':
+          description: Returned if the requesting user is not the user who made the conversion request.
+          content: {}
+        '404':
+          description: Returned if async macro conversion task cannot be found with the provided id.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:confluence-content.all
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:confluence-content.all
+      - scheme: oAuthDefinitions
+        state: Beta
+        scopes:
+        - read:content.metadata:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-codegen-request-body-name: body
+      x-atlassian-connect-scope: INACCESSIBLE
+  /wiki/rest/api/contentbody/convert/async/bulk/tasks:
+    post:
+      tags:
+      - Content Body
+      summary: Create asynchronous content body conversion tasks in bulk
+      description: 'Asynchronously converts content bodies from one format to another format in bulk. Use the Content body
+
+        REST API to get the status of conversion tasks. Note that there is a maximum limit of 10 conversions per
+
+        request to this endpoint.
+
+
+        Supported conversions:
+
+
+        - storage: editor, export_view, styled_view, view
+
+        - editor: storage
+
+
+        Once a conversion task is completed, it is available for polling for up to 5 minutes.
+
+
+        **Permissions required**:
+
+        ''View'' permission for the space, and permission to view the content if the `spaceKeyContext` or
+
+        `contentIdContext` are present.'
+      operationId: bulkAsyncConvertContentBodyRequest
+      requestBody:
+        description: An array of parameters to create content body conversion tasks.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkContentBodyConversionInput'
+        required: true
+      responses:
+        '200':
+          description: Returned if asynchronous tasks are created to convert content bodies. If a conversion task fails to be created, a “FAILED_TO_QUEUE” string will be returned instead of an asyncId.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncIdArray'
+        '400':
+          description: Returned if there are more than 10 conversions requested.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:confluence-content.all
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:confluence-content.all
+      - scheme: oAuthDefinitions
+        state: Beta
+        scopes:
+        - read:content.metadata:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-codegen-request-body-name: body
+      x-atlassian-connect-scope: READ
+    get:
+      tags:
+      - Content Body
+      summary: Get asynchronous content body conversion task result in bulk
+      description: 'Returns the content body for the corresponding `asyncId` of a completed conversion task. If
+
+        the task is not completed, the task status is returned instead.
+
+
+        Once a conversion task is completed, the result can be obtained for up to 5 minutes, or
+
+        until an identical conversion request is made again with the `allowCache` parameter set to
+
+        false.
+
+
+        Note that there is a maximum limit of 50 task results per request to this endpoint.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: bulkAsyncConvertContentBodyResponse
+      parameters:
+      - name: ids
+        in: query
+        description: The asyncIds of the conversion tasks.
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Returned if asynchronous conversion tasks are successfully found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncContentBodyArray'
+        '400':
+          description: Returned if there are more than 50 results requested.
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:confluence-content.all
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:confluence-content.all
+      - scheme: oAuthDefinitions
+        state: Beta
+        scopes:
+        - read:content.metadata:confluence
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-codegen-request-body-name: body
+      x-atlassian-connect-scope: INACCESSIBLE
+components:
+  schemas:
+    AsyncId:
+      required:
+      - asyncId
+      type: object
+      properties:
+        asyncId:
+          type: string
+    BulkContentBodyConversionInput:
+      type: object
+      properties:
+        conversionInputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBodyConversionInput'
+    AsyncIdArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/AsyncId'
+    ContentBodyCreate:
+      required:
+      - representation
+      - value
+      type: object
+      additionalProperties: true
+      properties:
+        value:
+          type: string
+          description: The body of the content in the relevant format.
+        representation:
+          type: string
+          description: 'The content format type. Set the value of this property to
+
+            the name of the format being used, e.g. ''storage''.'
+          enum:
+          - view
+          - export_view
+          - styled_view
+          - storage
+          - editor
+          - editor2
+          - anonymous_export_view
+          - wiki
+          - atlas_doc_format
+          - plain
+          - raw
+      description: This object is used when creating or updating content.
+    EmbeddedContent:
+      type: object
+      additionalProperties: true
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        entityType:
+          type: string
+        entity:
+          $ref: '#/components/schemas/Embeddable'
+    SuperBatchWebResources:
+      type: object
+      properties:
+        uris:
+          type: object
+          properties:
+            all:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            css:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            js:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+        tags:
+          type: object
+          properties:
+            all:
+              type: string
+            css:
+              type: string
+            data:
+              type: string
+            js:
+              type: string
+        metatags:
+          type: string
+        _expandable:
+          type: object
+          additionalProperties: true
+    WebResourceDependencies:
+      type: object
+      properties:
+        _expandable:
+          type: object
+          additionalProperties: true
+          properties:
+            uris:
+              oneOf:
+              - type: string
+              - type: object
+                additionalProperties: true
+        keys:
+          type: array
+          items:
+            type: string
+        contexts:
+          type: array
+          items:
+            type: string
+        uris:
+          type: object
+          properties:
+            all:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            css:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            js:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            _expandable:
+              type: object
+              additionalProperties: true
+              properties:
+                css:
+                  oneOf:
+                  - type: array
+                    items:
+                      type: string
+                  - type: string
+                js:
+                  oneOf:
+                  - type: array
+                    items:
+                      type: string
+                  - type: string
+        tags:
+          type: object
+          properties:
+            all:
+              type: string
+            css:
+              type: string
+            data:
+              type: string
+            js:
+              type: string
+            _expandable:
+              type: object
+              additionalProperties: true
+        superbatch:
+          $ref: '#/components/schemas/SuperBatchWebResources'
+    ContentBodyConversionInput:
+      required:
+      - to
+      - body
+      type: object
+      properties:
+        to:
+          type: string
+          description: The name of the target format for the content body conversion.
+        allowCache:
+          type: boolean
+          description: "Controls whether conversion results are cached and reused for identical requests.\n\n- `false`: Each request creates a new conversion task, even if an identical request was made previously.\n- `true`: Enables caching behavior for identical requests from the same user.\n  - If no cached result exists, a new conversion task is created\n  - If a cached result exists, the existing task is marked as RERUNNING and will complete with status COMPLETED\n  - Returns the same task ID for identical requests, allowing you to retrieve the cached result"
+          default: false
+        spaceKeyContext:
+          type: string
+          description: The space key used for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>` and the `spaceKeyContext=TEST` parameter is provided, then the link will be converted into a link to the "Example page" page in the "TEST" space.
+        contentIdContext:
+          type: string
+          description: The content ID used to find the space for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>` and the `contentIdContext=123` parameter is provided, then the link will be converted into a link to the "Example page" page in the same space that has the content with ID=123. Note that `spaceKeyContext` will be ignored if this parameter is provided.
+        embeddedContentRender:
+          type: string
+          description: Mode used for rendering embedded content, such as attachments. - `current` renders the embedded content using the latest version. - `version-at-save` renders the embedded content using the version at the time of save.
+          default: current
+          enum:
+          - current
+          - version-at-save
+        expand:
+          type: array
+          items:
+            type: string
+          description: "A multi-value, comma-separated parameter indicating which properties of the content to expand and populate. Expands are dependent\non the `to` conversion format and may be irrelevant for certain conversions (e.g. `macroRenderedOutput` is redundant when\nconverting to `view` format). \n\nIf rendering to `view` format, and the body content being converted includes arbitrary nested content (such as macros); then it is \nnecessary to include webresource expands in the request. Webresources for content body are the batched JS and CSS dependencies for\nany nested dynamic content (i.e. macros).\n\n- `embeddedContent` returns metadata for nested content (e.g. page included using page include macro)\n- `mediaToken` returns JWT token for retrieving attachment data from Media API\n- `macroRenderedOutput` additionally converts body to view format\n- `webresource.superbatch.uris.js` returns all common JS dependencies as static URLs\n- `webresource.superbatch.uris.css` returns all common CSS dependencies as static URLs\n- `webresource.superbatch.uris.all` returns all common dependencies as static URLs\n- `webresource.superbatch.tags.all` returns all common JS dependencies as html `<script>` tags\n- `webresource.superbatch.tags.css` returns all common CSS dependencies as html `<style>` tags\n- `webresource.superbatch.tags.js` returns all common dependencies as html `<script>` and `<style>` tags\n- `webresource.uris.js` returns JS dependencies specific to conversion\n- `webresource.uris.css` returns CSS dependencies specific to conversion\n- `webresource.uris.all` returns all dependencies specific to conversion     \n- `webresource.tags.all` returns common JS dependencies as html `<script>` tags\n- `webresource.tags.css` returns common CSS dependencies as html `<style>` tags\n- `webresource.tags.js` returns common dependencies as html `<script>` and `<style>` tags"
+        body:
+          $ref: '#/components/schemas/ContentBodyCreate'
+    AsyncContentBodyArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/AsyncContentBody'
+    AsyncContentBody:
+      type: object
+      properties:
+        value:
+          type: string
+        representation:
+          type: string
+          enum:
+          - view
+          - export_view
+          - styled_view
+          - storage
+          - editor
+          - editor2
+          - anonymous_export_view
+          - wiki
+          - atlas_doc_format
+        renderTaskId:
+          type: string
+        error:
+          type: string
+        status:
+          description: Rerunning is reserved for when the job is working, but there is a previous run's value in the cache. You may choose to continue polling, or use the cached value.
+          type: string
+          enum:
+          - WORKING
+          - QUEUED
+          - FAILED
+          - COMPLETED
+          - RERUNNING
+        embeddedContent:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmbeddedContent'
+        webresource:
+          $ref: '#/components/schemas/WebResourceDependencies'
+        mediaToken:
+          type: object
+          properties:
+            collectionIds:
+              type: array
+              items:
+                type: string
+            contentId:
+              type: string
+            expiryDateTime:
+              type: string
+            fileIds:
+              type: array
+              items:
+                type: string
+            token:
+              type: string
+        _expandable:
+          type: object
+          properties:
+            content:
+              type: string
+            embeddedContent:
+              type: string
+            webresource:
+              type: string
+            mediaToken:
+              type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    Embeddable:
+      type: object
+      additionalProperties: true
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+  parameters:
+    bodyConversionExpand:
+      name: expand
+      in: query
+      description: "A multi-value parameter indicating which properties of the content to expand and populate. Expands are dependent on the\n`to` conversion format and may be irrelevant for certain conversions (e.g. `macroRenderedOutput` is redundant when\nconverting to `view` format). \n\nIf rendering to `view` format, and the body content being converted includes arbitrary nested content (such as macros); then it is \nnecessary to include webresource expands in the request. Webresources for content body are the batched JS and CSS dependencies for\nany nested dynamic content (i.e. macros).\n\n- `embeddedContent` returns metadata for nested content (e.g. page included using page include macro)\n- `mediaToken` returns JWT token for retrieving attachment data from Media API\n- `macroRenderedOutput` additionally converts body to view format\n- `webresource.superbatch.uris.js` returns all common JS dependencies as static URLs\n- `webresource.superbatch.uris.css` returns all common CSS dependencies as static URLs\n- `webresource.superbatch.uris.all` returns all common dependencies as static URLs\n- `webresource.superbatch.tags.all` returns all common JS dependencies as html `<script>` tags\n- `webresource.superbatch.tags.css` returns all common CSS dependencies as html `<style>` tags\n- `webresource.superbatch.tags.js` returns all common dependencies as html `<script>` and `<style>` tags\n- `webresource.uris.js` returns JS dependencies specific to conversion\n- `webresource.uris.css` returns CSS dependencies specific to conversion\n- `webresource.uris.all` returns all dependencies specific to conversion     \n- `webresource.tags.all` returns common JS dependencies as html `<script>` tags\n- `webresource.tags.css` returns common CSS dependencies as html `<style>` tags\n- `webresource.tags.js` returns common dependencies as html `<script>` and `<style>` tags"
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: Read all content, including content body (expansions permitted). Note, APIs using this scope may also return data allowed by read:confluence-space.summary. However, this scope is not a substitute for read:confluence-space.summary.
+            read:confluence-content.permission: Read content permissions.
+            read:confluence-content.summary: Read a summary of the content, which is the content without expansions. Note, APIs using this scope may also return data allowed by read:confluence-space.summary. However, this scope is not a substitute for read:confluence-space.summary.
+            write:confluence-content: Permits the creation of pages, blogs, comments and questions.
+            read:confluence-space.summary: Read a summary of space information without expansions.
+            write:confluence-space: Create, update and delete space information.
+            write:confluence-file: Upload attachments.
+            read:confluence-props: Read content properties.
+            write:confluence-props: Write content properties.
+            search:confluence: Search Confluence. Note, APIs using this scope may also return data allowed by read:confluence-space.summary and read:confluence-content.summary. However, this scope is not a substitute for read:confluence-space.summary or read:confluence-content.summary.
+            manage:confluence-configuration: Manage global settings.
+            read:confluence-groups: Read user groups.
+            write:confluence-groups: Create, remove and update user groups.
+            read:confluence-user: Read users.
+            readonly:content.attachment:confluence: Download attachments of a Confluence page or blogpost that you have access to.
+            read:content:confluence: View content.
+            read:content-details:confluence: View content details.
+            write:content:confluence: Create and update content.
+            delete:content:confluence: Delete content.
+            read:space-details:confluence: View space details.
+            read:analytics.content:confluence: View analytics for content.
+            read:audit-log:confluence: View audit records.
+            write:audit-log:confluence: Create audit records.
+            read:configuration:confluence: View Confluence settings.
+            write:configuration:confluence: Update Confluence settings.
+            read:page:confluence: View pages.
+            write:page:confluence: Create and update pages.
+            delete:page:confluence: Delete pages.
+            read:blogpost:confluence: View blogposts.
+            write:blogpost:confluence: Create and update blogposts.
+            delete:blogpost:confluence: Delete blogposts.
+            read:whiteboard:confluence: View whiteboards.
+            write:whiteboard:confluence: Create and update whiteboards.
+            delete:whiteboard:confluence: Delete whiteboards.
+            read:custom-content:confluence: View custom content.
+            write:custom-content:confluence: Create and update custom content.
+            delete:custom-content:confluence: Delete custom content.
+            read:attachment:confluence: View and download content attachments.
+            write:attachment:confluence: Create and update attachments.
+            delete:attachment:confluence: Delete attachments.
+            read:comment:confluence: View comments.
+            write:comment:confluence: Create and update comments.
+            delete:comment:confluence: Delete comments.
+            read:template:confluence: View content templates.
+            write:template:confluence: Create, update and delete content templates.
+            read:label:confluence: View labels.
+            write:label:confluence: Add and remove labels.
+            read:content.permission:confluence: Check content permissions.
+            read:content.property:confluence: View content properties.
+            write:content.property:confluence: Create, update and delete content properties.
+            read:content.restriction:confluence: View content restrictions.
+            write:content.restriction:confluence: Update content restrictions.
+            read:content.metadata:confluence: View content summaries.
+            read:watcher:confluence: View content watchers.
+            write:watcher:confluence: Add and remove content watchers.
+            read:group:confluence: View groups.
+            write:group:confluence: Create and delete groups.
+            read:inlinetask:confluence: View tasks.
+            write:inlinetask:confluence: Update tasks.
+            read:relation:confluence: View entity relationships.
+            write:relation:confluence: Create and update entity relationships.
+            read:space:confluence: View spaces.
+            write:space:confluence: Create and update spaces.
+            delete:space:confluence: Delete spaces.
+            read:space.permission:confluence: View space permissions.
+            write:space.permission:confluence: Update space permissions.
+            read:space.property:confluence: View space properties.
+            write:space.property:confluence: Create, update and delete space properties.
+            read:user.property:confluence: View user properties.
+            write:user.property:confluence: Create, update and delete user properties.
+            read:space.setting:confluence: View space settings.
+            write:space.setting:confluence: Update space settings.
+            read:user:confluence: View user details.
+            moderate:core-content:confluence: Moderate core contents
+            moderate:comment:confluence: Moderate comments
+            read:email-address:confluence: View email addresses of all users regardless of the user’s profile visibility settings.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: 'This is the reference for the Confluence Cloud REST API. This API is the primary way to get and
+
+      modify data in Confluence Cloud, whether you are developing an app or any other integration.
+
+      Use it to interact with Confluence entities, like pages and blog posts, spaces, users, groups,
+
+      and more.'
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or OAuth 2.0, depending on what you are building (see [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Status codes
+    anchor: status-code
+    body: "The Confluence REST API uses the [standard HTTP status codes](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html).\n\nResponses that return an error status code will also return a response body, similar to the following:\n```json\n{\n  \"statusCode\": 404,\n  \"data\": {\n    \"authorized\": false,\n    \"valid\": false,\n    \"errors\": [\n      {\n        \"message\": {\n          \"translation\": \"This is an example error message.\",\n          \"args\": []\n        }\n      }\n    ],\n    \"successful\": false\n  },\n  \"message\": \"This is an example error message.\"\n}\n```"
+  - title: Using the REST API
+    anchor: using
+    body: '**Expansion:** The Confluence REST API uses resource expansion: some parts of a resource are not returned unless explicitly specified. This simplifies responses and minimizes network traffic.
+
+
+      To expand part of a resource in a request, use the `expand` query parameter and specify the entities to be expanded. If you need to expand nested entities, use the `.` dot notation. For example, the following request will expand information about the requested content''s space and labels:
+
+      ```
+
+      GET /wiki/rest/api/content/{id}?expand=space,metadata.labels
+
+      ```
+
+
+      For bulk endpoints, when using the expand query parameter to request `body.export_view` and/or `body.styled_view` content representations, the response will be limited to a maximum of 25 results. If you require more than 25 results, use pagination to retrieve additional results.
+
+
+      **Pagination:** The Confluence REST API uses pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.
+
+
+      Use the ''limit'' and ''start'' query parameters to specify pagination:
+
+
+      - `limit` is the number of objects to return per page. This may be restricted by system limits.
+
+      - `start` is the index of the first item returned in the page of results. The base index is 0.
+
+
+      For example, the following request will return ten content objects, starting from the fifth object.
+
+      ```
+
+      GET /wiki/rest/api/content?start=4&limit=10
+
+      ```
+
+      **Special headers:**
+
+
+      - `X-Atlassian-Token: no-check` request header must be specified for methods
+
+      that are protected from Cross Site Request Forgery (XSRF/CSRF) attacks. This is
+
+      stated in the method description, if required. For more information, see this
+
+      [KB article](https://confluence.atlassian.com/cloudkb/xsrf-check-failed-when-calling-cloud-apis-826874382.html).'
+  - title: Capabilities
+    anchor: capabilities
+    body: '**Webhooks:** A webhook is a user-defined callback over HTTP. You can use Confluence webhooks to notify your app or web application when certain events occur in Confluence. For example, when a page is created or updated. To learn more, see [Webhooks](https://developer.atlassian.com/cloud/confluence/modules/webhook/).
+
+
+      **Content properties:** Content properties are a key-value storage associated with a piece of Confluence content. If you are building an app, this is one form of persistence that you can use. You can use the Confluence REST API to get, update, and delete content properties. To learn more, see [Content properties in the REST API](https://developer.atlassian.com/cloud/confluence/content-properties/).
+
+
+      **CQL:** The Confluence Query Language (CQL) allows you to perform complex searches for content using an SQL-like syntax in the `search` resource. To learn more, see [Advanced searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).'

@@ -1,0 +1,982 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST API v2 Children API
+  description: This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+  termsOfService: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  version: 2.0.0
+servers:
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
+tags:
+- name: Children
+  description: ''
+paths:
+  /whiteboards/{id}/direct-children:
+    get:
+      tags:
+      - Children
+      operationId: getWhiteboardDirectChildren
+      summary: Get direct children of a whiteboard
+      description: 'Returns all children for given whiteboard id in the content tree. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each child. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only content that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent whiteboard.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ContentSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested children are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildrenResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildrenResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /databases/{id}/direct-children:
+    get:
+      tags:
+      - Children
+      operationId: getDatabaseDirectChildren
+      summary: Get direct children of a database
+      description: 'Returns all children for given database id in the content tree. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each child. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only content that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent database.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ContentSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested children are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildrenResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildrenResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified database or the database was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /embeds/{id}/direct-children:
+    get:
+      tags:
+      - Children
+      operationId: getSmartLinkDirectChildren
+      summary: Get direct children of a Smart Link
+      description: 'Returns all children for given smart link id in the content tree. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each child. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only content that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent smart link.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ContentSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested children are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildrenResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildrenResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified smart link or the smart link was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /folders/{id}/direct-children:
+    get:
+      tags:
+      - Children
+      operationId: getFolderDirectChildren
+      summary: Get direct children of a folder
+      description: 'Returns all children for given folder id in the content tree. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each child. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only content that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent folder.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ContentSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested children are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildrenResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildrenResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified folder or the folder was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /pages/{id}/children:
+    get:
+      tags:
+      - Children
+      operationId: getChildPages
+      summary: Get child pages
+      deprecated: true
+      description: 'Returns all child pages for given page id. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only pages that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent page. If you don't know the page ID, use Get pages and filter the results.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of pages per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ChildPageSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested child pages are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildPage>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildPage'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/pages/{id}/children?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:page:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:page:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /custom-content/{id}/children:
+    get:
+      tags:
+      - Children
+      operationId: getChildCustomContent
+      summary: Get child custom content
+      description: 'Returns all child custom content for given custom content id. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only custom content that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent custom content. If you don't know the custom content ID, use Get custom-content and filter the results.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of pages per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ChildCustomContentSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested child custom content are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildCustomContent>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildCustomContent'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. For example, rel="next" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/custom-content/{id}/children?cursor=<opaque cursor token>>; rel="next", <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:custom-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:custom-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+  /pages/{id}/direct-children:
+    get:
+      tags:
+      - Children
+      operationId: getPageDirectChildren
+      summary: Get direct children of a page
+      description: 'Returns all children for given page id in the content tree. The number of results is limited by the `limit` parameter and additional results (if available)
+
+        will be available through the `next` URL present in the `Link` response header.
+
+
+        The following types of content will be returned:
+
+        - Database
+
+        - Embed
+
+        - Folder
+
+        - Page
+
+        - Whiteboard
+
+
+        This endpoint returns minimal information about each child. To fetch more details, use a related endpoint based on the content type, such
+
+        as:
+
+
+        - Get database by id
+
+        - Get embed by id
+
+        - Get folder by id
+
+        - Get page by id
+
+        - Get whiteboard by id.
+
+
+        **Permissions required**:
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only content that the user has permission to view will be returned.'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the parent page.
+        schema:
+          format: int64
+          type: integer
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items per result to return. If more results exist, use the `Link` header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          type: string
+          items:
+            $ref: '#/components/schemas/ContentSortOrder'
+      responses:
+        '200':
+          description: Returned if the requested children are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<ChildrenResponse>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChildrenResponse'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: 'This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request''s URL. Example response header format: <https://site.atlassian.net/wiki>; rel="base"`
+
+                '
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+        '404':
+          description: 'Returned if the calling user does not have permission to view the
+
+            specified page or the page was not found.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:hierarchical-content:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:hierarchical-content:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: false
+components:
+  schemas:
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    ChildCustomContentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - id
+      - -id
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for child custom content. The default sort direction is ascending by id. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    ContentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - id
+      - -id
+      - modified-date
+      - -modified-date
+      - child-position
+      - -child-position
+      - title
+      - -title
+      type: string
+      description: The sort fields for hierarchical content types. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    ChildCustomContent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the child custom content.
+        status:
+          $ref: '#/components/schemas/OnlyArchivedAndCurrentContentStatus'
+        title:
+          type: string
+          description: Title of the custom content.
+        type:
+          type: string
+          description: Custom content type.
+        spaceId:
+          type: string
+          description: ID of the space the custom content is in.
+    ChildrenResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the child content.
+        status:
+          $ref: '#/components/schemas/OnlyArchivedAndCurrentContentStatus'
+        title:
+          type: string
+          description: Title of the child content.
+        type:
+          type: string
+          description: Hierarchical content type (database/embed/folder/page/whiteboard).
+        spaceId:
+          type: string
+          description: ID of the space the content is in.
+        childPosition:
+          format: int32
+          type:
+          - integer
+          - 'null'
+          description: 'Numerical value indicating position of the content relative to its siblings (with the same parentId) within the content tree.
+
+            If the content is sorted by childPosition, it will reflect the default content ordering within the content tree.'
+    ChildPageSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - id
+      - -id
+      - child-position
+      - -child-position
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for child pages. The default sort direction is ascending by child-position. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    OnlyArchivedAndCurrentContentStatus:
+      enum:
+      - current
+      - archived
+      type: string
+      description: The status of the content.
+    ChildPage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+        status:
+          $ref: '#/components/schemas/OnlyArchivedAndCurrentContentStatus'
+        title:
+          type: string
+          description: Title of the page.
+        spaceId:
+          type: string
+          description: ID of the space the page is in.
+        childPosition:
+          format: int32
+          type:
+          - integer
+          - 'null'
+          description: Position of child page within the given parent page tree.
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: This is the reference for the Confluence Cloud REST API v2, with definitions and performance intended to be an improvement over v1. You can click on the meatball menu in the upper right to download the spec or Postman collection.
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or Oauth 2.0, depending on what you''re building (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Using the REST API
+    anchor: using
+    body: "**Pagination:** The Confluence REST API v2 uses cursor-based pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.\n\nUse the 'limit' and 'cursor' parameters on endpoints that return multiple objects to work with pagination. First, make a request with your desired limit in the 'limit' parameter, then observe the `Link` header in the response. If there are additional entities to be retrieved, the `next` URL in the `Link` header will allow you to retrieve the next set of results. This relative URL will also be available under the `_links.next` property of paginated responses. \n\nFor example, the following request will return 5 page objects (if there are 5 present in the target site).\n```\nGET /wiki/api/v2/pages?limit=5\n```\n\nIf there are additional pages available, the `Link` header will look like:\n```\n</wiki/api/v2/pages?limit=5&cursor=<cursor token>>; rel=\"next\"\n```\nThe URL within the `Link` header will allow you to access the next 5 pages, while the `rel=\"next\"` denotes that the URL refers to the \"next\" set of pages. Relations for a single URL are separated by semicolons (;) and URLs are separated by commas (,)\nIf there are no related URLs, the `Link` header will not be present in the response and neither will the `next` property for `_links` in the response body."

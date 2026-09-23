@@ -1,0 +1,314 @@
+openapi: 3.2.0
+info:
+  title: Confluence Cloud REST API v2 Data Policies API
+  description: This document describes Confluence's v2 APIs. This is intended to be an iteration on the existing Confluence Cloud REST API with improvements in both endpoint definitions and performance.
+  termsOfService: https://developer.atlassian.com/platform/marketplace/atlassian-developer-terms/
+  version: 2.0.0
+servers:
+- url: https://{your-domain}/wiki/api/v2
+  variables:
+    your-domain:
+      default: no-default
+      description: Specific domain of the Confluence site being used. Must be provided.
+tags:
+- name: Data Policies
+  description: ''
+paths:
+  /data-policies/metadata:
+    get:
+      tags:
+      - Data Policies
+      summary: Get data policy metadata for the workspace
+      description: 'Returns data policy metadata for the workspace.
+
+
+        **Permissions required:**
+
+        Only apps can make this request.
+
+        Permission to access the Confluence site (''Can use'' global permission).'
+      operationId: getDataPolicyMetadata
+      responses:
+        '200':
+          description: Returned if the request is successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPolicyMetadata'
+        '400':
+          description: Returned if the request is not valid.
+        '401':
+          description: Returned if the authentication credentials are incorrect or missing.
+      deprecated: false
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:configuration:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:configuration:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-experimental: true
+  /data-policies/spaces:
+    get:
+      tags:
+      - Data Policies
+      operationId: getDataPolicySpaces
+      summary: Get spaces with data policies
+      description: 'Returns all spaces. The results will be sorted by id ascending. The number of results is limited by the `limit` parameter and
+
+        additional results (if available) will be available through the `next` URL present in the `Link` response header.
+
+
+        **Permissions required**:
+
+        Only apps can make this request.
+
+        Permission to access the Confluence site (''Can use'' global permission).
+
+        Only spaces that the app has permission to view will be returned.'
+      parameters:
+      - name: ids
+        in: query
+        required: false
+        description: Filter the results to spaces based on their IDs. Multiple IDs can be specified as a comma-separated list.
+        schema:
+          type: array
+          maxItems: 250
+          items:
+            type: integer
+            format: int64
+      - name: keys
+        in: query
+        required: false
+        description: Filter the results to spaces based on their keys. Multiple keys can be specified as a comma-separated list.
+        schema:
+          type: array
+          maxItems: 250
+          items:
+            type: string
+      - name: sort
+        in: query
+        required: false
+        description: Used to sort the result by a particular field.
+        schema:
+          $ref: '#/components/schemas/SpaceSortOrder'
+      - name: cursor
+        in: query
+        required: false
+        description: Used for pagination, this opaque cursor will be returned in the `next` URL in the `Link` response header. Use the relative URL in the `Link` header to retrieve the `next` set of results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of spaces per result to return. If more results exist, use the `Link` response header to retrieve a relative URL that will return the next set of results.
+        schema:
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 250
+          type: integer
+      responses:
+        '200':
+          description: Returned if the requested spaces are returned.
+          content:
+            application/json:
+              schema:
+                title: MultiEntityResult<DataPolicySpace>
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DataPolicySpace'
+                  _links:
+                    $ref: '#/components/schemas/MultiEntityLinks'
+          headers:
+            Link:
+              schema:
+                type: string
+              description: "This header contains URL(s) within angle brackets and a relation description for each URL, describing how the provided URL relates to the incoming request's URL. \nFor example, rel=\"next\" would be the URL necessary to get the next page of information. Example response header format: `Link: </wiki/api/v2/spaces?cursor=<opaque cursor token>>; rel=\"next\", <https://site.atlassian.net/wiki>; rel=\"base\"`\n"
+        '400':
+          description: Returned if an invalid request is provided.
+          content: {}
+        '401':
+          description: 'Returned if the authentication credentials are incorrect or missing
+
+            from the request.'
+          content: {}
+      security:
+      - basicAuth: []
+      - oAuthDefinitions:
+        - read:space:confluence
+      x-atlassian-oauth2-scopes:
+      - scheme: oAuthDefinitions
+        state: Current
+        scopes:
+        - read:space:confluence
+      x-atlassian-connect-scope: READ
+      x-atlassian-data-security-policy:
+      - app-access-rule-exempt: true
+      x-experimental: true
+components:
+  schemas:
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    SpaceDescription:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    DataPolicySpace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the space.
+        key:
+          type: string
+          description: Key of the space.
+        name:
+          type: string
+          description: Name of the space.
+        description:
+          $ref: '#/components/schemas/SpaceDescription'
+        dataPolicy:
+          type: object
+          properties:
+            anyContentBlocked:
+              type: boolean
+              description: Whether the space contains any content blocked for (inaccessible to) the requesting client application.
+              readOnly: true
+        icon:
+          $ref: '#/components/schemas/SpaceIcon'
+        _links:
+          $ref: '#/components/schemas/SpaceLinks'
+    SpaceLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the space.
+    SpaceIcon:
+      type: object
+      description: The icon of the space
+      properties:
+        path:
+          type: string
+          description: The path (relative to base URL) at which the space's icon can be retrieved. The format should be like `/wiki/download/...` or `/wiki/aa-avatar/...`
+        apiDownloadLink:
+          type: string
+          description: 'The path (relative to base URL) that can be used to retrieve a link to download the space icon. 3LO apps should use this link instead of the value provided
+
+            in the `path` property to retrieve the icon.
+
+
+            Currently this field is only returned for `global` spaces and not `personal` spaces.
+
+            '
+    SpaceSortOrder:
+      enum:
+      - id
+      - -id
+      - key
+      - -key
+      - name
+      - -name
+      type: string
+      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    DataPolicyMetadata:
+      type: object
+      properties:
+        anyContentBlocked:
+          type: boolean
+          description: Whether the workspace contains any content blocked for (inaccessible to) the requesting client application.
+          readOnly: true
+      additionalProperties: false
+      description: Details about data policies.
+      xml:
+        name: datapolicy
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:page:confluence: View pages and blogposts and their properties.
+            read:space:confluence: View spaces and their properties.
+            read:attachment:confluence: View attachments and their properties.
+            read:comment:confluence: View comments and their properties.
+            read:custom-content:confluence: View custom content and their properties.
+            read:task:confluence: View tasks.
+            read:whiteboard:confluence: View whiteboards and their properties.
+            read:database:confluence: View databases and their properties.
+            read:embed:confluence: View Smart Links in the content tree and their properties.
+            read:folder:confluence: View folders and their properties.
+            read:hierarchical-content:confluence: View children and descendants in the content tree.
+            write:space:confluence: Create and update spaces and their properties.
+            write:page:confluence: Create and update pages and blog posts and their properties.
+            write:comment:confluence: Create and update comments and their properties.
+            write:custom-content:confluence: Create and update custom content and their properties.
+            write:whiteboard:confluence: Create and update whiteboards and their properties.
+            write:database:confluence: Create and update databases and their properties.
+            write:embed:confluence: Create and update Smart Links in the content tree and their properties.
+            write:folder:confluence: Create and update folders and their properties.
+            write:app-data:confluence: Create, update and delete app properties.
+            delete:custom-content:confluence: Delete custom content.
+            delete:page:confluence: Delete pages and blog posts.
+            delete:comment:confluence: Delete comments.
+            delete:whiteboard:confluence: Delete whiteboards.
+            delete:database:confluence: Delete databases.
+            delete:embed:confluence: Delete Smart Links in the content tree.
+            delete:folder:confluence: Delete folders.
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/v2
+x-atlassian-narrative:
+  documents:
+  - title: About
+    anchor: about
+    body: This is the reference for the Confluence Cloud REST API v2, with definitions and performance intended to be an improvement over v1. You can click on the meatball menu in the upper right to download the spec or Postman collection.
+  - title: Authentication and authorization
+    anchor: auth
+    body: '**Authentication:** If you are building a Cloud app, authentication is implemented via JWT or Oauth 2.0, depending on what you''re building (see [Authentication for apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)). Otherwise, if you are authenticating directly against the REST API, the REST API supports basic auth (see [Basic auth for REST APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+      **Authorization:** If you are building a Cloud app, authorization can be implemented by [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by [OAuth 2.0 user impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps). Otherwise, if you are making calls directly against the REST API, authorization is based on the user used in the authentication process.
+
+
+      See [Security overview](https://developer.atlassian.com/cloud/confluence/security-overview/) for more details on authentication and authorization.'
+  - title: Using the REST API
+    anchor: using
+    body: "**Pagination:** The Confluence REST API v2 uses cursor-based pagination: a method that returns a response with multiple objects can only return a limited number at one time. This limits the size of responses and conserves server resources.\n\nUse the 'limit' and 'cursor' parameters on endpoints that return multiple objects to work with pagination. First, make a request with your desired limit in the 'limit' parameter, then observe the `Link` header in the response. If there are additional entities to be retrieved, the `next` URL in the `Link` header will allow you to retrieve the next set of results. This relative URL will also be available under the `_links.next` property of paginated responses. \n\nFor example, the following request will return 5 page objects (if there are 5 present in the target site).\n```\nGET /wiki/api/v2/pages?limit=5\n```\n\nIf there are additional pages available, the `Link` header will look like:\n```\n</wiki/api/v2/pages?limit=5&cursor=<cursor token>>; rel=\"next\"\n```\nThe URL within the `Link` header will allow you to access the next 5 pages, while the `rel=\"next\"` denotes that the URL refers to the \"next\" set of pages. Relations for a single URL are separated by semicolons (;) and URLs are separated by commas (,)\nIf there are no related URLs, the `Link` header will not be present in the response and neither will the `next` property for `_links` in the response body."
