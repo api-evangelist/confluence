@@ -321,34 +321,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    TaskBodySingle:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
     PrimaryBodyRepresentation:
       enum:
       - storage
@@ -406,6 +378,34 @@ components:
           type: string
           format: date-time
           description: Date and time when the task was completed. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
+    TaskBodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
   requestBodies:
     TaskUpdateRequest:
       required: true

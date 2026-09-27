@@ -889,6 +889,174 @@ paths:
       x-atlassian-connect-scope: WRITE
 components:
   schemas:
+    GenericAccountId:
+      type:
+      - string
+      - 'null'
+      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
+
+        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
+    SpaceWatchArray:
+      required:
+      - limit
+      - results
+      - size
+      - start
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpaceWatch'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    UserWatch:
+      required:
+      - watching
+      type: object
+      properties:
+        watching:
+          type: boolean
+    SpaceWatch:
+      required:
+      - type
+      - watcher
+      type: object
+      properties:
+        type:
+          type: string
+        watcher:
+          $ref: '#/components/schemas/WatchUser'
+        spaceKey:
+          type: string
+        labelName:
+          type: string
+        prefix:
+          type: string
+    Watch:
+      required:
+      - contentId
+      - type
+      - watcher
+      type: object
+      properties:
+        type:
+          type: string
+        watcher:
+          $ref: '#/components/schemas/WatchUser'
+        contentId:
+          type: integer
+          format: int64
+    WatchArray:
+      required:
+      - _links
+      - limit
+      - results
+      - size
+      - start
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Watch'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    WatchUser:
+      required:
+      - type
+      - accountId
+      - profilePicture
+      - displayName
+      - operations
+      - isExternalCollaborator
+      - isGuest
+      - accountType
+      - email
+      - publicName
+      - personalSpace
+      - externalCollaborator
+      type: object
+      properties:
+        type:
+          type: string
+        username:
+          $ref: '#/components/schemas/GenericUserName'
+        userKey:
+          $ref: '#/components/schemas/GenericUserKey'
+        accountId:
+          $ref: '#/components/schemas/GenericAccountId'
+        profilePicture:
+          $ref: '#/components/schemas/Icon'
+        displayName:
+          type: string
+        timeZone:
+          type:
+          - string
+          - 'null'
+        operations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/OperationCheckResult'
+        externalCollaborator:
+          type: boolean
+        isGuest:
+          type:
+          - boolean
+          - 'null'
+        isExternalCollaborator:
+          type: boolean
+        details:
+          $ref: '#/components/schemas/UserDetails'
+        accountType:
+          type: string
+        email:
+          type: string
+        publicName:
+          type: string
+        personalSpace:
+          type:
+          - object
+          - 'null'
+      description: 'This essentially the same as the `User` object, but no `_links` property and
+
+        no `_expandable` property (therefore, different required fields).'
+    GenericUserName:
+      type:
+      - string
+      - 'null'
+      description: 'This property is no longer available and will be removed from the documentation soon.
+
+        Use `accountId` instead.
+
+        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     UserDetails:
       type: object
       properties:
@@ -956,76 +1124,27 @@ components:
         Use `accountId` instead.
 
         See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-    GenericUserName:
-      type:
-      - string
-      - 'null'
-      description: 'This property is no longer available and will be removed from the documentation soon.
-
-        Use `accountId` instead.
-
-        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-    WatchUser:
+    Icon:
       required:
-      - type
-      - accountId
-      - profilePicture
-      - displayName
-      - operations
-      - isExternalCollaborator
-      - isGuest
-      - accountType
-      - email
-      - publicName
-      - personalSpace
-      - externalCollaborator
-      type: object
+      - height
+      - isDefault
+      - path
+      - width
+      type:
+      - object
+      - 'null'
       properties:
-        type:
+        path:
           type: string
-        username:
-          $ref: '#/components/schemas/GenericUserName'
-        userKey:
-          $ref: '#/components/schemas/GenericUserKey'
-        accountId:
-          $ref: '#/components/schemas/GenericAccountId'
-        profilePicture:
-          $ref: '#/components/schemas/Icon'
-        displayName:
-          type: string
-        timeZone:
-          type:
-          - string
-          - 'null'
-        operations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/OperationCheckResult'
-        externalCollaborator:
+        width:
+          type: integer
+          format: int32
+        height:
+          type: integer
+          format: int32
+        isDefault:
           type: boolean
-        isGuest:
-          type:
-          - boolean
-          - 'null'
-        isExternalCollaborator:
-          type: boolean
-        details:
-          $ref: '#/components/schemas/UserDetails'
-        accountType:
-          type: string
-        email:
-          type: string
-        publicName:
-          type: string
-        personalSpace:
-          type:
-          - object
-          - 'null'
-      description: 'This essentially the same as the `User` object, but no `_links` property and
-
-        no `_expandable` property (therefore, different required fields).'
+      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
     OperationCheckResult:
       required:
       - operation
@@ -1056,126 +1175,15 @@ components:
           type: string
           description: The space or content type that the operation applies to. Could be one of- - application - page - blogpost - comment - attachment - space
       description: An operation and the target entity that it applies to, e.g. create page.
-    SpaceWatchArray:
-      required:
-      - limit
-      - results
-      - size
-      - start
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpaceWatch'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    WatchArray:
-      required:
-      - _links
-      - limit
-      - results
-      - size
-      - start
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Watch'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    Icon:
-      required:
-      - height
-      - isDefault
-      - path
-      - width
-      type:
-      - object
-      - 'null'
-      properties:
-        path:
-          type: string
-        width:
-          type: integer
-          format: int32
-        height:
-          type: integer
-          format: int32
-        isDefault:
-          type: boolean
-      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
-    GenericAccountId:
-      type:
-      - string
-      - 'null'
-      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
+  parameters:
+    userLookupAccountId:
+      name: accountId
+      in: query
+      description: 'The account ID of the user. The accountId uniquely identifies the user across all Atlassian products.
 
         For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
-    SpaceWatch:
-      required:
-      - type
-      - watcher
-      type: object
-      properties:
-        type:
-          type: string
-        watcher:
-          $ref: '#/components/schemas/WatchUser'
-        spaceKey:
-          type: string
-        labelName:
-          type: string
-        prefix:
-          type: string
-    UserWatch:
-      required:
-      - watching
-      type: object
-      properties:
-        watching:
-          type: boolean
-    Watch:
-      required:
-      - contentId
-      - type
-      - watcher
-      type: object
-      properties:
-        type:
-          type: string
-        watcher:
-          $ref: '#/components/schemas/WatchUser'
-        contentId:
-          type: integer
-          format: int64
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
-  parameters:
+      schema:
+        type: string
     userLookupUsername:
       name: username
       in: query
@@ -1196,14 +1204,6 @@ components:
         Use `accountId` instead.
 
         See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-      schema:
-        type: string
-    userLookupAccountId:
-      name: accountId
-      in: query
-      description: 'The account ID of the user. The accountId uniquely identifies the user across all Atlassian products.
-
-        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
       schema:
         type: string
   securitySchemes:

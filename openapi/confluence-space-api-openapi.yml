@@ -342,7 +342,7 @@ paths:
         **Permissions required**:
 
         ''Create Space(s)'' global permission.'
-      operationId: createSpace
+      operationId: postWikiRestApiSpace
       requestBody:
         description: The space to be created.
         content:
@@ -392,6 +392,8 @@ paths:
       - app-access-rule-exempt: true
       x-codegen-request-body-name: body
       x-atlassian-connect-scope: WRITE
+      x-operation-id-source: normalized
+      x-operation-id-original: createSpace
     servers:
     - url: //your-domain.atlassian.net
   /wiki/rest/api/space/_private:
@@ -599,79 +601,123 @@ paths:
     servers:
     - url: //your-domain.atlassian.net
 components:
+  parameters:
+    StatusFilter:
+      name: status
+      in: query
+      description: Filter by content status.
+      schema:
+        type: string
+        enum:
+        - current
+        - archived
+        - draft
+        - trashed
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    BodyFormatParam:
+      name: body-format
+      in: query
+      description: The representation format for the content body.
+      schema:
+        type: string
+        enum:
+        - storage
+        - atlas_doc_format
+        - view
+        - export_view
+        - anonymous_export_view
+        - editor
+    SortParam:
+      name: sort
+      in: query
+      description: Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.
+      schema:
+        type: string
+        enum:
+        - id
+        - -id
+        - title
+        - -title
+        - created-date
+        - -created-date
+        - modified-date
+        - -modified-date
+    DescriptionFormatParam:
+      name: description-format
+      in: query
+      description: The format of the space description in the response.
+      schema:
+        type: string
+        enum:
+        - plain
+        - view
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Returned if the request is malformed or contains invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      description: Error response from the Confluence API.
-      properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
-        message:
-          type: string
-          description: A human-readable error message.
-          example: example_value
-    BodyRepresentation:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: The name of the representation format.
-          example: example_value
-        value:
-          type: string
-          description: The body content in this representation.
-          example: example_value
-    OperationArray:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Operation'
-          example: []
-    Like:
-      type: object
-      properties:
-        accountId:
-          type: string
-          description: The Atlassian account ID of the user who liked the content.
-          example: '500123'
-    SpaceLinks:
+    PageLinks:
       type: object
       properties:
         webui:
           type: string
-          description: Web UI link for the space.
+          description: Web UI link for the page.
           example: example_value
+        editui:
+          type: string
+          description: Edit UI link for the page.
+          example: example_value
+        tinyui:
+          type: string
+          description: Shortened link for the page.
+          example: example_value
+    SpaceDescription:
+      type: object
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    Body:
+      type: object
+      description: The body content in various representations.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
     LabelArray:
       type: object
       description: A list of labels.
@@ -683,6 +729,102 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
+    Page:
+      type: object
+      description: Represents a Confluence page.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the page.
+          example: abc123
+        status:
+          type: string
+          description: The current status of the page.
+          enum:
+          - current
+          - draft
+          - archived
+          - trashed
+          example: current
+        title:
+          type: string
+          description: The title of the page.
+          example: Example Title
+        spaceId:
+          type: string
+          description: The ID of the space this page belongs to.
+          example: '500123'
+        parentId:
+          type: string
+          description: The ID of the parent page, if the page is nested.
+          example: '500123'
+        parentType:
+          type: string
+          description: The type of the parent (page or space).
+          enum:
+          - page
+          - space
+          example: page
+        position:
+          type: integer
+          description: The position of this page in the page tree relative to siblings.
+          example: 10
+        authorId:
+          type: string
+          description: The Atlassian account ID of the page author.
+          example: '500123'
+        ownerId:
+          type: string
+          description: The Atlassian account ID of the page owner.
+          example: '500123'
+        lastOwnerId:
+          type: string
+          description: The Atlassian account ID of the previous owner.
+          example: '500123'
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the page was created.
+          example: '2026-01-15T10:30:00Z'
+        version:
+          $ref: '#/components/schemas/Version'
+        body:
+          $ref: '#/components/schemas/Body'
+        labels:
+          $ref: '#/components/schemas/LabelArray'
+        properties:
+          $ref: '#/components/schemas/ContentPropertyArray'
+        operations:
+          $ref: '#/components/schemas/OperationArray'
+        likes:
+          $ref: '#/components/schemas/LikeArray'
+        versions:
+          $ref: '#/components/schemas/VersionArray'
+        _links:
+          $ref: '#/components/schemas/PageLinks'
+    LikeArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Like'
+          example: []
+    SpaceLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the space.
+          example: example_value
+    SpacePermissionArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpacePermission'
+          example: []
     Version:
       type: object
       description: Version information for content.
@@ -708,6 +850,117 @@ components:
           type: string
           description: The Atlassian account ID of the version author.
           example: '500123'
+    SpaceBulk:
+      type: object
+      description: A paginated list of spaces.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Space'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    VersionArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    SpaceIcon:
+      type: object
+      properties:
+        path:
+          type: string
+          description: The relative path to the space icon.
+          example: example_value
+        apiDownloadLink:
+          type: string
+          description: The API download link for the space icon.
+          example: example_value
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The Atlassian account ID of the user who liked the content.
+          example: '500123'
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+          example: example_value
+        value:
+          type: string
+          description: The body content in this representation.
+          example: example_value
+    SpacePermission:
+      type: object
+      properties:
+        id:
+          type: string
+          example: abc123
+        principal:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - user
+              - group
+              - role
+            id:
+              type: string
+          example: example_value
+        operation:
+          $ref: '#/components/schemas/Operation'
+    ContentPropertyArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentProperty'
+          example: []
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    SpacePropertyArray:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentProperty'
+          example: []
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          example: abc123
+        key:
+          type: string
+          example: example_value
+        value:
+          example: example_value
+        version:
+          $ref: '#/components/schemas/Version'
     Space:
       type: object
       description: Represents a Confluence space.
@@ -793,113 +1046,6 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-    LikeArray:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Like'
-          example: []
-    SpaceDescription:
-      type: object
-      properties:
-        plain:
-          $ref: '#/components/schemas/BodyRepresentation'
-        view:
-          $ref: '#/components/schemas/BodyRepresentation'
-    SpaceBulk:
-      type: object
-      description: A paginated list of spaces.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Space'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
-    Page:
-      type: object
-      description: Represents a Confluence page.
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the page.
-          example: abc123
-        status:
-          type: string
-          description: The current status of the page.
-          enum:
-          - current
-          - draft
-          - archived
-          - trashed
-          example: current
-        title:
-          type: string
-          description: The title of the page.
-          example: Example Title
-        spaceId:
-          type: string
-          description: The ID of the space this page belongs to.
-          example: '500123'
-        parentId:
-          type: string
-          description: The ID of the parent page, if the page is nested.
-          example: '500123'
-        parentType:
-          type: string
-          description: The type of the parent (page or space).
-          enum:
-          - page
-          - space
-          example: page
-        position:
-          type: integer
-          description: The position of this page in the page tree relative to siblings.
-          example: 10
-        authorId:
-          type: string
-          description: The Atlassian account ID of the page author.
-          example: '500123'
-        ownerId:
-          type: string
-          description: The Atlassian account ID of the page owner.
-          example: '500123'
-        lastOwnerId:
-          type: string
-          description: The Atlassian account ID of the previous owner.
-          example: '500123'
-        createdAt:
-          type: string
-          format: date-time
-          description: The ISO 8601 timestamp when the page was created.
-          example: '2026-01-15T10:30:00Z'
-        version:
-          $ref: '#/components/schemas/Version'
-        body:
-          $ref: '#/components/schemas/Body'
-        labels:
-          $ref: '#/components/schemas/LabelArray'
-        properties:
-          $ref: '#/components/schemas/ContentPropertyArray'
-        operations:
-          $ref: '#/components/schemas/OperationArray'
-        likes:
-          $ref: '#/components/schemas/LikeArray'
-        versions:
-          $ref: '#/components/schemas/VersionArray'
-        _links:
-          $ref: '#/components/schemas/PageLinks'
-    SpacePermissionArray:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpacePermission'
-          example: []
     Label:
       type: object
       description: Represents a label applied to Confluence content.
@@ -916,368 +1062,100 @@ components:
           type: string
           description: The prefix of the label (global, my, team).
           example: example_value
-    SpacePermission:
+    Error:
       type: object
+      description: Error response from the Confluence API.
       properties:
-        id:
-          type: string
-          example: abc123
-        principal:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
           type: object
           properties:
-            type:
-              type: string
-              enum:
-              - user
-              - group
-              - role
-            id:
-              type: string
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
           example: example_value
-        operation:
-          $ref: '#/components/schemas/Operation'
-    SpacePropertyArray:
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    OperationArray:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/ContentProperty'
+            $ref: '#/components/schemas/Operation'
           example: []
-    PaginationLinks:
-      type: object
-      description: Pagination links for cursor-based pagination.
-      properties:
-        next:
-          type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
-        base:
-          type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
-    ContentPropertyArray:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentProperty'
-          example: []
-    Body:
-      type: object
-      description: The body content in various representations.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyRepresentation'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyRepresentation'
-        view:
-          $ref: '#/components/schemas/BodyRepresentation'
-    VersionArray:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Version'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
-    PageLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link for the page.
-          example: example_value
-        editui:
-          type: string
-          description: Edit UI link for the page.
-          example: example_value
-        tinyui:
-          type: string
-          description: Shortened link for the page.
-          example: example_value
-    SpaceIcon:
-      type: object
-      properties:
-        path:
-          type: string
-          description: The relative path to the space icon.
-          example: example_value
-        apiDownloadLink:
-          type: string
-          description: The API download link for the space icon.
-          example: example_value
-    ContentProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          example: abc123
-        key:
-          type: string
-          example: example_value
-        value:
-          example: example_value
-        version:
-          $ref: '#/components/schemas/Version'
-    HorizontalHeaderLookAndFeel:
+    ContentRestriction:
       required:
-      - backgroundColor
-      - primaryNavigation
-      type: object
-      properties:
-        backgroundColor:
-          type: string
-        button:
-          $ref: '#/components/schemas/ButtonLookAndFeel'
-        primaryNavigation:
-          $ref: '#/components/schemas/TopNavigationLookAndFeel'
-        secondaryNavigation:
-          $ref: '#/components/schemas/NavigationLookAndFeel'
-        search:
-          $ref: '#/components/schemas/SearchFieldLookAndFeel'
-    ScreenLookAndFeel:
-      required:
-      - background
-      type: object
-      properties:
-        background:
-          type: string
-        backgroundAttachment:
-          type:
-          - string
-          - 'null'
-        backgroundBlendMode:
-          type:
-          - string
-          - 'null'
-        backgroundClip:
-          type:
-          - string
-          - 'null'
-        backgroundColor:
-          type:
-          - string
-          - 'null'
-        backgroundImage:
-          type:
-          - string
-          - 'null'
-        backgroundOrigin:
-          type:
-          - string
-          - 'null'
-        backgroundPosition:
-          type:
-          - string
-          - 'null'
-        backgroundRepeat:
-          type:
-          - string
-          - 'null'
-        backgroundSize:
-          type:
-          - string
-          - 'null'
-        layer:
-          type:
-          - object
-          - 'null'
-          properties:
-            width:
-              type: string
-            height:
-              type: string
-        gutterTop:
-          type:
-          - string
-          - 'null'
-        gutterRight:
-          type:
-          - string
-          - 'null'
-        gutterBottom:
-          type:
-          - string
-          - 'null'
-        gutterLeft:
-          type:
-          - string
-          - 'null'
-    UserDetails:
-      type: object
-      properties:
-        business:
-          type: object
-          properties:
-            position:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            department:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            location:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-        personal:
-          type: object
-          properties:
-            phone:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            im:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            website:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            email:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. Use the `User.email` property instead. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-    GenericUserName:
-      type:
-      - string
-      - 'null'
-      description: 'This property is no longer available and will be removed from the documentation soon.
-
-        Use `accountId` instead.
-
-        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-    SpacePermissionCreate:
-      required:
-      - anonymousAccess
+      - _expandable
+      - _links
       - operation
-      - unlicensedAccess
       type: object
-      additionalProperties: true
       properties:
-        subjects:
+        operation:
+          type: string
+          enum:
+          - administer
+          - copy
+          - create
+          - delete
+          - export
+          - move
+          - purge
+          - purge_version
+          - read
+          - restore
+          - update
+          - use
+        restrictions:
           type: object
           properties:
             user:
-              required:
-              - results
-              - size
-              type: object
-              properties:
-                results:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/User'
-                size:
-                  type: integer
-                  format: int32
+              $ref: '#/components/schemas/UserArray'
             group:
-              required:
-              - results
-              - size
+              $ref: '#/components/schemas/GroupArray'
+            _expandable:
               type: object
               properties:
-                results:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GroupCreate'
-                size:
-                  type: integer
-                  format: int32
-          description: The users and/or groups that the permission applies to.
-        operation:
-          $ref: '#/components/schemas/OperationCheckResult'
-        anonymousAccess:
-          type: boolean
-          description: Grant anonymous users permission to use the operation.
-          default: false
-        unlicensedAccess:
-          type: boolean
-          description: 'Grants access to unlicensed users from JIRA Service Desk when used
-
-            with the ''read space'' operation.'
-          default: false
-      description: "This object represents a permission for given space. Permissions consist of\nat least one operation object with an accompanying subjects object.\n\nThe following combinations of `operation` and `targetType` values are\nvalid for the `operation` object:\n\n  - 'create': 'page', 'blogpost', 'comment', 'attachment'\n  - 'read': 'space'\n  - 'delete': 'page', 'blogpost', 'comment', 'attachment'\n  - 'export': 'space'\n  - 'administer': 'space'"
-    GroupCreate:
-      required:
-      - type
-      type: object
-      additionalProperties: true
-      properties:
-        type:
-          type: string
-          default: group
-          enum:
-          - group
-        id:
-          type: string
-    SuperBatchWebResources:
-      type: object
-      properties:
-        uris:
-          type: object
-          properties:
-            all:
-              oneOf:
-              - type: array
-                items:
+                user:
                   type: string
-              - type: string
-            css:
-              oneOf:
-              - type: array
-                items:
+                group:
                   type: string
-              - type: string
-            js:
-              oneOf:
-              - type: array
-                items:
-                  type: string
-              - type: string
-        tags:
-          type: object
-          properties:
-            all:
-              type: string
-            css:
-              type: string
-            data:
-              type: string
-            js:
-              type: string
-        metatags:
-          type: string
+        content:
+          $ref: '#/components/schemas/Content'
         _expandable:
           type: object
-          additionalProperties: true
+          properties:
+            restrictions:
+              type: string
+            content:
+              type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
     Content:
       required:
       - status
@@ -1432,28 +1310,381 @@ components:
         _links:
           $ref: '#/components/schemas/GenericLinks'
       description: Base object for all content types.
-    ContentChildren:
+    SpaceDescription_2:
+      required:
+      - embeddedContent
+      - representation
+      - value
       type: object
       additionalProperties: true
       properties:
-        attachment:
-          $ref: '#/components/schemas/ContentArray'
-        comment:
-          $ref: '#/components/schemas/ContentArray'
-        page:
-          $ref: '#/components/schemas/ContentArray'
-        whiteboard:
-          $ref: '#/components/schemas/ContentArray'
-        database:
-          $ref: '#/components/schemas/ContentArray'
-        embed:
-          $ref: '#/components/schemas/ContentArray'
-        folder:
-          $ref: '#/components/schemas/ContentArray'
-        _expandable:
+        value:
+          type: string
+        representation:
+          type: string
+          enum:
+          - plain
+          - view
+        embeddedContent:
+          type: array
+          items:
+            type: object
+            properties: {}
+    ContentLookAndFeel:
+      type: object
+      properties:
+        screen:
+          $ref: '#/components/schemas/ScreenLookAndFeel'
+        container:
+          $ref: '#/components/schemas/ContainerLookAndFeel'
+        header:
+          $ref: '#/components/schemas/ContainerLookAndFeel'
+        body:
+          $ref: '#/components/schemas/ContainerLookAndFeel'
+    NavigationLookAndFeel:
+      required:
+      - color
+      - hoverOrFocus
+      type:
+      - object
+      - 'null'
+      properties:
+        color:
+          type: string
+        highlightColor:
+          type:
+          - string
+          - 'null'
+        hoverOrFocus:
+          required:
+          - backgroundColor
+          - color
+          type: object
+          properties:
+            backgroundColor:
+              type: string
+            color:
+              type: string
+    MenusLookAndFeel:
+      required:
+      - color
+      - hoverOrFocus
+      type: object
+      properties:
+        hoverOrFocus:
+          required:
+          - backgroundColor
+          type: object
+          properties:
+            backgroundColor:
+              type: string
+        color:
+          type: string
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+    LabelArray_2:
+      required:
+      - results
+      - size
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label_2'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    ContentMetadata:
+      type: object
+      additionalProperties: true
+      properties:
+        currentuser:
+          type: object
+          properties:
+            favourited:
+              type: object
+              properties:
+                isFavourite:
+                  type: boolean
+                favouritedDate:
+                  type: string
+                  format: date-time
+            lastmodified:
+              type: object
+              properties:
+                version:
+                  $ref: '#/components/schemas/Version_2'
+                friendlyLastModified:
+                  type: string
+            lastcontributed:
+              type: object
+              properties:
+                status:
+                  type: string
+                when:
+                  type: string
+                  format: date-time
+            viewed:
+              type: object
+              properties:
+                lastSeen:
+                  type: string
+                  format: date-time
+                friendlyLastSeen:
+                  type: string
+            scheduled:
+              type: object
+            _expandable:
+              type: object
+              properties:
+                favourited:
+                  type: string
+                lastmodified:
+                  type: string
+                lastcontributed:
+                  type: string
+                viewed:
+                  type: string
+                scheduled:
+                  type: string
+        properties:
+          $ref: '#/components/schemas/GenericLinks'
+        frontend:
           type: object
           additionalProperties: true
+        labels:
+          oneOf:
+          - $ref: '#/components/schemas/LabelArray_2'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Label_2'
+      description: Metadata object for page, blogpost, comment content
+    ContainerLookAndFeel:
+      required:
+      - background
+      - backgroundColor
+      - backgroundImage
+      - backgroundSize
+      - borderRadius
+      - padding
+      type:
+      - object
+      - 'null'
+      properties:
+        background:
+          type: string
+        backgroundAttachment:
+          type:
+          - string
+          - 'null'
+        backgroundBlendMode:
+          type:
+          - string
+          - 'null'
+        backgroundClip:
+          type:
+          - string
+          - 'null'
+        backgroundColor:
+          type:
+          - string
+          - 'null'
+        backgroundImage:
+          type:
+          - string
+          - 'null'
+        backgroundOrigin:
+          type:
+          - string
+          - 'null'
+        backgroundPosition:
+          type:
+          - string
+          - 'null'
+        backgroundRepeat:
+          type:
+          - string
+          - 'null'
+        backgroundSize:
+          type:
+          - string
+          - 'null'
+        padding:
+          type: string
+        borderRadius:
+          type: string
+    ScreenLookAndFeel:
+      required:
+      - background
+      type: object
+      properties:
+        background:
+          type: string
+        backgroundAttachment:
+          type:
+          - string
+          - 'null'
+        backgroundBlendMode:
+          type:
+          - string
+          - 'null'
+        backgroundClip:
+          type:
+          - string
+          - 'null'
+        backgroundColor:
+          type:
+          - string
+          - 'null'
+        backgroundImage:
+          type:
+          - string
+          - 'null'
+        backgroundOrigin:
+          type:
+          - string
+          - 'null'
+        backgroundPosition:
+          type:
+          - string
+          - 'null'
+        backgroundRepeat:
+          type:
+          - string
+          - 'null'
+        backgroundSize:
+          type:
+          - string
+          - 'null'
+        layer:
+          type:
+          - object
+          - 'null'
           properties:
+            width:
+              type: string
+            height:
+              type: string
+        gutterTop:
+          type:
+          - string
+          - 'null'
+        gutterRight:
+          type:
+          - string
+          - 'null'
+        gutterBottom:
+          type:
+          - string
+          - 'null'
+        gutterLeft:
+          type:
+          - string
+          - 'null'
+    SpaceSettings:
+      required:
+      - _links
+      - routeOverrideEnabled
+      type:
+      - object
+      - 'null'
+      properties:
+        routeOverrideEnabled:
+          type: boolean
+          description: 'Defines whether an override for the space home should be used. This is
+
+            used in conjunction with a space theme provided by an app. For
+
+            example, if this property is set to true, a theme can display a page
+
+            other than the space homepage when users visit the root URL for a
+
+            space. This property allows apps to provide content-only theming
+
+            without overriding the space home.'
+        editor:
+          required:
+          - page
+          - blogpost
+          - default
+          type: object
+          properties:
+            page:
+              type: string
+            blogpost:
+              type: string
+            default:
+              type: string
+        contentMode:
+          type:
+          - string
+          - 'null'
+          enum:
+          - standard
+          - compact
+          description: 'The content rendering mode for the space. Controls spacing and typography
+
+            in the editor and renderer. Valid values are "standard" and "compact".
+
+            When set to "compact", content is rendered more densely with smaller
+
+            spacing and typography.'
+        spaceKey:
+          type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    ContentChildType:
+      type: object
+      properties:
+        attachment:
+          required:
+          - _links
+          - value
+          type: object
+          properties:
+            value:
+              type: boolean
+            _links:
+              $ref: '#/components/schemas/GenericLinks'
+        comment:
+          required:
+          - _links
+          - value
+          type: object
+          properties:
+            value:
+              type: boolean
+            _links:
+              $ref: '#/components/schemas/GenericLinks'
+        page:
+          required:
+          - _links
+          - value
+          type: object
+          properties:
+            value:
+              type: boolean
+            _links:
+              $ref: '#/components/schemas/GenericLinks'
+        _expandable:
+          type: object
+          properties:
+            all:
+              type: string
             attachment:
               type: string
             comment:
@@ -1468,66 +1699,164 @@ components:
               type: string
             folder:
               type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    ContentArray:
-      required:
-      - _links
-      - results
-      - size
+      additionalProperties: true
+      description: 'Shows whether a piece of content has attachments, comments, or child pages/whiteboards.
+
+        Note, this doesn''t actually contain the child objects.'
+    SuperBatchWebResources:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Content'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    TopNavigationLookAndFeel:
-      required:
-      - highlightColor
-      type: object
-      properties:
-        color:
-          type:
-          - string
-          - 'null'
-        highlightColor:
-          type: string
-        hoverOrFocus:
+        uris:
           type: object
           properties:
-            backgroundColor:
+            all:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            css:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+            js:
+              oneOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+        tags:
+          type: object
+          properties:
+            all:
               type: string
-            color:
+            css:
               type: string
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
+            data:
+              type: string
+            js:
+              type: string
+        metatags:
+          type: string
+        _expandable:
+          type: object
           additionalProperties: true
-        - type: string
-    ContentLookAndFeel:
+    Group:
+      required:
+      - name
+      - type
+      - id
       type: object
       properties:
-        screen:
-          $ref: '#/components/schemas/ScreenLookAndFeel'
-        container:
-          $ref: '#/components/schemas/ContainerLookAndFeel'
-        header:
-          $ref: '#/components/schemas/ContainerLookAndFeel'
-        body:
-          $ref: '#/components/schemas/ContainerLookAndFeel'
+        type:
+          type: string
+          default: group
+          enum:
+          - group
+        name:
+          type: string
+        id:
+          type: string
+        usageType:
+          type: string
+          default: USERBASE_GROUP
+          enum:
+          - USERBASE_GROUP
+          - TEAM_COLLABORATION
+          description: "This property represents how this collection of users is used:\n  - `USERBASE_GROUP`: This value indicates that the collection of users is used as a group.\n  - `TEAM_COLLABORATION`: This value indicates that the collection of users is used as a team."
+        managedBy:
+          type: string
+          default: ADMINS
+          enum:
+          - ADMINS
+          - EXTERNAL
+          - TEAM_MEMBERS
+          - OPEN
+          description: "This property represents how this collection of users is managed:\n  - `ADMINS`: This value indicates that the collection of users is managed by org, site or product admins.\n  - `EXTERNAL`: This value indicates that the collection of users is managed externally (through SCIM, HRIS, etc.).\n  - `TEAM_MEMBERS`: This value indicates that the collection of users is managed by its members.\n  - `OPEN`: This value indicates that the collection of users is not actively managed by any users."
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    Theme:
+      required:
+      - themeKey
+      type: object
+      properties:
+        themeKey:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          $ref: '#/components/schemas/Icon'
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    SpaceCreate:
+      required:
+      - name
+      type: object
+      additionalProperties: true
+      properties:
+        name:
+          maxLength: 200
+          type: string
+          description: The name of the new space.
+        key:
+          type: string
+          description: 'The key for the new space. Format: See [Space
+
+            keys](https://confluence.atlassian.com/x/lqNMMQ). If `alias` is not provided, this is required.'
+        alias:
+          type: string
+          description: 'This field will be used as the new identifier for the space in confluence page URLs.
+
+            If the property is not provided the alias will be the provided key.
+
+            This property is experimental and may be changed or removed in the future.'
+        description:
+          $ref: '#/components/schemas/SpaceDescriptionCreate'
+        permissions:
+          type:
+          - array
+          - 'null'
+          description: 'The permissions for the new space. If no permissions are provided, the
+
+            [Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)
+
+            are applied. Note that if permissions are provided, the space is
+
+            created with only the provided set of permissions, not
+
+            including the default space permissions. Space permissions
+
+            can be modified after creation using the space permissions
+
+            endpoints, and a private space can be created using the
+
+            create private space endpoint.'
+          items:
+            $ref: '#/components/schemas/SpacePermissionCreate'
+      description: This is the request object used when creating a new space.
+    LongTask:
+      required:
+      - id
+      - links
+      type: object
+      properties:
+        ari:
+          type: string
+          description: the ARI for the long task, based on its ID
+        id:
+          type: string
+          description: a unique identifier for the long task
+        links:
+          type: object
+          additionalProperties: true
+          properties:
+            status:
+              type: string
+              description: The URL to retrive status of long task.
     Version_2:
       required:
       - minorEdit
@@ -1593,8 +1922,30 @@ components:
           - string
           - 'null'
           description: Source of the synchrony revision
-    LabelArray_2:
+    GroupArray:
       required:
+      - limit
+      - results
+      - size
+      - start
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+    ContentArray:
+      required:
+      - _links
       - results
       - size
       type: object
@@ -1602,7 +1953,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Label_2'
+            $ref: '#/components/schemas/Content'
         start:
           type: integer
           format: int32
@@ -1614,6 +1965,372 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
+    Embeddable:
+      type: object
+      additionalProperties: true
+    Icon:
+      required:
+      - height
+      - isDefault
+      - path
+      - width
+      type:
+      - object
+      - 'null'
+      properties:
+        path:
+          type: string
+        width:
+          type: integer
+          format: int32
+        height:
+          type: integer
+          format: int32
+        isDefault:
+          type: boolean
+      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+    SpacePermission_2:
+      required:
+      - anonymousAccess
+      - operation
+      - unlicensedAccess
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        subjects:
+          type: object
+          properties:
+            user:
+              required:
+              - results
+              - size
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
+                size:
+                  type: integer
+                  format: int32
+                start:
+                  type: integer
+                  format: int32
+                limit:
+                  type: integer
+                  format: int32
+            group:
+              required:
+              - results
+              - size
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Group'
+                size:
+                  type: integer
+                  format: int32
+                start:
+                  type: integer
+                  format: int32
+                limit:
+                  type: integer
+                  format: int32
+            _expandable:
+              type: object
+              properties:
+                user:
+                  type: string
+                group:
+                  type: string
+          description: The users and/or groups that the permission applies to.
+        operation:
+          $ref: '#/components/schemas/OperationCheckResult'
+        anonymousAccess:
+          type: boolean
+          description: Grant anonymous users permission to use the operation.
+          default: false
+        unlicensedAccess:
+          type: boolean
+          description: 'Grants access to unlicensed users from JIRA Service Desk when used
+
+            with the ''read space'' operation.'
+          default: false
+      description: "This object represents a permission for given space. Permissions consist of\nat least one operation object with an accompanying subjects object.\n\nThe following combinations of `operation` and `targetType` values are\nvalid for the `operation` object:\n\n  - 'create': 'page', 'blogpost', 'comment', 'attachment'\n  - 'read': 'space'\n  - 'delete': 'page', 'blogpost', 'comment', 'attachment'\n  - 'export': 'space'\n  - 'administer': 'space'"
+    UserArray:
+      required:
+      - results
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalSize:
+          type: integer
+          format: int64
+          default: 0
+          description: 'This property will return total count of the objects before pagination is applied.
+
+            This value is returned if `shouldReturnTotalSize` is set to `true`.'
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    LookAndFeel:
+      required:
+      - bordersAndDividers
+      - content
+      - header
+      - headings
+      - links
+      - menus
+      type: object
+      properties:
+        headings:
+          required:
+          - color
+          type: object
+          properties:
+            color:
+              type: string
+        links:
+          required:
+          - color
+          type: object
+          properties:
+            color:
+              type: string
+        menus:
+          $ref: '#/components/schemas/MenusLookAndFeel'
+        header:
+          $ref: '#/components/schemas/HeaderLookAndFeel'
+        horizontalHeader:
+          $ref: '#/components/schemas/HorizontalHeaderLookAndFeel'
+        content:
+          $ref: '#/components/schemas/ContentLookAndFeel'
+        bordersAndDividers:
+          required:
+          - color
+          type: object
+          properties:
+            color:
+              type: string
+        spaceReference:
+          type:
+          - object
+          - 'null'
+    ContentBody:
+      required:
+      - representation
+      - value
+      type: object
+      properties:
+        value:
+          type: string
+        representation:
+          type: string
+          enum:
+          - view
+          - export_view
+          - styled_view
+          - storage
+          - editor
+          - editor2
+          - anonymous_export_view
+          - wiki
+          - atlas_doc_format
+          - raw
+        embeddedContent:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmbeddedContent'
+        webresource:
+          $ref: '#/components/schemas/WebResourceDependencies'
+        mediaToken:
+          type: object
+          properties:
+            collectionIds:
+              type: array
+              items:
+                type: string
+            contentId:
+              type: string
+            expiryDateTime:
+              type: string
+            fileIds:
+              type: array
+              items:
+                type: string
+            token:
+              type: string
+        _expandable:
+          type: object
+          properties:
+            content:
+              type: string
+            embeddedContent:
+              type: string
+            webresource:
+              type: string
+            mediaToken:
+              type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    HorizontalHeaderLookAndFeel:
+      required:
+      - backgroundColor
+      - primaryNavigation
+      type: object
+      properties:
+        backgroundColor:
+          type: string
+        button:
+          $ref: '#/components/schemas/ButtonLookAndFeel'
+        primaryNavigation:
+          $ref: '#/components/schemas/TopNavigationLookAndFeel'
+        secondaryNavigation:
+          $ref: '#/components/schemas/NavigationLookAndFeel'
+        search:
+          $ref: '#/components/schemas/SearchFieldLookAndFeel'
+    UsersUserKeys:
+      required:
+      - userAccountIds
+      type:
+      - object
+      - 'null'
+      additionalProperties: true
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        userKeys:
+          type: array
+          items:
+            type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    ContentHistory:
+      required:
+      - latest
+      type:
+      - object
+      - 'null'
+      properties:
+        latest:
+          type: boolean
+        createdBy:
+          $ref: '#/components/schemas/User'
+        ownedBy:
+          $ref: '#/components/schemas/User'
+        lastOwnedBy:
+          $ref: '#/components/schemas/User'
+        createdDate:
+          type: string
+          format: date-time
+        lastUpdated:
+          $ref: '#/components/schemas/Version_2'
+        previousVersion:
+          $ref: '#/components/schemas/Version_2'
+        contributors:
+          type: object
+          properties:
+            publishers:
+              $ref: '#/components/schemas/UsersUserKeys'
+        nextVersion:
+          $ref: '#/components/schemas/Version_2'
+        _expandable:
+          type: object
+          properties:
+            lastUpdated:
+              type: string
+            previousVersion:
+              type: string
+            contributors:
+              type: string
+            nextVersion:
+              type: string
+            ownedBy:
+              type: string
+            lastOwnedBy:
+              type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    SearchFieldLookAndFeel:
+      required:
+      - backgroundColor
+      - color
+      type:
+      - object
+      - 'null'
+      properties:
+        backgroundColor:
+          type: string
+        color:
+          type: string
+    SpacePermissionCreate:
+      required:
+      - anonymousAccess
+      - operation
+      - unlicensedAccess
+      type: object
+      additionalProperties: true
+      properties:
+        subjects:
+          type: object
+          properties:
+            user:
+              required:
+              - results
+              - size
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
+                size:
+                  type: integer
+                  format: int32
+            group:
+              required:
+              - results
+              - size
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/GroupCreate'
+                size:
+                  type: integer
+                  format: int32
+          description: The users and/or groups that the permission applies to.
+        operation:
+          $ref: '#/components/schemas/OperationCheckResult'
+        anonymousAccess:
+          type: boolean
+          description: Grant anonymous users permission to use the operation.
+          default: false
+        unlicensedAccess:
+          type: boolean
+          description: 'Grants access to unlicensed users from JIRA Service Desk when used
+
+            with the ''read space'' operation.'
+          default: false
+      description: "This object represents a permission for given space. Permissions consist of\nat least one operation object with an accompanying subjects object.\n\nThe following combinations of `operation` and `targetType` values are\nvalid for the `operation` object:\n\n  - 'create': 'page', 'blogpost', 'comment', 'attachment'\n  - 'read': 'space'\n  - 'delete': 'page', 'blogpost', 'comment', 'attachment'\n  - 'export': 'space'\n  - 'administer': 'space'"
     User:
       required:
       - type
@@ -1692,72 +2409,91 @@ components:
               type: string
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    SpaceDescriptionCreate:
-      required:
-      - plain
+    Container:
       type:
       - object
       - 'null'
-      properties:
-        plain:
-          type: object
-          additionalProperties: true
-          properties:
-            value:
-              type: string
-              description: The space description.
-            representation:
-              type: string
-              description: Set to 'plain'.
-      description: 'The description of the new/updated space. Note, only the ''plain'' representation
-
-        can be used for the description when creating or updating a space.'
-    SpaceCreate:
-      required:
-      - name
-      type: object
       additionalProperties: true
+      description: 'Container for content. This can be either a space (containing a page or blogpost)
+
+        or a page/blog post (containing an attachment or comment)'
+    HeaderLookAndFeel:
+      required:
+      - backgroundColor
+      - button
+      - primaryNavigation
+      - search
+      - secondaryNavigation
+      type: object
       properties:
-        name:
-          maxLength: 200
+        backgroundColor:
           type: string
-          description: The name of the new space.
-        key:
-          type: string
-          description: 'The key for the new space. Format: See [Space
+        button:
+          $ref: '#/components/schemas/ButtonLookAndFeel'
+        primaryNavigation:
+          $ref: '#/components/schemas/NavigationLookAndFeel'
+        secondaryNavigation:
+          $ref: '#/components/schemas/NavigationLookAndFeel'
+        search:
+          $ref: '#/components/schemas/SearchFieldLookAndFeel'
+    UserDetails:
+      type: object
+      properties:
+        business:
+          type: object
+          properties:
+            position:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
 
-            keys](https://confluence.atlassian.com/x/lqNMMQ). If `alias` is not provided, this is required.'
-        alias:
-          type: string
-          description: 'This field will be used as the new identifier for the space in confluence page URLs.
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
 
-            If the property is not provided the alias will be the provided key.
+                for details.'
+            department:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
 
-            This property is experimental and may be changed or removed in the future.'
-        description:
-          $ref: '#/components/schemas/SpaceDescriptionCreate'
-        permissions:
-          type:
-          - array
-          - 'null'
-          description: 'The permissions for the new space. If no permissions are provided, the
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
 
-            [Confluence default space permissions](https://confluence.atlassian.com/x/UAgzKw#CreateaSpace-Spacepermissions)
+                for details.'
+            location:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
 
-            are applied. Note that if permissions are provided, the space is
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
 
-            created with only the provided set of permissions, not
+                for details.'
+        personal:
+          type: object
+          properties:
+            phone:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
 
-            including the default space permissions. Space permissions
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
 
-            can be modified after creation using the space permissions
+                for details.'
+            im:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
 
-            endpoints, and a private space can be created using the
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
 
-            create private space endpoint.'
-          items:
-            $ref: '#/components/schemas/SpacePermissionCreate'
-      description: This is the request object used when creating a new space.
+                for details.'
+            website:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+            email:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. Use the `User.email` property instead. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
     Space_2:
       required:
       - _expandable
@@ -1859,6 +2595,15 @@ components:
               type: string
         _links:
           $ref: '#/components/schemas/GenericLinks'
+    GenericUserKey:
+      type:
+      - string
+      - 'null'
+      description: 'This property is no longer available and will be removed from the documentation soon.
+
+        Use `accountId` instead.
+
+        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
     EmbeddedContent:
       type: object
       additionalProperties: true
@@ -1870,227 +2615,44 @@ components:
           type: string
         entity:
           $ref: '#/components/schemas/Embeddable'
-    LookAndFeel:
-      required:
-      - bordersAndDividers
-      - content
-      - header
-      - headings
-      - links
-      - menus
-      type: object
-      properties:
-        headings:
-          required:
-          - color
-          type: object
-          properties:
-            color:
-              type: string
-        links:
-          required:
-          - color
-          type: object
-          properties:
-            color:
-              type: string
-        menus:
-          $ref: '#/components/schemas/MenusLookAndFeel'
-        header:
-          $ref: '#/components/schemas/HeaderLookAndFeel'
-        horizontalHeader:
-          $ref: '#/components/schemas/HorizontalHeaderLookAndFeel'
-        content:
-          $ref: '#/components/schemas/ContentLookAndFeel'
-        bordersAndDividers:
-          required:
-          - color
-          type: object
-          properties:
-            color:
-              type: string
-        spaceReference:
-          type:
-          - object
-          - 'null'
-    MenusLookAndFeel:
-      required:
-      - color
-      - hoverOrFocus
-      type: object
-      properties:
-        hoverOrFocus:
-          required:
-          - backgroundColor
-          type: object
-          properties:
-            backgroundColor:
-              type: string
-        color:
-          type: string
-    ContentBody:
-      required:
-      - representation
-      - value
-      type: object
-      properties:
-        value:
-          type: string
-        representation:
-          type: string
-          enum:
-          - view
-          - export_view
-          - styled_view
-          - storage
-          - editor
-          - editor2
-          - anonymous_export_view
-          - wiki
-          - atlas_doc_format
-          - raw
-        embeddedContent:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmbeddedContent'
-        webresource:
-          $ref: '#/components/schemas/WebResourceDependencies'
-        mediaToken:
-          type: object
-          properties:
-            collectionIds:
-              type: array
-              items:
-                type: string
-            contentId:
-              type: string
-            expiryDateTime:
-              type: string
-            fileIds:
-              type: array
-              items:
-                type: string
-            token:
-              type: string
-        _expandable:
-          type: object
-          properties:
-            content:
-              type: string
-            embeddedContent:
-              type: string
-            webresource:
-              type: string
-            mediaToken:
-              type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    ButtonLookAndFeel:
-      required:
-      - backgroundColor
-      - color
-      type:
-      - object
-      - 'null'
-      properties:
-        backgroundColor:
-          type: string
-        color:
-          type: string
-    LongTask:
-      required:
-      - id
-      - links
-      type: object
-      properties:
-        ari:
-          type: string
-          description: the ARI for the long task, based on its ID
-        id:
-          type: string
-          description: a unique identifier for the long task
-        links:
-          type: object
-          additionalProperties: true
-          properties:
-            status:
-              type: string
-              description: The URL to retrive status of long task.
-    GroupArray:
-      required:
-      - limit
-      - results
-      - size
-      - start
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-    SpaceUpdate:
+    ContentChildren:
       type: object
       additionalProperties: true
       properties:
-        name:
-          maxLength: 200
-          type:
-          - string
-          - 'null'
-          description: The updated name of the space.
-        description:
-          $ref: '#/components/schemas/SpaceDescriptionCreate'
-        homepage:
-          description: The updated homepage for this space
-          type:
-          - object
-          - 'null'
-        type:
-          description: The updated type for this space.
-          type: string
-        status:
-          description: The updated status for this space.
-          type:
-          - string
-          - 'null'
-      description: The properties of a space that can be updated.
-    HeaderLookAndFeel:
-      required:
-      - backgroundColor
-      - button
-      - primaryNavigation
-      - search
-      - secondaryNavigation
-      type: object
-      properties:
-        backgroundColor:
-          type: string
-        button:
-          $ref: '#/components/schemas/ButtonLookAndFeel'
-        primaryNavigation:
-          $ref: '#/components/schemas/NavigationLookAndFeel'
-        secondaryNavigation:
-          $ref: '#/components/schemas/NavigationLookAndFeel'
-        search:
-          $ref: '#/components/schemas/SearchFieldLookAndFeel'
-    GenericUserKey:
-      type:
-      - string
-      - 'null'
-      description: 'This property is no longer available and will be removed from the documentation soon.
-
-        Use `accountId` instead.
-
-        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+        attachment:
+          $ref: '#/components/schemas/ContentArray'
+        comment:
+          $ref: '#/components/schemas/ContentArray'
+        page:
+          $ref: '#/components/schemas/ContentArray'
+        whiteboard:
+          $ref: '#/components/schemas/ContentArray'
+        database:
+          $ref: '#/components/schemas/ContentArray'
+        embed:
+          $ref: '#/components/schemas/ContentArray'
+        folder:
+          $ref: '#/components/schemas/ContentArray'
+        _expandable:
+          type: object
+          additionalProperties: true
+          properties:
+            attachment:
+              type: string
+            comment:
+              type: string
+            page:
+              type: string
+            whiteboard:
+              type: string
+            database:
+              type: string
+            embed:
+              type: string
+            folder:
+              type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
     OperationCheckResult:
       required:
       - operation
@@ -2121,42 +2683,109 @@ components:
           type: string
           description: The space or content type that the operation applies to. Could be one of- - application - page - blogpost - comment - attachment - space
       description: An operation and the target entity that it applies to, e.g. create page.
-    Theme:
-      required:
-      - themeKey
+    SpaceUpdate:
       type: object
+      additionalProperties: true
       properties:
-        themeKey:
-          type: string
         name:
-          type: string
+          maxLength: 200
+          type:
+          - string
+          - 'null'
+          description: The updated name of the space.
         description:
+          $ref: '#/components/schemas/SpaceDescriptionCreate'
+        homepage:
+          description: The updated homepage for this space
+          type:
+          - object
+          - 'null'
+        type:
+          description: The updated type for this space.
           type: string
-        icon:
-          $ref: '#/components/schemas/Icon'
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    Icon:
+        status:
+          description: The updated status for this space.
+          type:
+          - string
+          - 'null'
+      description: The properties of a space that can be updated.
+    GenericAccountId:
+      type:
+      - string
+      - 'null'
+      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
+
+        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
+    ButtonLookAndFeel:
       required:
-      - height
-      - isDefault
-      - path
-      - width
+      - backgroundColor
+      - color
       type:
       - object
       - 'null'
       properties:
-        path:
+        backgroundColor:
           type: string
-        width:
-          type: integer
-          format: int32
-        height:
-          type: integer
-          format: int32
-        isDefault:
-          type: boolean
-      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+        color:
+          type: string
+    Label_2:
+      required:
+      - id
+      - label
+      - name
+      - prefix
+      type: object
+      properties:
+        prefix:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+    SpaceDescriptionCreate:
+      required:
+      - plain
+      type:
+      - object
+      - 'null'
+      properties:
+        plain:
+          type: object
+          additionalProperties: true
+          properties:
+            value:
+              type: string
+              description: The space description.
+            representation:
+              type: string
+              description: Set to 'plain'.
+      description: 'The description of the new/updated space. Note, only the ''plain'' representation
+
+        can be used for the description when creating or updating a space.'
+    GenericUserName:
+      type:
+      - string
+      - 'null'
+      description: 'This property is no longer available and will be removed from the documentation soon.
+
+        Use `accountId` instead.
+
+        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+    GroupCreate:
+      required:
+      - type
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+          default: group
+          enum:
+          - group
+        id:
+          type: string
     WebResourceDependencies:
       type: object
       properties:
@@ -2230,566 +2859,271 @@ components:
               additionalProperties: true
         superbatch:
           $ref: '#/components/schemas/SuperBatchWebResources'
-    ContentMetadata:
+    TopNavigationLookAndFeel:
+      required:
+      - highlightColor
       type: object
-      additionalProperties: true
-      properties:
-        currentuser:
-          type: object
-          properties:
-            favourited:
-              type: object
-              properties:
-                isFavourite:
-                  type: boolean
-                favouritedDate:
-                  type: string
-                  format: date-time
-            lastmodified:
-              type: object
-              properties:
-                version:
-                  $ref: '#/components/schemas/Version_2'
-                friendlyLastModified:
-                  type: string
-            lastcontributed:
-              type: object
-              properties:
-                status:
-                  type: string
-                when:
-                  type: string
-                  format: date-time
-            viewed:
-              type: object
-              properties:
-                lastSeen:
-                  type: string
-                  format: date-time
-                friendlyLastSeen:
-                  type: string
-            scheduled:
-              type: object
-            _expandable:
-              type: object
-              properties:
-                favourited:
-                  type: string
-                lastmodified:
-                  type: string
-                lastcontributed:
-                  type: string
-                viewed:
-                  type: string
-                scheduled:
-                  type: string
-        properties:
-          $ref: '#/components/schemas/GenericLinks'
-        frontend:
-          type: object
-          additionalProperties: true
-        labels:
-          oneOf:
-          - $ref: '#/components/schemas/LabelArray_2'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Label_2'
-      description: Metadata object for page, blogpost, comment content
-    GenericAccountId:
-      type:
-      - string
-      - 'null'
-      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
-
-        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
-    SpaceDescription_2:
-      required:
-      - embeddedContent
-      - representation
-      - value
-      type: object
-      additionalProperties: true
-      properties:
-        value:
-          type: string
-        representation:
-          type: string
-          enum:
-          - plain
-          - view
-        embeddedContent:
-          type: array
-          items:
-            type: object
-            properties: {}
-    Container:
-      type:
-      - object
-      - 'null'
-      additionalProperties: true
-      description: 'Container for content. This can be either a space (containing a page or blogpost)
-
-        or a page/blog post (containing an attachment or comment)'
-    ContainerLookAndFeel:
-      required:
-      - background
-      - backgroundColor
-      - backgroundImage
-      - backgroundSize
-      - borderRadius
-      - padding
-      type:
-      - object
-      - 'null'
-      properties:
-        background:
-          type: string
-        backgroundAttachment:
-          type:
-          - string
-          - 'null'
-        backgroundBlendMode:
-          type:
-          - string
-          - 'null'
-        backgroundClip:
-          type:
-          - string
-          - 'null'
-        backgroundColor:
-          type:
-          - string
-          - 'null'
-        backgroundImage:
-          type:
-          - string
-          - 'null'
-        backgroundOrigin:
-          type:
-          - string
-          - 'null'
-        backgroundPosition:
-          type:
-          - string
-          - 'null'
-        backgroundRepeat:
-          type:
-          - string
-          - 'null'
-        backgroundSize:
-          type:
-          - string
-          - 'null'
-        padding:
-          type: string
-        borderRadius:
-          type: string
-    SpaceSettings:
-      required:
-      - _links
-      - routeOverrideEnabled
-      type:
-      - object
-      - 'null'
-      properties:
-        routeOverrideEnabled:
-          type: boolean
-          description: 'Defines whether an override for the space home should be used. This is
-
-            used in conjunction with a space theme provided by an app. For
-
-            example, if this property is set to true, a theme can display a page
-
-            other than the space homepage when users visit the root URL for a
-
-            space. This property allows apps to provide content-only theming
-
-            without overriding the space home.'
-        editor:
-          required:
-          - page
-          - blogpost
-          - default
-          type: object
-          properties:
-            page:
-              type: string
-            blogpost:
-              type: string
-            default:
-              type: string
-        contentMode:
-          type:
-          - string
-          - 'null'
-          enum:
-          - standard
-          - compact
-          description: 'The content rendering mode for the space. Controls spacing and typography
-
-            in the editor and renderer. Valid values are "standard" and "compact".
-
-            When set to "compact", content is rendered more densely with smaller
-
-            spacing and typography.'
-        spaceKey:
-          type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    ContentHistory:
-      required:
-      - latest
-      type:
-      - object
-      - 'null'
-      properties:
-        latest:
-          type: boolean
-        createdBy:
-          $ref: '#/components/schemas/User'
-        ownedBy:
-          $ref: '#/components/schemas/User'
-        lastOwnedBy:
-          $ref: '#/components/schemas/User'
-        createdDate:
-          type: string
-          format: date-time
-        lastUpdated:
-          $ref: '#/components/schemas/Version_2'
-        previousVersion:
-          $ref: '#/components/schemas/Version_2'
-        contributors:
-          type: object
-          properties:
-            publishers:
-              $ref: '#/components/schemas/UsersUserKeys'
-        nextVersion:
-          $ref: '#/components/schemas/Version_2'
-        _expandable:
-          type: object
-          properties:
-            lastUpdated:
-              type: string
-            previousVersion:
-              type: string
-            contributors:
-              type: string
-            nextVersion:
-              type: string
-            ownedBy:
-              type: string
-            lastOwnedBy:
-              type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    Embeddable:
-      type: object
-      additionalProperties: true
-    Group:
-      required:
-      - name
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          type: string
-          default: group
-          enum:
-          - group
-        name:
-          type: string
-        id:
-          type: string
-        usageType:
-          type: string
-          default: USERBASE_GROUP
-          enum:
-          - USERBASE_GROUP
-          - TEAM_COLLABORATION
-          description: "This property represents how this collection of users is used:\n  - `USERBASE_GROUP`: This value indicates that the collection of users is used as a group.\n  - `TEAM_COLLABORATION`: This value indicates that the collection of users is used as a team."
-        managedBy:
-          type: string
-          default: ADMINS
-          enum:
-          - ADMINS
-          - EXTERNAL
-          - TEAM_MEMBERS
-          - OPEN
-          description: "This property represents how this collection of users is managed:\n  - `ADMINS`: This value indicates that the collection of users is managed by org, site or product admins.\n  - `EXTERNAL`: This value indicates that the collection of users is managed externally (through SCIM, HRIS, etc.).\n  - `TEAM_MEMBERS`: This value indicates that the collection of users is managed by its members.\n  - `OPEN`: This value indicates that the collection of users is not actively managed by any users."
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    Label_2:
-      required:
-      - id
-      - label
-      - name
-      - prefix
-      type: object
-      properties:
-        prefix:
-          type: string
-        name:
-          type: string
-        id:
-          type: string
-        label:
-          type: string
-    SpacePermission_2:
-      required:
-      - anonymousAccess
-      - operation
-      - unlicensedAccess
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        subjects:
-          type: object
-          properties:
-            user:
-              required:
-              - results
-              - size
-              type: object
-              properties:
-                results:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/User'
-                size:
-                  type: integer
-                  format: int32
-                start:
-                  type: integer
-                  format: int32
-                limit:
-                  type: integer
-                  format: int32
-            group:
-              required:
-              - results
-              - size
-              type: object
-              properties:
-                results:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Group'
-                size:
-                  type: integer
-                  format: int32
-                start:
-                  type: integer
-                  format: int32
-                limit:
-                  type: integer
-                  format: int32
-            _expandable:
-              type: object
-              properties:
-                user:
-                  type: string
-                group:
-                  type: string
-          description: The users and/or groups that the permission applies to.
-        operation:
-          $ref: '#/components/schemas/OperationCheckResult'
-        anonymousAccess:
-          type: boolean
-          description: Grant anonymous users permission to use the operation.
-          default: false
-        unlicensedAccess:
-          type: boolean
-          description: 'Grants access to unlicensed users from JIRA Service Desk when used
-
-            with the ''read space'' operation.'
-          default: false
-      description: "This object represents a permission for given space. Permissions consist of\nat least one operation object with an accompanying subjects object.\n\nThe following combinations of `operation` and `targetType` values are\nvalid for the `operation` object:\n\n  - 'create': 'page', 'blogpost', 'comment', 'attachment'\n  - 'read': 'space'\n  - 'delete': 'page', 'blogpost', 'comment', 'attachment'\n  - 'export': 'space'\n  - 'administer': 'space'"
-    ContentRestriction:
-      required:
-      - _expandable
-      - _links
-      - operation
-      type: object
-      properties:
-        operation:
-          type: string
-          enum:
-          - administer
-          - copy
-          - create
-          - delete
-          - export
-          - move
-          - purge
-          - purge_version
-          - read
-          - restore
-          - update
-          - use
-        restrictions:
-          type: object
-          properties:
-            user:
-              $ref: '#/components/schemas/UserArray'
-            group:
-              $ref: '#/components/schemas/GroupArray'
-            _expandable:
-              type: object
-              properties:
-                user:
-                  type: string
-                group:
-                  type: string
-        content:
-          $ref: '#/components/schemas/Content'
-        _expandable:
-          type: object
-          properties:
-            restrictions:
-              type: string
-            content:
-              type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    ContentChildType:
-      type: object
-      properties:
-        attachment:
-          required:
-          - _links
-          - value
-          type: object
-          properties:
-            value:
-              type: boolean
-            _links:
-              $ref: '#/components/schemas/GenericLinks'
-        comment:
-          required:
-          - _links
-          - value
-          type: object
-          properties:
-            value:
-              type: boolean
-            _links:
-              $ref: '#/components/schemas/GenericLinks'
-        page:
-          required:
-          - _links
-          - value
-          type: object
-          properties:
-            value:
-              type: boolean
-            _links:
-              $ref: '#/components/schemas/GenericLinks'
-        _expandable:
-          type: object
-          properties:
-            all:
-              type: string
-            attachment:
-              type: string
-            comment:
-              type: string
-            page:
-              type: string
-            whiteboard:
-              type: string
-            database:
-              type: string
-            embed:
-              type: string
-            folder:
-              type: string
-      additionalProperties: true
-      description: 'Shows whether a piece of content has attachments, comments, or child pages/whiteboards.
-
-        Note, this doesn''t actually contain the child objects.'
-    NavigationLookAndFeel:
-      required:
-      - color
-      - hoverOrFocus
-      type:
-      - object
-      - 'null'
       properties:
         color:
-          type: string
-        highlightColor:
           type:
           - string
           - 'null'
+        highlightColor:
+          type: string
         hoverOrFocus:
-          required:
-          - backgroundColor
-          - color
           type: object
           properties:
             backgroundColor:
               type: string
             color:
               type: string
-    UserArray:
-      required:
-      - results
+    SpaceDescription_3:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    BodyType:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        totalSize:
-          type: integer
-          format: int64
-          default: 0
-          description: 'This property will return total count of the objects before pagination is applied.
-
-            This value is returned if `shouldReturnTotalSize` is set to `true`.'
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    UsersUserKeys:
-      required:
-      - userAccountIds
-      type:
-      - object
-      - 'null'
-      additionalProperties: true
-      properties:
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        userKeys:
-          type: array
-          items:
-            type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    SearchFieldLookAndFeel:
-      required:
-      - backgroundColor
-      - color
-      type:
-      - object
-      - 'null'
-      properties:
-        backgroundColor:
+        representation:
           type: string
-        color:
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
+    SpaceProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the space property.
+        key:
+          type: string
+          description: Key of the space property.
+        value:
+          description: Value of the space property.
+        createdAt:
+          type: string
+          format: date-time
+          description: RFC3339 compliant date time at which the property was created.
+        createdBy:
+          type: string
+          description: Atlassian account ID of the user that created the space property.
+        version:
+          type: object
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+              description: RFC3339 compliant date time at which the property's current version was created.
+            createdBy:
+              type: string
+              description: Atlassian account ID of the user that created the space property's current version.
+            message:
+              type: string
+              description: Message associated with the current version.
+            number:
+              type: integer
+              format: int32
+              description: The space property's current version number.
+    SpacePermissionAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the space permission.
+        principal:
+          type: object
+          description: The entity the space permissions corresponds to.
+          properties:
+            type:
+              enum:
+              - user
+              - group
+              - role
+              type: string
+            id:
+              type: string
+              description: ID of the entity.
+        operation:
+          type: object
+          description: The operation the space permission corresponds to.
+          properties:
+            key:
+              enum:
+              - use
+              - create
+              - read
+              - update
+              - delete
+              - copy
+              - move
+              - export
+              - purge
+              - purge_version
+              - administer
+              - restore
+              - create_space
+              - restrict_content
+              - archive
+              type: string
+              description: The type of operation.
+            targetType:
+              enum:
+              - page
+              - blogpost
+              - comment
+              - attachment
+              - whiteboard
+              - database
+              - embed
+              - folder
+              - space
+              - application
+              - userProfile
+              type: string
+              description: The type of entity the operation type targets.
+    SpaceType:
+      enum:
+      - global
+      - collaboration
+      - knowledge_base
+      - personal
+      - system
+      - onboarding
+      - xflow_sample_space
+      type: string
+      description: The type of space.
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    SpaceBulk_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the space.
+        key:
+          type: string
+          description: Key of the space.
+        name:
+          type: string
+          description: Name of the space.
+        type:
+          $ref: '#/components/schemas/SpaceType'
+        status:
+          $ref: '#/components/schemas/SpaceStatus'
+        authorId:
+          type: string
+          description: The account ID of the user who created this space originally.
+        spaceOwnerId:
+          type: string
+          description: The account ID of the user who owns this space.
+        currentActiveAlias:
+          type: string
+          description: Currently active alias for a Confluence space.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the space was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        homepageId:
+          type: string
+          description: ID of the space's homepage.
+        description:
+          $ref: '#/components/schemas/SpaceDescription_3'
+        icon:
+          $ref: '#/components/schemas/SpaceIcon_2'
+        _links:
+          $ref: '#/components/schemas/SpaceLinks_2'
+    SpaceLinks_2:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the space.
+    SpaceDescriptionBodyRepresentation:
+      enum:
+      - plain
+      - view
+      type: string
+      description: The formats a space description can be represented as. A subset of BodyRepresentation.
+    Principal:
+      type: object
+      description: The principal of the role assignment.
+      properties:
+        principalType:
+          $ref: '#/components/schemas/PrincipalType'
+        principalId:
+          type: string
+          description: The principal ID.
+    SpaceIcon_2:
+      type: object
+      description: The icon of the space
+      properties:
+        path:
+          type: string
+          description: The path (relative to base URL) at which the space's icon can be retrieved. The format should be like `/wiki/download/...` or `/wiki/aa-avatar/...`
+        apiDownloadLink:
+          type: string
+          description: 'The path (relative to base URL) that can be used to retrieve a link to download the space icon. 3LO apps should use this link instead of the value provided
+
+            in the `path` property to retrieve the icon.
+
+
+            Currently this field is only returned for `global` spaces and not `personal` spaces.
+
+            '
+    SpaceSortOrder:
+      enum:
+      - id
+      - -id
+      - key
+      - -key
+      - name
+      - -name
+      type: string
+      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    PrincipalType:
+      type: string
+      description: The principal type.
+      enum:
+      - USER
+      - GROUP
+      - ACCESS_CLASS
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    Operation_2:
+      type: object
+      properties:
+        operation:
+          description: The type of operation.
+          type: string
+        targetType:
+          description: The type of entity the operation type targets.
           type: string
     SpaceSingle:
       type: object
@@ -2870,139 +3204,6 @@ components:
               $ref: '#/components/schemas/OptionalFieldLinks'
         _links:
           $ref: '#/components/schemas/SpaceLinks_2'
-    SpaceLinks_2:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the space.
-    SpaceType:
-      enum:
-      - global
-      - collaboration
-      - knowledge_base
-      - personal
-      - system
-      - onboarding
-      - xflow_sample_space
-      type: string
-      description: The type of space.
-    SpaceDescriptionBodyRepresentation:
-      enum:
-      - plain
-      - view
-      type: string
-      description: The formats a space description can be represented as. A subset of BodyRepresentation.
-    OptionalFieldMeta:
-      type: object
-      properties:
-        hasMore:
-          type: boolean
-          description: Indicates if there are more available results that can be fetched.
-        cursor:
-          type: string
-          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
-    Operation_2:
-      type: object
-      properties:
-        operation:
-          description: The type of operation.
-          type: string
-        targetType:
-          description: The type of entity the operation type targets.
-          type: string
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    SpaceDescription_3:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        plain:
-          $ref: '#/components/schemas/BodyType'
-        view:
-          $ref: '#/components/schemas/BodyType'
-    PrincipalType:
-      type: string
-      description: The principal type.
-      enum:
-      - USER
-      - GROUP
-      - ACCESS_CLASS
-    SpaceBulk_2:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the space.
-        key:
-          type: string
-          description: Key of the space.
-        name:
-          type: string
-          description: Name of the space.
-        type:
-          $ref: '#/components/schemas/SpaceType'
-        status:
-          $ref: '#/components/schemas/SpaceStatus'
-        authorId:
-          type: string
-          description: The account ID of the user who created this space originally.
-        spaceOwnerId:
-          type: string
-          description: The account ID of the user who owns this space.
-        currentActiveAlias:
-          type: string
-          description: Currently active alias for a Confluence space.
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the space was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        homepageId:
-          type: string
-          description: ID of the space's homepage.
-        description:
-          $ref: '#/components/schemas/SpaceDescription_3'
-        icon:
-          $ref: '#/components/schemas/SpaceIcon_2'
-        _links:
-          $ref: '#/components/schemas/SpaceLinks_2'
-    SpaceSortOrder:
-      enum:
-      - id
-      - -id
-      - key
-      - -key
-      - name
-      - -name
-      type: string
-      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    Principal:
-      type: object
-      description: The principal of the role assignment.
-      properties:
-        principalType:
-          $ref: '#/components/schemas/PrincipalType'
-        principalId:
-          type: string
-          description: The principal ID.
     Label_3:
       type: object
       properties:
@@ -3015,63 +3216,6 @@ components:
         prefix:
           type: string
           description: Prefix of the label.
-    SpacePermissionAssignment:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the space permission.
-        principal:
-          type: object
-          description: The entity the space permissions corresponds to.
-          properties:
-            type:
-              enum:
-              - user
-              - group
-              - role
-              type: string
-            id:
-              type: string
-              description: ID of the entity.
-        operation:
-          type: object
-          description: The operation the space permission corresponds to.
-          properties:
-            key:
-              enum:
-              - use
-              - create
-              - read
-              - update
-              - delete
-              - copy
-              - move
-              - export
-              - purge
-              - purge_version
-              - administer
-              - restore
-              - create_space
-              - restrict_content
-              - archive
-              type: string
-              description: The type of operation.
-            targetType:
-              enum:
-              - page
-              - blogpost
-              - comment
-              - attachment
-              - whiteboard
-              - database
-              - embed
-              - folder
-              - space
-              - application
-              - userProfile
-              type: string
-              description: The type of entity the operation type targets.
     SpaceStatus:
       enum:
       - current
@@ -3079,148 +3223,6 @@ components:
       - trashed
       type: string
       description: The status of the space.
-    SpaceProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the space property.
-        key:
-          type: string
-          description: Key of the space property.
-        value:
-          description: Value of the space property.
-        createdAt:
-          type: string
-          format: date-time
-          description: RFC3339 compliant date time at which the property was created.
-        createdBy:
-          type: string
-          description: Atlassian account ID of the user that created the space property.
-        version:
-          type: object
-          properties:
-            createdAt:
-              type: string
-              format: date-time
-              description: RFC3339 compliant date time at which the property's current version was created.
-            createdBy:
-              type: string
-              description: Atlassian account ID of the user that created the space property's current version.
-            message:
-              type: string
-              description: Message associated with the current version.
-            number:
-              type: integer
-              format: int32
-              description: The space property's current version number.
-    SpaceIcon_2:
-      type: object
-      description: The icon of the space
-      properties:
-        path:
-          type: string
-          description: The path (relative to base URL) at which the space's icon can be retrieved. The format should be like `/wiki/download/...` or `/wiki/aa-avatar/...`
-        apiDownloadLink:
-          type: string
-          description: 'The path (relative to base URL) that can be used to retrieve a link to download the space icon. 3LO apps should use this link instead of the value provided
-
-            in the `path` property to retrieve the icon.
-
-
-            Currently this field is only returned for `global` spaces and not `personal` spaces.
-
-            '
-    OptionalFieldLinks:
-      type: object
-      properties:
-        self:
-          type: string
-          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
-  parameters:
-    SortParam:
-      name: sort
-      in: query
-      description: Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.
-      schema:
-        type: string
-        enum:
-        - id
-        - -id
-        - title
-        - -title
-        - created-date
-        - -created-date
-        - modified-date
-        - -modified-date
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    StatusFilter:
-      name: status
-      in: query
-      description: Filter by content status.
-      schema:
-        type: string
-        enum:
-        - current
-        - archived
-        - draft
-        - trashed
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
-    BodyFormatParam:
-      name: body-format
-      in: query
-      description: The representation format for the content body.
-      schema:
-        type: string
-        enum:
-        - storage
-        - atlas_doc_format
-        - view
-        - export_view
-        - anonymous_export_view
-        - editor
-    DescriptionFormatParam:
-      name: description-format
-      in: query
-      description: The format of the space description in the response.
-      schema:
-        type: string
-        enum:
-        - plain
-        - view
-  responses:
-    BadRequest:
-      description: Returned if the request is malformed or contains invalid parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Returned if the requested resource is not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   requestBodies:
     SpaceCreateRequest:
       required: true

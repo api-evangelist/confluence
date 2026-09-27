@@ -390,6 +390,29 @@ paths:
       x-atlassian-connect-scope: WRITE
 components:
   schemas:
+    UserPropertyKeyArray:
+      required:
+      - results
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
     UserPropertyUpdate:
       required:
       - value
@@ -401,6 +424,13 @@ components:
           additionalProperties: true
           properties: {}
           description: The value of the user property.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     UserProperty:
       required:
       - key
@@ -430,29 +460,6 @@ components:
           description: datetime when the property was created such as `2022-01-01T12:00:00.111Z`
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    UserPropertyKeyArray:
-      required:
-      - results
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
     UserPropertyCreate:
       required:
       - value
@@ -464,13 +471,6 @@ components:
           additionalProperties: true
           properties: {}
           description: The value of the user property.
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
   securitySchemes:
     basicAuth:
       type: http

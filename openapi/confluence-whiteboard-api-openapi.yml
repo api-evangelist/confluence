@@ -231,6 +231,24 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
+    ParentContentType:
+      type: string
+      enum:
+      - page
+      - whiteboard
+      - database
+      - embed
+      - folder
+      description: Content type of the parent, or null if there is no parent.
+    WhiteboardLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        editui:
+          type: string
+          description: Edit UI link of the content.
     WhiteboardSingle:
       type: object
       properties:
@@ -273,35 +291,6 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/WhiteboardLinks'
-    ContentStatus:
-      enum:
-      - current
-      - draft
-      - archived
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
-    WhiteboardLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the content.
-        editui:
-          type: string
-          description: Edit UI link of the content.
-    ParentContentType:
-      type: string
-      enum:
-      - page
-      - whiteboard
-      - database
-      - embed
-      - folder
-      description: Content type of the parent, or null if there is no parent.
     Version:
       type: object
       properties:
@@ -322,6 +311,17 @@ components:
         authorId:
           type: string
           description: The account ID of the user who created this version.
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
   requestBodies:
     WhiteboardCreateRequest:
       required: true

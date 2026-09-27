@@ -778,7 +778,54 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
+  parameters:
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    LabelPrefixParam:
+      name: prefix
+      in: query
+      description: Filter labels by prefix (global, my, team).
+      schema:
+        type: string
+        enum:
+        - global
+        - my
+        - team
   schemas:
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
     Label:
       type: object
       description: Represents a label applied to Confluence content.
@@ -834,18 +881,6 @@ components:
           type: string
           description: A human-readable error message.
           example: example_value
-    PaginationLinks:
-      type: object
-      description: Pagination links for cursor-based pagination.
-      properties:
-        next:
-          type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
-        base:
-          type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
     LabelArray:
       type: object
       description: A list of labels.
@@ -857,6 +892,17 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
     Label_2:
       type: object
       properties:
@@ -879,52 +925,6 @@ components:
       - -name
       type: string
       description: The sort fields for labels. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-  parameters:
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
-    LabelPrefixParam:
-      name: prefix
-      in: query
-      description: Filter labels by prefix (global, my, team).
-      schema:
-        type: string
-        enum:
-        - global
-        - my
-        - team
   responses:
     NotFound:
       description: Returned if the requested resource is not found.

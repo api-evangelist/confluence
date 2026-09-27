@@ -155,15 +155,58 @@ paths:
       x-experimental: true
 components:
   schemas:
-    BodyType:
+    SpaceSortOrder:
+      enum:
+      - id
+      - -id
+      - key
+      - -key
+      - name
+      - -name
+      type: string
+      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    SpaceLinks:
       type: object
       properties:
-        representation:
+        webui:
           type: string
-          description: Type of content representation used for the value field.
-        value:
+          description: Web UI link of the space.
+    SpaceDescription:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    DataPolicyMetadata:
+      type: object
+      properties:
+        anyContentBlocked:
+          type: boolean
+          description: Whether the workspace contains any content blocked for (inaccessible to) the requesting client application.
+          readOnly: true
+      additionalProperties: false
+      description: Details about data policies.
+      xml:
+        name: datapolicy
+    SpaceIcon:
+      type: object
+      description: The icon of the space
+      properties:
+        path:
           type: string
-          description: Body of the content, in the format found in the representation field.
+          description: The path (relative to base URL) at which the space's icon can be retrieved. The format should be like `/wiki/download/...` or `/wiki/aa-avatar/...`
+        apiDownloadLink:
+          type: string
+          description: 'The path (relative to base URL) that can be used to retrieve a link to download the space icon. 3LO apps should use this link instead of the value provided
+
+            in the `path` property to retrieve the icon.
+
+
+            Currently this field is only returned for `global` spaces and not `personal` spaces.
+
+            '
     MultiEntityLinks:
       type: object
       properties:
@@ -175,14 +218,15 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    SpaceDescription:
+    BodyType:
       type: object
-      description: Contains fields for each representation type requested.
       properties:
-        plain:
-          $ref: '#/components/schemas/BodyType'
-        view:
-          $ref: '#/components/schemas/BodyType'
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
     DataPolicySpace:
       type: object
       properties:
@@ -208,50 +252,6 @@ components:
           $ref: '#/components/schemas/SpaceIcon'
         _links:
           $ref: '#/components/schemas/SpaceLinks'
-    SpaceLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the space.
-    SpaceIcon:
-      type: object
-      description: The icon of the space
-      properties:
-        path:
-          type: string
-          description: The path (relative to base URL) at which the space's icon can be retrieved. The format should be like `/wiki/download/...` or `/wiki/aa-avatar/...`
-        apiDownloadLink:
-          type: string
-          description: 'The path (relative to base URL) that can be used to retrieve a link to download the space icon. 3LO apps should use this link instead of the value provided
-
-            in the `path` property to retrieve the icon.
-
-
-            Currently this field is only returned for `global` spaces and not `personal` spaces.
-
-            '
-    SpaceSortOrder:
-      enum:
-      - id
-      - -id
-      - key
-      - -key
-      - name
-      - -name
-      type: string
-      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    DataPolicyMetadata:
-      type: object
-      properties:
-        anyContentBlocked:
-          type: boolean
-          description: Whether the workspace contains any content blocked for (inaccessible to) the requesting client application.
-          readOnly: true
-      additionalProperties: false
-      description: Details about data policies.
-      xml:
-        name: datapolicy
   securitySchemes:
     basicAuth:
       type: http

@@ -96,22 +96,13 @@ paths:
       x-atlassian-connect-scope: READ
 components:
   schemas:
-    Label:
-      required:
-      - id
-      - label
-      - name
-      - prefix
-      type: object
-      properties:
-        prefix:
-          type: string
-        name:
-          type: string
-        id:
-          type: string
-        label:
-          type: string
+    LabeledContentType:
+      type: string
+      enum:
+      - page
+      - blogpost
+      - attachment
+      - page_template
     LabeledContentPageResponse:
       required:
       - results
@@ -140,13 +131,22 @@ components:
           $ref: '#/components/schemas/Label'
         associatedContents:
           $ref: '#/components/schemas/LabeledContentPageResponse'
-    LabeledContentType:
-      type: string
-      enum:
-      - page
-      - blogpost
-      - attachment
-      - page_template
+    Label:
+      required:
+      - id
+      - label
+      - name
+      - prefix
+      type: object
+      properties:
+        prefix:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
     LabeledContent:
       required:
       - contentId

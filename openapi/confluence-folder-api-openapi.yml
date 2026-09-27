@@ -224,17 +224,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    ContentStatus:
-      enum:
-      - current
-      - draft
-      - archived
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
     ParentContentType:
       type: string
       enum:
@@ -250,6 +239,37 @@ components:
         webui:
           type: string
           description: Web UI link of the content.
+    Version:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
+          type: string
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
     FolderSingle:
       type: object
       properties:
@@ -292,26 +312,6 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/FolderLinks'
-    Version:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        message:
-          type: string
-          description: Message associated with the current version.
-        number:
-          format: int32
-          type: integer
-          description: The version number.
-        minorEdit:
-          type: boolean
-          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
-        authorId:
-          type: string
-          description: The account ID of the user who created this version.
   requestBodies:
     FolderCreateRequest:
       required: true

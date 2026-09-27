@@ -937,12 +937,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    ClassificationLevelStatus:
-      type: string
-      enum:
-      - DRAFT
-      - PUBLISHED
-      - ARCHIVED
     ClassificationLevelColor:
       type: string
       enum:
@@ -957,6 +951,12 @@ components:
       - PURPLE
       - GREY
       - LIME
+    ClassificationLevelStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PUBLISHED
+      - ARCHIVED
     ClassificationLevel:
       title: ClassificationLevel
       type: object
@@ -986,6 +986,20 @@ components:
           description: The color of the classification level object.
           $ref: '#/components/schemas/ClassificationLevelColor'
   requestBodies:
+    LiveEditContentClassificationLevelResetRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - status
+            properties:
+              status:
+                enum:
+                - current
+                type: string
+                description: Status of the content.
     SpaceDefaultClassificationLevelUpdateRequest:
       required: true
       content:
@@ -998,6 +1012,25 @@ components:
               id:
                 type: string
                 description: The ID of the classification level.
+    ContentClassificationLevelUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - id
+            - status
+            properties:
+              id:
+                type: string
+                description: The ID of the classification level.
+              status:
+                enum:
+                - current
+                - draft
+                type: string
+                description: Status of the content.
     LiveEditContentClassificationLevelUpdateRequest:
       required: true
       content:
@@ -1029,39 +1062,6 @@ components:
                 enum:
                 - current
                 - draft
-                type: string
-                description: Status of the content.
-    ContentClassificationLevelUpdateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - id
-            - status
-            properties:
-              id:
-                type: string
-                description: The ID of the classification level.
-              status:
-                enum:
-                - current
-                - draft
-                type: string
-                description: Status of the content.
-    LiveEditContentClassificationLevelResetRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - status
-            properties:
-              status:
-                enum:
-                - current
                 type: string
                 description: Status of the content.
   securitySchemes:

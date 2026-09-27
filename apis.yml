@@ -3,15 +3,19 @@ name: Confluence
 description: APIs for Atlassian Confluence - team collaboration and knowledge management software.
 deliveryModel:
   model: saas
-  open_source: false
+  license_evidence:
+    not_product:
+    - atlassian/atlassian-mcp-server
+  open_source: unknown
   commercial: true
   callable_host: true
   label: Hosted service · you call their endpoint
-  confidence: high
+  confidence: low
   source:
   - openapi
   - pricing
-  generated: '2026-08-28'
+  - repository-not-product
+  generated: '2026-09-25'
   method: derived
 specificationVersion: '0.23'
 accessModel:
@@ -105,11 +109,13 @@ apis:
   tags:
   - Permissions
   - Settings
+  - Spaces
   - Space
   tags_raw:
   - Permissions
   - Settings
   - Spaces
+  - Space
   properties:
   - type: Documentation
     url: https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-space/
@@ -296,7 +302,7 @@ apis:
   humanURL: https://developer.atlassian.com/server/confluence/confluence-server-rest-api/
   baseURL: https://your-domain.atlassian.net/wiki/rest/api
   tags:
-  - Data-Center
+  - Data Center
   - On-Premises
   - REST
   - Servers
@@ -305,6 +311,7 @@ apis:
   - On-Premise
   - Rest
   - Server
+  - Data-Center
   properties:
   - type: Documentation
     url: https://developer.atlassian.com/server/confluence/confluence-server-rest-api/
@@ -616,11 +623,13 @@ apis:
   humanURL: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
   baseURL: https://your-domain.atlassian.net/wiki/api/v2
   tags:
-  - Space
+  - Spaces
   - v2
+  - Space
   tags_raw:
   - Spaces
   - V2
+  - Space
   properties:
   - type: Documentation
     url: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/
@@ -1312,12 +1321,14 @@ apis:
   - GraphQL
   - Content
   - Pages
+  - Spaces
   - Space
   tags_raw:
   - GraphQL
   - Content
   - Pages
   - Spaces
+  - Space
   properties:
   - type: GraphQL
     url: graphql/confluence-graphql.md

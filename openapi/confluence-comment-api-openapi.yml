@@ -1818,57 +1818,36 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
+  responses:
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Returned if the request is malformed or contains invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    Body:
       type: object
-      description: Error response from the Confluence API.
+      description: The body content in various representations.
       properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
-        message:
-          type: string
-          description: A human-readable error message.
-          example: example_value
-    BodyRepresentation:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: The name of the representation format.
-          example: example_value
-        value:
-          type: string
-          description: The body content in this representation.
-          example: example_value
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
     Version:
       type: object
       description: Version information for content.
@@ -1894,31 +1873,6 @@ components:
           type: string
           description: The Atlassian account ID of the version author.
           example: '500123'
-    CommentLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link for the comment.
-          example: example_value
-    InlineCommentCreateRequest:
-      type: object
-      required:
-      - body
-      - inlineCommentProperties
-      properties:
-        blogPostId:
-          type: string
-          description: The ID of the blog post to add an inline comment on.
-          example: '500123'
-        pageId:
-          type: string
-          description: The ID of the page to add an inline comment on.
-          example: '500123'
-        body:
-          $ref: '#/components/schemas/BodyWrite'
-        inlineCommentProperties:
-          $ref: '#/components/schemas/InlineCommentProperties'
     Comment:
       type: object
       description: Represents a comment on a Confluence page or blog post.
@@ -1976,6 +1930,47 @@ components:
           $ref: '#/components/schemas/InlineCommentProperties'
         _links:
           $ref: '#/components/schemas/CommentLinks'
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+          example: example_value
+        value:
+          type: string
+          description: The body content in this representation.
+          example: example_value
+    InlineCommentCreateRequest:
+      type: object
+      required:
+      - body
+      - inlineCommentProperties
+      properties:
+        blogPostId:
+          type: string
+          description: The ID of the blog post to add an inline comment on.
+          example: '500123'
+        pageId:
+          type: string
+          description: The ID of the page to add an inline comment on.
+          example: '500123'
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        inlineCommentProperties:
+          $ref: '#/components/schemas/InlineCommentProperties'
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
     VersionWrite:
       type: object
       required:
@@ -1989,27 +1984,6 @@ components:
           type: string
           description: An optional message associated with this version.
           example: example_value
-    CommentUpdateRequest:
-      type: object
-      required:
-      - body
-      - version
-      properties:
-        body:
-          $ref: '#/components/schemas/BodyWrite'
-        version:
-          $ref: '#/components/schemas/VersionWrite'
-    CommentBulk:
-      type: object
-      description: A paginated list of comments.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Comment'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
     CommentCreateRequest:
       type: object
       required:
@@ -2029,40 +2003,6 @@ components:
           example: '500123'
         body:
           $ref: '#/components/schemas/BodyWrite'
-    PaginationLinks:
-      type: object
-      description: Pagination links for cursor-based pagination.
-      properties:
-        next:
-          type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
-        base:
-          type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
-    Body:
-      type: object
-      description: The body content in various representations.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyRepresentation'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyRepresentation'
-        view:
-          $ref: '#/components/schemas/BodyRepresentation'
-    InlineCommentProperties:
-      type: object
-      description: Properties specific to inline comments.
-      properties:
-        textSelection:
-          type: string
-          description: The selected text that this inline comment is anchored to.
-          example: example_value
-        textSelectionMatchCount:
-          type: integer
-          description: The match index of the text selection, if the same text appears multiple times.
-          example: 10
     BodyWrite:
       type: object
       required:
@@ -2082,13 +2022,86 @@ components:
           type: string
           description: The body content in the specified representation.
           example: example_value
-    Like:
+    CommentUpdateRequest:
+      type: object
+      required:
+      - body
+      - version
+      properties:
+        body:
+          $ref: '#/components/schemas/BodyWrite'
+        version:
+          $ref: '#/components/schemas/VersionWrite'
+    InlineCommentProperties:
+      type: object
+      description: Properties specific to inline comments.
+      properties:
+        textSelection:
+          type: string
+          description: The selected text that this inline comment is anchored to.
+          example: example_value
+        textSelectionMatchCount:
+          type: integer
+          description: The match index of the text selection, if the same text appears multiple times.
+          example: 10
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
+    CommentLinks:
       type: object
       properties:
-        accountId:
+        webui:
           type: string
-          description: Account ID.
-    FooterCommentModel:
+          description: Web UI link for the comment.
+          example: example_value
+    CommentBulk:
+      type: object
+      description: A paginated list of comments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    ChildrenCommentModel:
       type: object
       properties:
         id:
@@ -2099,67 +2112,31 @@ components:
         title:
           type: string
           description: Title of the comment.
-        blogPostId:
-          type: string
-          description: ID of the blog post containing the comment if the comment is on a blog post.
-        pageId:
-          type: string
-          description: ID of the page containing the comment if the comment is on a page.
-        attachmentId:
-          type: string
-          description: ID of the attachment containing the comment if the comment is on an attachment.
-        customContentId:
-          type: string
-          description: ID of the custom content containing the comment if the comment is on a custom content.
         parentCommentId:
           type: string
-          description: ID of the parent comment if the comment is a reply.
+          description: ID of the parent comment the child comment is in.
         version:
           $ref: '#/components/schemas/Version_2'
-        properties:
-          type: object
-          properties:
-            results:
-              type: array
-              items:
-                $ref: '#/components/schemas/ContentProperty'
-            meta:
-              $ref: '#/components/schemas/OptionalFieldMeta'
-            _links:
-              $ref: '#/components/schemas/OptionalFieldLinks'
-        operations:
-          type: object
-          properties:
-            results:
-              type: array
-              items:
-                $ref: '#/components/schemas/Operation'
-            meta:
-              $ref: '#/components/schemas/OptionalFieldMeta'
-            _links:
-              $ref: '#/components/schemas/OptionalFieldLinks'
-        likes:
-          type: object
-          properties:
-            results:
-              type: array
-              items:
-                $ref: '#/components/schemas/Like'
-            meta:
-              $ref: '#/components/schemas/OptionalFieldMeta'
-            _links:
-              $ref: '#/components/schemas/OptionalFieldLinks'
-        versions:
-          type: object
-          properties:
-            results:
-              type: array
-              items:
-                $ref: '#/components/schemas/Version_2'
-            meta:
-              $ref: '#/components/schemas/OptionalFieldMeta'
-            _links:
-              $ref: '#/components/schemas/OptionalFieldLinks'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    AttachmentCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        attachmentId:
+          type: string
+          description: ID of the attachment containing the comment.
+        version:
+          $ref: '#/components/schemas/Version_2'
         body:
           $ref: '#/components/schemas/BodySingle'
         _links:
@@ -2184,52 +2161,27 @@ components:
           $ref: '#/components/schemas/BodySingle'
         _links:
           $ref: '#/components/schemas/CommentLinks_2'
-    CreateFooterCommentModel:
+    CommentNestedBodyWrite:
+      type: object
+      description: 'Body of the comment. Only one body format should be specified as the property
+
+        for this object, e.g. `storage`.'
+      properties:
+        storage:
+          $ref: '#/components/schemas/CommentBodyWrite'
+        atlas_doc_format:
+          $ref: '#/components/schemas/CommentBodyWrite'
+        wiki:
+          $ref: '#/components/schemas/CommentBodyWrite'
+    BodyType:
       type: object
       properties:
-        blogPostId:
+        representation:
           type: string
-          description: ID of the containing blog post, if intending to create a top level footer comment. Do not provide if creating a reply.
-        pageId:
+          description: Type of content representation used for the value field.
+        value:
           type: string
-          description: ID of the containing page, if intending to create a top level footer comment. Do not provide if creating a reply.
-        parentCommentId:
-          type: string
-          description: ID of the parent comment, if intending to create a reply. Do not provide if creating a top level comment.
-        attachmentId:
-          type: string
-          description: ID of the attachment, if intending to create a comment against an attachment.
-        customContentId:
-          type: string
-          description: ID of the custom content, if intending to create a comment against a custom content.
-        body:
-          oneOf:
-          - $ref: '#/components/schemas/CommentBodyWrite'
-          - $ref: '#/components/schemas/CommentNestedBodyWrite'
-    InlineCommentChildrenModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the comment.
-        status:
-          $ref: '#/components/schemas/ContentStatus'
-        title:
-          type: string
-          description: Title of the comment.
-        parentCommentId:
-          type: string
-          description: ID of the parent comment the child comment is in.
-        version:
-          $ref: '#/components/schemas/Version_2'
-        body:
-          $ref: '#/components/schemas/BodyBulk'
-        resolutionStatus:
-          $ref: '#/components/schemas/InlineCommentResolutionStatus'
-        properties:
-          $ref: '#/components/schemas/InlineCommentProperties_2'
-        _links:
-          $ref: '#/components/schemas/CommentLinks_2'
+          description: Body of the content, in the format found in the representation field.
     PrimaryBodyRepresentationSingle:
       enum:
       - storage
@@ -2241,6 +2193,82 @@ components:
       - editor
       type: string
       description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    InlineCommentResolutionStatus:
+      enum:
+      - open
+      - reopened
+      - resolved
+      - dangling
+      type: string
+      description: Inline comment resolution status
+    PageInlineCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        pageId:
+          type: string
+          description: ID of the page the comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        resolutionStatus:
+          $ref: '#/components/schemas/InlineCommentResolutionStatus'
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties_2'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    BodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    BodyBulk:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
     Version_2:
       type: object
       properties:
@@ -2261,13 +2289,7 @@ components:
         authorId:
           type: string
           description: The account ID of the user who created this version.
-    CommentLinks_2:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the content.
-    ChildrenCommentModel:
+    PageCommentModel:
       type: object
       properties:
         id:
@@ -2278,71 +2300,13 @@ components:
         title:
           type: string
           description: Title of the comment.
-        parentCommentId:
+        pageId:
           type: string
-          description: ID of the parent comment the child comment is in.
+          description: ID of the page the comment is in.
         version:
           $ref: '#/components/schemas/Version_2'
         body:
           $ref: '#/components/schemas/BodyBulk'
-        _links:
-          $ref: '#/components/schemas/CommentLinks_2'
-    OptionalFieldMeta:
-      type: object
-      properties:
-        hasMore:
-          type: boolean
-          description: Indicates if there are more available results that can be fetched.
-        cursor:
-          type: string
-          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
-    InlineCommentResolutionStatus:
-      enum:
-      - open
-      - reopened
-      - resolved
-      - dangling
-      type: string
-      description: Inline comment resolution status
-    Operation:
-      type: object
-      properties:
-        operation:
-          description: The type of operation.
-          type: string
-        targetType:
-          description: The type of entity the operation type targets.
-          type: string
-    BodyBulk:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
-    BlogPostInlineCommentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the comment.
-        status:
-          $ref: '#/components/schemas/ContentStatus'
-        title:
-          type: string
-          description: Title of the comment.
-        blogPostId:
-          type: string
-          description: ID of the blog post the comment is in.
-        version:
-          $ref: '#/components/schemas/Version_2'
-        body:
-          $ref: '#/components/schemas/BodyBulk'
-        resolutionStatus:
-          $ref: '#/components/schemas/InlineCommentResolutionStatus'
-        properties:
-          $ref: '#/components/schemas/InlineCommentProperties_2'
         _links:
           $ref: '#/components/schemas/CommentLinks_2'
     UpdateFooterCommentModel:
@@ -2361,145 +2325,6 @@ components:
           oneOf:
           - $ref: '#/components/schemas/CommentBodyWrite'
           - $ref: '#/components/schemas/CommentNestedBodyWrite'
-    ContentStatus:
-      enum:
-      - current
-      - draft
-      - archived
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    CommentNestedBodyWrite:
-      type: object
-      description: 'Body of the comment. Only one body format should be specified as the property
-
-        for this object, e.g. `storage`.'
-      properties:
-        storage:
-          $ref: '#/components/schemas/CommentBodyWrite'
-        atlas_doc_format:
-          $ref: '#/components/schemas/CommentBodyWrite'
-        wiki:
-          $ref: '#/components/schemas/CommentBodyWrite'
-    AttachmentCommentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the comment.
-        status:
-          $ref: '#/components/schemas/ContentStatus'
-        title:
-          type: string
-          description: Title of the comment.
-        attachmentId:
-          type: string
-          description: ID of the attachment containing the comment.
-        version:
-          $ref: '#/components/schemas/Version_2'
-        body:
-          $ref: '#/components/schemas/BodySingle'
-        _links:
-          $ref: '#/components/schemas/CommentLinks_2'
-    PrimaryBodyRepresentation:
-      enum:
-      - storage
-      - atlas_doc_format
-      type: string
-      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
-    CommentSortOrder:
-      enum:
-      - created-date
-      - -created-date
-      - modified-date
-      - -modified-date
-      type: string
-      description: The sort fields for comments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    CreateInlineCommentModel:
-      type: object
-      properties:
-        blogPostId:
-          type: string
-          description: ID of the containing blog post, if intending to create a top level footer comment. Do not provide if creating a reply.
-        pageId:
-          type: string
-          description: ID of the containing page, if intending to create a top level footer comment. Do not provide if creating a reply.
-        parentCommentId:
-          type: string
-          description: ID of the parent comment, if intending to create a reply. Do not provide if creating a top level comment.
-        body:
-          oneOf:
-          - $ref: '#/components/schemas/CommentBodyWrite'
-          - $ref: '#/components/schemas/CommentNestedBodyWrite'
-        inlineCommentProperties:
-          type: object
-          description: Object describing the text to highlight on the page/blog post. Only applicable for top level inline comments (not replies) and required in that case.
-          properties:
-            textSelection:
-              type: string
-              description: The text to highlight
-            textSelectionMatchCount:
-              type: integer
-              description: The number of matches for the selected text on the page (should be strictly greater than textSelectionMatchIndex)
-            textSelectionMatchIndex:
-              type: integer
-              description: "The match index to highlight. This is zero-based. E.g. if you have 3 occurrences of \"hello world\" on a page \nand you want to highlight the second occurrence, you should pass 1 for textSelectionMatchIndex and 3 for textSelectionMatchCount."
-    CommentBodyWrite:
-      type: object
-      properties:
-        representation:
-          enum:
-          - storage
-          - atlas_doc_format
-          - wiki
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the comment, in the format found in the representation field.
-    BlogPostCommentModel:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the comment.
-        status:
-          $ref: '#/components/schemas/ContentStatus'
-        title:
-          type: string
-          description: Title of the comment.
-        blogPostId:
-          type: string
-          description: ID of the blog post the comment is in.
-        version:
-          $ref: '#/components/schemas/Version_2'
-        body:
-          $ref: '#/components/schemas/BodyBulk'
-        _links:
-          $ref: '#/components/schemas/CommentLinks_2'
     InlineCommentModel:
       type: object
       properties:
@@ -2585,7 +2410,55 @@ components:
               $ref: '#/components/schemas/OptionalFieldLinks'
         _links:
           $ref: '#/components/schemas/CommentLinks_2'
-    PageInlineCommentModel:
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Account ID.
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version_2'
+    CreateInlineCommentModel:
+      type: object
+      properties:
+        blogPostId:
+          type: string
+          description: ID of the containing blog post, if intending to create a top level footer comment. Do not provide if creating a reply.
+        pageId:
+          type: string
+          description: ID of the containing page, if intending to create a top level footer comment. Do not provide if creating a reply.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment, if intending to create a reply. Do not provide if creating a top level comment.
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CommentBodyWrite'
+          - $ref: '#/components/schemas/CommentNestedBodyWrite'
+        inlineCommentProperties:
+          type: object
+          description: Object describing the text to highlight on the page/blog post. Only applicable for top level inline comments (not replies) and required in that case.
+          properties:
+            textSelection:
+              type: string
+              description: The text to highlight
+            textSelectionMatchCount:
+              type: integer
+              description: The number of matches for the selected text on the page (should be strictly greater than textSelectionMatchIndex)
+            textSelectionMatchIndex:
+              type: integer
+              description: "The match index to highlight. This is zero-based. E.g. if you have 3 occurrences of \"hello world\" on a page \nand you want to highlight the second occurrence, you should pass 1 for textSelectionMatchIndex and 3 for textSelectionMatchCount."
+    InlineCommentChildrenModel:
       type: object
       properties:
         id:
@@ -2596,9 +2469,9 @@ components:
         title:
           type: string
           description: Title of the comment.
-        pageId:
+        parentCommentId:
           type: string
-          description: ID of the page the comment is in.
+          description: ID of the parent comment the child comment is in.
         version:
           $ref: '#/components/schemas/Version_2'
         body:
@@ -2609,6 +2482,78 @@ components:
           $ref: '#/components/schemas/InlineCommentProperties_2'
         _links:
           $ref: '#/components/schemas/CommentLinks_2'
+    BlogPostInlineCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post the comment is in.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        resolutionStatus:
+          $ref: '#/components/schemas/InlineCommentResolutionStatus'
+        properties:
+          $ref: '#/components/schemas/InlineCommentProperties_2'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    PrimaryBodyRepresentation:
+      enum:
+      - storage
+      - atlas_doc_format
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    Operation:
+      type: object
+      properties:
+        operation:
+          description: The type of operation.
+          type: string
+        targetType:
+          description: The type of entity the operation type targets.
+          type: string
+    CreateFooterCommentModel:
+      type: object
+      properties:
+        blogPostId:
+          type: string
+          description: ID of the containing blog post, if intending to create a top level footer comment. Do not provide if creating a reply.
+        pageId:
+          type: string
+          description: ID of the containing page, if intending to create a top level footer comment. Do not provide if creating a reply.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment, if intending to create a reply. Do not provide if creating a top level comment.
+        attachmentId:
+          type: string
+          description: ID of the attachment, if intending to create a comment against an attachment.
+        customContentId:
+          type: string
+          description: ID of the custom content, if intending to create a comment against a custom content.
+        body:
+          oneOf:
+          - $ref: '#/components/schemas/CommentBodyWrite'
+          - $ref: '#/components/schemas/CommentNestedBodyWrite'
     UpdateInlineCommentModel:
       type: object
       properties:
@@ -2632,7 +2577,24 @@ components:
             matching the existing state (i.e. true -> resolved or false -> open/reopened) , no change will occur. A dangling
 
             comment cannot be updated.'
-    PageCommentModel:
+    InlineCommentProperties_2:
+      type: object
+      properties:
+        inlineMarkerRef:
+          type: string
+          description: Property value used to reference the highlighted element in DOM.
+        inlineOriginalSelection:
+          type: string
+          description: Text that is highlighted.
+    CommentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for comments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    FooterCommentModel:
       type: object
       properties:
         id:
@@ -2643,67 +2605,111 @@ components:
         title:
           type: string
           description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post containing the comment if the comment is on a blog post.
         pageId:
           type: string
-          description: ID of the page the comment is in.
+          description: ID of the page containing the comment if the comment is on a page.
+        attachmentId:
+          type: string
+          description: ID of the attachment containing the comment if the comment is on an attachment.
+        customContentId:
+          type: string
+          description: ID of the custom content containing the comment if the comment is on a custom content.
+        parentCommentId:
+          type: string
+          description: ID of the parent comment if the comment is a reply.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        properties:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/ContentProperty'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        operations:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        likes:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Like'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        versions:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/Version_2'
+            meta:
+              $ref: '#/components/schemas/OptionalFieldMeta'
+            _links:
+              $ref: '#/components/schemas/OptionalFieldLinks'
+        body:
+          $ref: '#/components/schemas/BodySingle'
+        _links:
+          $ref: '#/components/schemas/CommentLinks_2'
+    CommentLinks_2:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+    BlogPostCommentModel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the comment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
+        blogPostId:
+          type: string
+          description: ID of the blog post the comment is in.
         version:
           $ref: '#/components/schemas/Version_2'
         body:
           $ref: '#/components/schemas/BodyBulk'
         _links:
           $ref: '#/components/schemas/CommentLinks_2'
-    BodySingle:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
-        view:
-          $ref: '#/components/schemas/BodyType'
-    InlineCommentProperties_2:
+    CommentBodyWrite:
       type: object
       properties:
-        inlineMarkerRef:
+        representation:
+          enum:
+          - storage
+          - atlas_doc_format
+          - wiki
           type: string
-          description: Property value used to reference the highlighted element in DOM.
-        inlineOriginalSelection:
-          type: string
-          description: Text that is highlighted.
-    OptionalFieldLinks:
-      type: object
-      properties:
-        self:
-          type: string
-          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
-    ContentProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the property
-        key:
-          type: string
-          description: Key of the property
+          description: Type of content representation used for the value field.
         value:
-          description: Value of the property. Must be a valid JSON value.
-        version:
-          $ref: '#/components/schemas/Version_2'
+          type: string
+          description: Body of the comment, in the format found in the representation field.
   parameters:
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    VersionParam:
-      name: version
-      in: query
-      description: The version number of the content to retrieve.
-      schema:
-        type: integer
-        format: int32
     LimitParam:
       name: limit
       in: query
@@ -2714,6 +2720,12 @@ components:
         minimum: 1
         maximum: 250
         default: 25
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
     BodyFormatParam:
       name: body-format
       in: query
@@ -2727,6 +2739,13 @@ components:
         - export_view
         - anonymous_export_view
         - editor
+    VersionParam:
+      name: version
+      in: query
+      description: The version number of the content to retrieve.
+      schema:
+        type: integer
+        format: int32
     ContentIdPath:
       name: id
       in: path
@@ -2735,25 +2754,6 @@ components:
       schema:
         type: integer
         format: int64
-  responses:
-    BadRequest:
-      description: Returned if the request is malformed or contains invalid parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Returned if the requested resource is not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

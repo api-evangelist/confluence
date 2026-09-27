@@ -238,30 +238,6 @@ components:
         - `INITIALIZING_TASK` - Message when initializing task
 
         - `UNKNOWN_STATUS` - Message when status is unknown'
-    LongTaskStatusArray:
-      required:
-      - _links
-      - limit
-      - results
-      - size
-      - start
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/LongTaskStatus'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
     Message:
       required:
       - args
@@ -277,6 +253,13 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     LongTaskStatus:
       required:
       - elapsedTime
@@ -378,13 +361,30 @@ components:
         - `INITIALIZING_TASK` - Message when initializing task
 
         - `UNKNOWN_STATUS` - Message when status is unknown'
-    GenericLinks:
+    LongTaskStatusArray:
+      required:
+      - _links
+      - limit
+      - results
+      - size
+      - start
       type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LongTaskStatus'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
   securitySchemes:
     basicAuth:
       type: http

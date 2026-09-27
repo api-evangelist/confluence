@@ -657,12 +657,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    OnlyArchivedAndCurrentContentStatus:
-      enum:
-      - current
-      - archived
-      type: string
-      description: The status of the content.
     DescendantsResponse:
       type: object
       properties:
@@ -692,6 +686,12 @@ components:
           description: 'Numerical value indicating position of the content relative to its siblings (with the same parentId) within the content tree.
 
             If the content is sorted by childPosition, it will reflect the default content ordering within the content tree.'
+    OnlyArchivedAndCurrentContentStatus:
+      enum:
+      - current
+      - archived
+      type: string
+      description: The status of the content.
     MultiEntityLinks:
       type: object
       properties:

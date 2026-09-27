@@ -3047,50 +3047,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    ContentPropertyUpdateRequest:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Key of the content property
-        value:
-          description: Value of the content property.
-        version:
-          type: object
-          description: New version number and associated message
-          properties:
-            number:
-              type: integer
-              format: int32
-              description: Version number of the new version. Should be 1 more than the current version number.
-            message:
-              type: string
-              description: Message to be associated with the new version.
-    ContentPropertyCreateRequest:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Key of the content property
-        value:
-          description: Value of the content property.
-    ContentPropertySortOrder:
-      type: string
-      description: The sort fields for content properties. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-      enum:
-      - key
-      - -key
     ContentProperty:
       type: object
       properties:
@@ -3104,6 +3060,12 @@ components:
           description: Value of the property. Must be a valid JSON value.
         version:
           $ref: '#/components/schemas/Version'
+    ContentPropertySortOrder:
+      type: string
+      description: The sort fields for content properties. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+      enum:
+      - key
+      - -key
     Version:
       type: object
       properties:
@@ -3124,6 +3086,44 @@ components:
         authorId:
           type: string
           description: The account ID of the user who created this version.
+    ContentPropertyCreateRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of the content property
+        value:
+          description: Value of the content property.
+    ContentPropertyUpdateRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of the content property
+        value:
+          description: Value of the content property.
+        version:
+          type: object
+          description: New version number and associated message
+          properties:
+            number:
+              type: integer
+              format: int32
+              description: Version number of the new version. Should be 1 more than the current version number.
+            message:
+              type: string
+              description: Message to be associated with the new version.
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
   securitySchemes:
     basicAuth:
       type: http
