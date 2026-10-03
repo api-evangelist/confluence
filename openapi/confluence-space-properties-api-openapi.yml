@@ -364,25 +364,6 @@ paths:
       - app-access-rule-exempt: true
 components:
   schemas:
-    SpacePropertyCreateRequest:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Key of the space property
-        value:
-          description: Value of the space property.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
     SpaceProperty:
       type: object
       properties:
@@ -437,6 +418,25 @@ components:
             message:
               type: string
               description: Message to be associated with the new version.
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    SpacePropertyCreateRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of the space property
+        value:
+          description: Value of the space property.
   securitySchemes:
     basicAuth:
       type: http

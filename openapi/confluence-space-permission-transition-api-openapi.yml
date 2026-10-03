@@ -287,6 +287,73 @@ paths:
       x-experimental: true
 components:
   schemas:
+    BulkTransitionSpaceTarget:
+      type: object
+      required:
+      - id
+      - key
+      properties:
+        id:
+          type: string
+          description: The space ID.
+        key:
+          type: string
+          description: The space key.
+    BulkTransitionTaskStatusResponse:
+      type: object
+      required:
+      - taskId
+      - status
+      properties:
+        taskId:
+          type: string
+          description: The ID of the task.
+        status:
+          type: string
+          description: The current status of the task.
+          enum:
+          - IN_PROGRESS
+          - COMPLETED
+          - FAILED
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human-readable error message describing why the task failed. Only present when status is FAILED.
+    ListSpacePermissionCombinationsResponse:
+      type: object
+      required:
+      - results
+      properties:
+        results:
+          type: array
+          description: One page of unassigned permission combinations, sorted by principalCount descending.
+          items:
+            $ref: '#/components/schemas/BulkTransitionCombinationEntry'
+        generatedAt:
+          type:
+          - string
+          - 'null'
+          description: 'ISO-8601 timestamp of the last audit run that populated the combinations table.
+
+            Absent if the audit task has never run on this tenant.'
+        cursor:
+          type:
+          - string
+          - 'null'
+          description: Opaque cursor for the next page. Absent when no further results exist.
+    BulkTransitionDecodedPermission:
+      type: object
+      required:
+      - id
+      - displayName
+      properties:
+        id:
+          type: string
+          description: The platform id of the permission (e.g. `VIEW_CONTENT`).
+        displayName:
+          type: string
+          description: Human-readable name of the permission.
     BulkTransitionTaskResponse:
       type: object
       required:
@@ -307,48 +374,17 @@ components:
         statusUrl:
           type: string
           description: URL to poll for task progress.
-    BulkTransitionSpaceSelection:
+    BulkAssignRolesRequest:
       type: object
       required:
-      - spaceType
-      properties:
-        spaceType:
-          type: string
-          description: The space selection type.
-          enum:
-          - ALL
-          - ALL_EXCEPT_PERSONAL
-          - ALL_EXCEPT_SPECIFIC
-          - PERSONAL
-          - SPECIFIC
-        selectedSpaces:
-          type: array
-          description: List of specific spaces. Required when spaceType is SPECIFIC or ALL_EXCEPT_SPECIFIC.
-          items:
-            $ref: '#/components/schemas/BulkTransitionSpaceTarget'
-    BulkTransitionSpaceTarget:
-      type: object
-      required:
-      - id
-      - key
-      properties:
-        id:
-          type: string
-          description: The space ID.
-        key:
-          type: string
-          description: The space key.
-    BulkRemoveAccessRequest:
-      type: object
-      required:
-      - permissionCombinationIds
+      - assignments
       - spaceSelection
       properties:
-        permissionCombinationIds:
+        assignments:
           type: array
-          description: List of permission combination IDs to remove access for.
+          description: List of role assignments to apply.
           items:
-            type: string
+            $ref: '#/components/schemas/BulkTransitionRoleAssignment'
         spaceSelection:
           $ref: '#/components/schemas/BulkTransitionSpaceSelection'
     BulkTransitionPrincipalTypeAssignment:
@@ -376,62 +412,19 @@ components:
           - string
           - 'null'
           description: The UUID of the space role to assign. Required when removeAccess is false.
-    BulkAssignRolesRequest:
+    BulkRemoveAccessRequest:
       type: object
       required:
-      - assignments
+      - permissionCombinationIds
       - spaceSelection
       properties:
-        assignments:
+        permissionCombinationIds:
           type: array
-          description: List of role assignments to apply.
+          description: List of permission combination IDs to remove access for.
           items:
-            $ref: '#/components/schemas/BulkTransitionRoleAssignment'
+            type: string
         spaceSelection:
           $ref: '#/components/schemas/BulkTransitionSpaceSelection'
-    ListSpacePermissionCombinationsResponse:
-      type: object
-      required:
-      - results
-      properties:
-        results:
-          type: array
-          description: One page of unassigned permission combinations, sorted by principalCount descending.
-          items:
-            $ref: '#/components/schemas/BulkTransitionCombinationEntry'
-        generatedAt:
-          type:
-          - string
-          - 'null'
-          description: 'ISO-8601 timestamp of the last audit run that populated the combinations table.
-
-            Absent if the audit task has never run on this tenant.'
-        cursor:
-          type:
-          - string
-          - 'null'
-          description: Opaque cursor for the next page. Absent when no further results exist.
-    BulkTransitionTaskStatusResponse:
-      type: object
-      required:
-      - taskId
-      - status
-      properties:
-        taskId:
-          type: string
-          description: The ID of the task.
-        status:
-          type: string
-          description: The current status of the task.
-          enum:
-          - IN_PROGRESS
-          - COMPLETED
-          - FAILED
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Human-readable error message describing why the task failed. Only present when status is FAILED.
     BulkTransitionCombinationEntry:
       type: object
       required:
@@ -489,18 +482,25 @@ components:
           description: List of principal type assignments.
           items:
             $ref: '#/components/schemas/BulkTransitionPrincipalTypeAssignment'
-    BulkTransitionDecodedPermission:
+    BulkTransitionSpaceSelection:
       type: object
       required:
-      - id
-      - displayName
+      - spaceType
       properties:
-        id:
+        spaceType:
           type: string
-          description: The platform id of the permission (e.g. `VIEW_CONTENT`).
-        displayName:
-          type: string
-          description: Human-readable name of the permission.
+          description: The space selection type.
+          enum:
+          - ALL
+          - ALL_EXCEPT_PERSONAL
+          - ALL_EXCEPT_SPECIFIC
+          - PERSONAL
+          - SPECIFIC
+        selectedSpaces:
+          type: array
+          description: List of specific spaces. Required when spaceType is SPECIFIC or ALL_EXCEPT_SPECIFIC.
+          items:
+            $ref: '#/components/schemas/BulkTransitionSpaceTarget'
   securitySchemes:
     basicAuth:
       type: http

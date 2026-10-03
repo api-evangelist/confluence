@@ -778,13 +778,20 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
+  responses:
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
     LimitParam:
       name: limit
       in: query
@@ -795,14 +802,12 @@ components:
         minimum: 1
         maximum: 250
         default: 25
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
       schema:
-        type: integer
-        format: int64
+        type: string
     LabelPrefixParam:
       name: prefix
       in: query
@@ -813,6 +818,14 @@ components:
         - global
         - my
         - team
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
   schemas:
     PaginationLinks:
       type: object
@@ -826,22 +839,17 @@ components:
           type: string
           description: The base URL of the Confluence instance.
           example: example_value
-    Label:
+    LabelArray:
       type: object
-      description: Represents a label applied to Confluence content.
+      description: A list of labels.
       properties:
-        id:
-          type: string
-          description: The unique identifier of the label.
-          example: abc123
-        name:
-          type: string
-          description: The name of the label.
-          example: Example Title
-        prefix:
-          type: string
-          description: The prefix of the label (global, my, team).
-          example: example_value
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
     Error:
       type: object
       description: Error response from the Confluence API.
@@ -881,17 +889,22 @@ components:
           type: string
           description: A human-readable error message.
           example: example_value
-    LabelArray:
+    Label:
       type: object
-      description: A list of labels.
+      description: Represents a label applied to Confluence content.
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
+        id:
+          type: string
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+          example: example_value
     MultiEntityLinks:
       type: object
       properties:
@@ -903,6 +916,16 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
+    LabelSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - id
+      - -id
+      - name
+      - -name
+      type: string
+      description: The sort fields for labels. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
     Label_2:
       type: object
       properties:
@@ -915,29 +938,6 @@ components:
         prefix:
           type: string
           description: Prefix of the label.
-    LabelSortOrder:
-      enum:
-      - created-date
-      - -created-date
-      - id
-      - -id
-      - name
-      - -name
-      type: string
-      description: The sort fields for labels. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-  responses:
-    NotFound:
-      description: Returned if the requested resource is not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

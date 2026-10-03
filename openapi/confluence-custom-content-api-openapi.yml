@@ -732,6 +732,19 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version'
     CustomContentBodyRepresentationSingle:
       enum:
       - raw
@@ -742,95 +755,6 @@ components:
       - anonymous_export_view
       type: string
       description: The formats a custom content body can be represented as. A subset of BodyRepresentation.
-    CustomContentNestedBodyWrite:
-      type: object
-      description: 'Body of the custom content. Only one body format should be specified as the property
-
-        for this object, e.g. `storage`.'
-      properties:
-        storage:
-          $ref: '#/components/schemas/CustomContentBodyWrite'
-        atlas_doc_format:
-          $ref: '#/components/schemas/CustomContentBodyWrite'
-        raw:
-          $ref: '#/components/schemas/CustomContentBodyWrite'
-    CustomContentSortOrder:
-      enum:
-      - id
-      - -id
-      - created-date
-      - -created-date
-      - modified-date
-      - -modified-date
-      - title
-      - -title
-      type: string
-      description: The sort fields for custom content. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    CustomContentBodyBulk:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        raw:
-          $ref: '#/components/schemas/BodyType'
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
-    ContentStatus:
-      enum:
-      - current
-      - draft
-      - archived
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
-    OptionalFieldLinks:
-      type: object
-      properties:
-        self:
-          type: string
-          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
-    OptionalFieldMeta:
-      type: object
-      properties:
-        hasMore:
-          type: boolean
-          description: Indicates if there are more available results that can be fetched.
-        cursor:
-          type: string
-          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
-    Version:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        message:
-          type: string
-          description: Message associated with the current version.
-        number:
-          format: int32
-          type: integer
-          description: The version number.
-        minorEdit:
-          type: boolean
-          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
-        authorId:
-          type: string
-          description: The account ID of the user who created this version.
     CustomContentBulk:
       type: object
       properties:
@@ -882,6 +806,131 @@ components:
           $ref: '#/components/schemas/CustomContentBodyBulk'
         _links:
           $ref: '#/components/schemas/CustomContentLinks'
+    CustomContentBodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        raw:
+          $ref: '#/components/schemas/BodyType'
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    CustomContentSortOrder:
+      enum:
+      - id
+      - -id
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      - title
+      - -title
+      type: string
+      description: The sort fields for custom content. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    CustomContentBodyWrite:
+      type: object
+      properties:
+        representation:
+          enum:
+          - storage
+          - atlas_doc_format
+          - raw
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the custom content, in the format found in the representation field.
+    CustomContentBodyRepresentation:
+      enum:
+      - raw
+      - storage
+      - atlas_doc_format
+      type: string
+      description: The formats a custom content body can be represented as. A subset of BodyRepresentation.
+    Version:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
+          type: string
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+    CustomContentNestedBodyWrite:
+      type: object
+      description: 'Body of the custom content. Only one body format should be specified as the property
+
+        for this object, e.g. `storage`.'
+      properties:
+        storage:
+          $ref: '#/components/schemas/CustomContentBodyWrite'
+        atlas_doc_format:
+          $ref: '#/components/schemas/CustomContentBodyWrite'
+        raw:
+          $ref: '#/components/schemas/CustomContentBodyWrite'
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the label.
+        name:
+          type: string
+          description: Name of the label.
+        prefix:
+          type: string
+          description: Prefix of the label.
     CustomContentSingle:
       type: object
       properties:
@@ -977,62 +1026,15 @@ components:
           $ref: '#/components/schemas/CustomContentBodySingle'
         _links:
           $ref: '#/components/schemas/CustomContentLinks'
-    ContentProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the property
-        key:
-          type: string
-          description: Key of the property
-        value:
-          description: Value of the property. Must be a valid JSON value.
-        version:
-          $ref: '#/components/schemas/Version'
-    CustomContentBodyRepresentation:
-      enum:
-      - raw
-      - storage
-      - atlas_doc_format
-      type: string
-      description: The formats a custom content body can be represented as. A subset of BodyRepresentation.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    CustomContentBodyWrite:
+    BodyType:
       type: object
       properties:
         representation:
-          enum:
-          - storage
-          - atlas_doc_format
-          - raw
           type: string
           description: Type of content representation used for the value field.
         value:
           type: string
-          description: Body of the custom content, in the format found in the representation field.
-    CustomContentBodySingle:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        raw:
-          $ref: '#/components/schemas/BodyType'
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
-        view:
-          $ref: '#/components/schemas/BodyType'
+          description: Body of the content, in the format found in the representation field.
     Operation:
       type: object
       properties:
@@ -1042,18 +1044,16 @@ components:
         targetType:
           description: The type of entity the operation type targets.
           type: string
-    Label:
+    CustomContentBodyBulk:
       type: object
+      description: Contains fields for each representation type requested.
       properties:
-        id:
-          type: string
-          description: ID of the label.
-        name:
-          type: string
-          description: Name of the label.
-        prefix:
-          type: string
-          description: Prefix of the label.
+        raw:
+          $ref: '#/components/schemas/BodyType'
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
     CustomContentLinks:
       type: object
       properties:

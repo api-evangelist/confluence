@@ -926,40 +926,29 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    VersionSortOrder:
-      enum:
-      - modified-date
-      - -modified-date
-      type: string
-      description: The sort fields for versions. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    AttachmentVersion:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        message:
-          type: string
-          description: Message associated with the current version.
-        number:
-          format: int32
-          type: integer
-          description: The version number.
-        minorEdit:
-          type: boolean
-          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
-        authorId:
-          type: string
-          description: The account ID of the user who created this version.
-        attachment:
-          $ref: '#/components/schemas/VersionedEntity'
     PrimaryBodyRepresentation:
       enum:
       - storage
       - atlas_doc_format
       type: string
       description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    BodyBulk:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
     DetailedVersion:
       type: object
       properties:
@@ -996,6 +985,85 @@ components:
           format: int32
           type: integer
           description: The version number of the version after this current content update.
+    CustomContentBodyRepresentation:
+      enum:
+      - raw
+      - storage
+      - atlas_doc_format
+      type: string
+      description: The formats a custom content body can be represented as. A subset of BodyRepresentation.
+    AttachmentVersion:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
+          type: string
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+        attachment:
+          $ref: '#/components/schemas/VersionedEntity'
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    CustomContentVersion:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
+          type: string
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+        custom:
+          $ref: '#/components/schemas/VersionedEntity'
+    VersionSortOrder:
+      enum:
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for versions. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    VersionedEntity:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the entity.
+        id:
+          type: string
+          description: ID of the entity.
+        body:
+          $ref: '#/components/schemas/BodyBulk'
     PageVersion:
       type: object
       properties:
@@ -1017,43 +1085,6 @@ components:
           type: string
           description: The account ID of the user who created this version.
         page:
-          $ref: '#/components/schemas/VersionedEntity'
-    BodyBulk:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
-    CustomContentBodyRepresentation:
-      enum:
-      - raw
-      - storage
-      - atlas_doc_format
-      type: string
-      description: The formats a custom content body can be represented as. A subset of BodyRepresentation.
-    CommentVersion:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        message:
-          type: string
-          description: Message associated with the current version.
-        number:
-          format: int32
-          type: integer
-          description: The version number.
-        minorEdit:
-          type: boolean
-          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
-        authorId:
-          type: string
-          description: The account ID of the user who created this version.
-        comment:
           $ref: '#/components/schemas/VersionedEntity'
     BlogPostVersion:
       type: object
@@ -1077,27 +1108,7 @@ components:
           description: The account ID of the user who created this version.
         blogpost:
           $ref: '#/components/schemas/VersionedEntity'
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    CustomContentVersion:
+    CommentVersion:
       type: object
       properties:
         createdAt:
@@ -1117,19 +1128,8 @@ components:
         authorId:
           type: string
           description: The account ID of the user who created this version.
-        custom:
+        comment:
           $ref: '#/components/schemas/VersionedEntity'
-    VersionedEntity:
-      type: object
-      properties:
-        title:
-          type: string
-          description: Title of the entity.
-        id:
-          type: string
-          description: ID of the entity.
-        body:
-          $ref: '#/components/schemas/BodyBulk'
   securitySchemes:
     basicAuth:
       type: http

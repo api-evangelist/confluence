@@ -301,7 +301,7 @@ paths:
       x-atlassian-connect-scope: DELETE
 components:
   schemas:
-    Theme:
+    ThemeNoLinks:
       required:
       - themeKey
       type: object
@@ -314,8 +314,7 @@ components:
           type: string
         icon:
           $ref: '#/components/schemas/Icon'
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
+      description: Theme object without links. Used in ThemeArray.
     ThemeArray:
       required:
       - _links
@@ -340,22 +339,7 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    ThemeUpdate:
-      required:
-      - themeKey
-      type: object
-      properties:
-        themeKey:
-          type: string
-          description: The key of the theme to be set as the space theme.
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
-    ThemeNoLinks:
+    Theme:
       required:
       - themeKey
       type: object
@@ -368,7 +352,8 @@ components:
           type: string
         icon:
           $ref: '#/components/schemas/Icon'
-      description: Theme object without links. Used in ThemeArray.
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
     Icon:
       required:
       - height
@@ -390,6 +375,21 @@ components:
         isDefault:
           type: boolean
       description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+    ThemeUpdate:
+      required:
+      - themeKey
+      type: object
+      properties:
+        themeKey:
+          type: string
+          description: The key of the theme to be set as the space theme.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
   securitySchemes:
     basicAuth:
       type: http

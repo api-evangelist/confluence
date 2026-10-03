@@ -936,65 +936,20 @@ paths:
       x-atlassian-data-security-policy:
       - app-access-rule-exempt: false
 components:
-  schemas:
-    ClassificationLevelColor:
-      type: string
-      enum:
-      - RED
-      - RED_BOLD
-      - ORANGE
-      - YELLOW
-      - GREEN
-      - BLUE
-      - NAVY
-      - TEAL
-      - PURPLE
-      - GREY
-      - LIME
-    ClassificationLevelStatus:
-      type: string
-      enum:
-      - DRAFT
-      - PUBLISHED
-      - ARCHIVED
-    ClassificationLevel:
-      title: ClassificationLevel
-      type: object
-      description: "A unit of [data classification](https://support.atlassian.com/security-and-access-policies/docs/what-is-data-classification/) defined by an organiation. \nA classification level may be associated with specific storage and handling requirements or expectations."
-      properties:
-        id:
-          type: string
-          description: The ID of the classification level.
-        status:
-          type: object
-          description: The status of the classification level.
-          $ref: '#/components/schemas/ClassificationLevelStatus'
-        order:
-          type: number
-          description: The order of the classification level object.
-        name:
-          type: string
-          description: The name of the classification level object.
-        description:
-          type: string
-          description: The description of the classification level object.
-        guideline:
-          type: string
-          description: The guideline of the classification level object.
-        color:
-          type: object
-          description: The color of the classification level object.
-          $ref: '#/components/schemas/ClassificationLevelColor'
   requestBodies:
-    LiveEditContentClassificationLevelResetRequest:
+    LiveEditContentClassificationLevelUpdateRequest:
       required: true
       content:
         application/json:
           schema:
             type: object
             required:
+            - id
             - status
             properties:
+              id:
+                type: string
+                description: The ID of the classification level.
               status:
                 enum:
                 - current
@@ -1031,19 +986,15 @@ components:
                 - draft
                 type: string
                 description: Status of the content.
-    LiveEditContentClassificationLevelUpdateRequest:
+    LiveEditContentClassificationLevelResetRequest:
       required: true
       content:
         application/json:
           schema:
             type: object
             required:
-            - id
             - status
             properties:
-              id:
-                type: string
-                description: The ID of the classification level.
               status:
                 enum:
                 - current
@@ -1064,6 +1015,55 @@ components:
                 - draft
                 type: string
                 description: Status of the content.
+  schemas:
+    ClassificationLevel:
+      title: ClassificationLevel
+      type: object
+      description: "A unit of [data classification](https://support.atlassian.com/security-and-access-policies/docs/what-is-data-classification/) defined by an organiation. \nA classification level may be associated with specific storage and handling requirements or expectations."
+      properties:
+        id:
+          type: string
+          description: The ID of the classification level.
+        status:
+          type: object
+          description: The status of the classification level.
+          $ref: '#/components/schemas/ClassificationLevelStatus'
+        order:
+          type: number
+          description: The order of the classification level object.
+        name:
+          type: string
+          description: The name of the classification level object.
+        description:
+          type: string
+          description: The description of the classification level object.
+        guideline:
+          type: string
+          description: The guideline of the classification level object.
+        color:
+          type: object
+          description: The color of the classification level object.
+          $ref: '#/components/schemas/ClassificationLevelColor'
+    ClassificationLevelColor:
+      type: string
+      enum:
+      - RED
+      - RED_BOLD
+      - ORANGE
+      - YELLOW
+      - GREEN
+      - BLUE
+      - NAVY
+      - TEAL
+      - PURPLE
+      - GREY
+      - LIME
+    ClassificationLevelStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PUBLISHED
+      - ARCHIVED
   securitySchemes:
     basicAuth:
       type: http

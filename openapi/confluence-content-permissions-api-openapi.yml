@@ -111,13 +111,6 @@ components:
             - type: string
             - type: object
               additionalProperties: true
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
     PermissionCheckResponse:
       required:
       - hasPermission
@@ -169,6 +162,13 @@ components:
 
             for `type=group`, identifier should be ID of the group'
       description: The user or group that the permission applies to.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     ContentPermissionRequest:
       required:
       - operation

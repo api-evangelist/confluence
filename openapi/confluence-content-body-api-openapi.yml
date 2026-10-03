@@ -332,10 +332,6 @@ paths:
       x-atlassian-connect-scope: INACCESSIBLE
 components:
   schemas:
-    AsyncContentBodyArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/AsyncContentBody'
     AsyncId:
       required:
       - asyncId
@@ -343,72 +339,50 @@ components:
       properties:
         asyncId:
           type: string
-    AsyncContentBody:
+    ContentBodyConversionInput:
+      required:
+      - to
+      - body
       type: object
       properties:
-        value:
+        to:
           type: string
-        representation:
+          description: The name of the target format for the content body conversion.
+        allowCache:
+          type: boolean
+          description: "Controls whether conversion results are cached and reused for identical requests.\n\n- `false`: Each request creates a new conversion task, even if an identical request was made previously.\n- `true`: Enables caching behavior for identical requests from the same user.\n  - If no cached result exists, a new conversion task is created\n  - If a cached result exists, the existing task is marked as RERUNNING and will complete with status COMPLETED\n  - Returns the same task ID for identical requests, allowing you to retrieve the cached result"
+          default: false
+        spaceKeyContext:
           type: string
+          description: The space key used for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>` and the `spaceKeyContext=TEST` parameter is provided, then the link will be converted into a link to the "Example page" page in the "TEST" space.
+        contentIdContext:
+          type: string
+          description: The content ID used to find the space for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>` and the `contentIdContext=123` parameter is provided, then the link will be converted into a link to the "Example page" page in the same space that has the content with ID=123. Note that `spaceKeyContext` will be ignored if this parameter is provided.
+        embeddedContentRender:
+          type: string
+          description: Mode used for rendering embedded content, such as attachments. - `current` renders the embedded content using the latest version. - `version-at-save` renders the embedded content using the version at the time of save.
+          default: current
           enum:
-          - view
-          - export_view
-          - styled_view
-          - storage
-          - editor
-          - editor2
-          - anonymous_export_view
-          - wiki
-          - atlas_doc_format
-        renderTaskId:
-          type: string
-        error:
-          type: string
-        status:
-          description: Rerunning is reserved for when the job is working, but there is a previous run's value in the cache. You may choose to continue polling, or use the cached value.
-          type: string
-          enum:
-          - WORKING
-          - QUEUED
-          - FAILED
-          - COMPLETED
-          - RERUNNING
-        embeddedContent:
+          - current
+          - version-at-save
+        expand:
           type: array
           items:
-            $ref: '#/components/schemas/EmbeddedContent'
-        webresource:
-          $ref: '#/components/schemas/WebResourceDependencies'
-        mediaToken:
-          type: object
-          properties:
-            collectionIds:
-              type: array
-              items:
-                type: string
-            contentId:
-              type: string
-            expiryDateTime:
-              type: string
-            fileIds:
-              type: array
-              items:
-                type: string
-            token:
-              type: string
-        _expandable:
-          type: object
-          properties:
-            content:
-              type: string
-            embeddedContent:
-              type: string
-            webresource:
-              type: string
-            mediaToken:
-              type: string
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
+            type: string
+          description: "A multi-value, comma-separated parameter indicating which properties of the content to expand and populate. Expands are dependent\non the `to` conversion format and may be irrelevant for certain conversions (e.g. `macroRenderedOutput` is redundant when\nconverting to `view` format). \n\nIf rendering to `view` format, and the body content being converted includes arbitrary nested content (such as macros); then it is \nnecessary to include webresource expands in the request. Webresources for content body are the batched JS and CSS dependencies for\nany nested dynamic content (i.e. macros).\n\n- `embeddedContent` returns metadata for nested content (e.g. page included using page include macro)\n- `mediaToken` returns JWT token for retrieving attachment data from Media API\n- `macroRenderedOutput` additionally converts body to view format\n- `webresource.superbatch.uris.js` returns all common JS dependencies as static URLs\n- `webresource.superbatch.uris.css` returns all common CSS dependencies as static URLs\n- `webresource.superbatch.uris.all` returns all common dependencies as static URLs\n- `webresource.superbatch.tags.all` returns all common JS dependencies as html `<script>` tags\n- `webresource.superbatch.tags.css` returns all common CSS dependencies as html `<style>` tags\n- `webresource.superbatch.tags.js` returns all common dependencies as html `<script>` and `<style>` tags\n- `webresource.uris.js` returns JS dependencies specific to conversion\n- `webresource.uris.css` returns CSS dependencies specific to conversion\n- `webresource.uris.all` returns all dependencies specific to conversion     \n- `webresource.tags.all` returns common JS dependencies as html `<script>` tags\n- `webresource.tags.css` returns common CSS dependencies as html `<style>` tags\n- `webresource.tags.js` returns common dependencies as html `<script>` and `<style>` tags"
+        body:
+          $ref: '#/components/schemas/ContentBodyCreate'
+    AsyncContentBodyArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/AsyncContentBody'
+    BulkContentBodyConversionInput:
+      type: object
+      properties:
+        conversionInputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBodyConversionInput'
     AsyncIdArray:
       type: array
       items:
@@ -486,67 +460,6 @@ components:
               additionalProperties: true
         superbatch:
           $ref: '#/components/schemas/SuperBatchWebResources'
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
-    Embeddable:
-      type: object
-      additionalProperties: true
-    BulkContentBodyConversionInput:
-      type: object
-      properties:
-        conversionInputs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentBodyConversionInput'
-    ContentBodyConversionInput:
-      required:
-      - to
-      - body
-      type: object
-      properties:
-        to:
-          type: string
-          description: The name of the target format for the content body conversion.
-        allowCache:
-          type: boolean
-          description: "Controls whether conversion results are cached and reused for identical requests.\n\n- `false`: Each request creates a new conversion task, even if an identical request was made previously.\n- `true`: Enables caching behavior for identical requests from the same user.\n  - If no cached result exists, a new conversion task is created\n  - If a cached result exists, the existing task is marked as RERUNNING and will complete with status COMPLETED\n  - Returns the same task ID for identical requests, allowing you to retrieve the cached result"
-          default: false
-        spaceKeyContext:
-          type: string
-          description: The space key used for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>` and the `spaceKeyContext=TEST` parameter is provided, then the link will be converted into a link to the "Example page" page in the "TEST" space.
-        contentIdContext:
-          type: string
-          description: The content ID used to find the space for resolving embedded content (page includes, files, and links) in the content body. For example, if the source content contains the link `<ac:link><ri:page ri:content-title="Example page" /><ac:link>` and the `contentIdContext=123` parameter is provided, then the link will be converted into a link to the "Example page" page in the same space that has the content with ID=123. Note that `spaceKeyContext` will be ignored if this parameter is provided.
-        embeddedContentRender:
-          type: string
-          description: Mode used for rendering embedded content, such as attachments. - `current` renders the embedded content using the latest version. - `version-at-save` renders the embedded content using the version at the time of save.
-          default: current
-          enum:
-          - current
-          - version-at-save
-        expand:
-          type: array
-          items:
-            type: string
-          description: "A multi-value, comma-separated parameter indicating which properties of the content to expand and populate. Expands are dependent\non the `to` conversion format and may be irrelevant for certain conversions (e.g. `macroRenderedOutput` is redundant when\nconverting to `view` format). \n\nIf rendering to `view` format, and the body content being converted includes arbitrary nested content (such as macros); then it is \nnecessary to include webresource expands in the request. Webresources for content body are the batched JS and CSS dependencies for\nany nested dynamic content (i.e. macros).\n\n- `embeddedContent` returns metadata for nested content (e.g. page included using page include macro)\n- `mediaToken` returns JWT token for retrieving attachment data from Media API\n- `macroRenderedOutput` additionally converts body to view format\n- `webresource.superbatch.uris.js` returns all common JS dependencies as static URLs\n- `webresource.superbatch.uris.css` returns all common CSS dependencies as static URLs\n- `webresource.superbatch.uris.all` returns all common dependencies as static URLs\n- `webresource.superbatch.tags.all` returns all common JS dependencies as html `<script>` tags\n- `webresource.superbatch.tags.css` returns all common CSS dependencies as html `<style>` tags\n- `webresource.superbatch.tags.js` returns all common dependencies as html `<script>` and `<style>` tags\n- `webresource.uris.js` returns JS dependencies specific to conversion\n- `webresource.uris.css` returns CSS dependencies specific to conversion\n- `webresource.uris.all` returns all dependencies specific to conversion     \n- `webresource.tags.all` returns common JS dependencies as html `<script>` tags\n- `webresource.tags.css` returns common CSS dependencies as html `<style>` tags\n- `webresource.tags.js` returns common dependencies as html `<script>` and `<style>` tags"
-        body:
-          $ref: '#/components/schemas/ContentBodyCreate'
-    EmbeddedContent:
-      type: object
-      additionalProperties: true
-      properties:
-        entityId:
-          type: integer
-          format: int64
-        entityType:
-          type: string
-        entity:
-          $ref: '#/components/schemas/Embeddable'
     ContentBodyCreate:
       required:
       - representation
@@ -575,6 +488,79 @@ components:
           - plain
           - raw
       description: This object is used when creating or updating content.
+    AsyncContentBody:
+      type: object
+      properties:
+        value:
+          type: string
+        representation:
+          type: string
+          enum:
+          - view
+          - export_view
+          - styled_view
+          - storage
+          - editor
+          - editor2
+          - anonymous_export_view
+          - wiki
+          - atlas_doc_format
+        renderTaskId:
+          type: string
+        error:
+          type: string
+        status:
+          description: Rerunning is reserved for when the job is working, but there is a previous run's value in the cache. You may choose to continue polling, or use the cached value.
+          type: string
+          enum:
+          - WORKING
+          - QUEUED
+          - FAILED
+          - COMPLETED
+          - RERUNNING
+        embeddedContent:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmbeddedContent'
+        webresource:
+          $ref: '#/components/schemas/WebResourceDependencies'
+        mediaToken:
+          type: object
+          properties:
+            collectionIds:
+              type: array
+              items:
+                type: string
+            contentId:
+              type: string
+            expiryDateTime:
+              type: string
+            fileIds:
+              type: array
+              items:
+                type: string
+            token:
+              type: string
+        _expandable:
+          type: object
+          properties:
+            content:
+              type: string
+            embeddedContent:
+              type: string
+            webresource:
+              type: string
+            mediaToken:
+              type: string
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     SuperBatchWebResources:
       type: object
       properties:
@@ -615,6 +601,20 @@ components:
         _expandable:
           type: object
           additionalProperties: true
+    Embeddable:
+      type: object
+      additionalProperties: true
+    EmbeddedContent:
+      type: object
+      additionalProperties: true
+      properties:
+        entityId:
+          type: integer
+          format: int64
+        entityType:
+          type: string
+        entity:
+          $ref: '#/components/schemas/Embeddable'
   parameters:
     bodyConversionExpand:
       name: expand

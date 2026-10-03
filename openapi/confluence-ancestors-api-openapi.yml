@@ -410,6 +410,14 @@ components:
       - folder
       type: string
       description: The type of ancestor.
+    Ancestor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the ancestor
+        type:
+          $ref: '#/components/schemas/AncestorType'
     MultiEntityLinks:
       type: object
       properties:
@@ -421,14 +429,6 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    Ancestor:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the ancestor
-        type:
-          $ref: '#/components/schemas/AncestorType'
   securitySchemes:
     basicAuth:
       type: http

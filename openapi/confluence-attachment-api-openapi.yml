@@ -675,12 +675,6 @@ paths:
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
   parameters:
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
     LimitParam:
       name: limit
       in: query
@@ -691,6 +685,12 @@ components:
         minimum: 1
         maximum: 250
         default: 25
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
     ContentIdPath:
       name: id
       in: path
@@ -699,6 +699,19 @@ components:
       schema:
         type: integer
         format: int64
+  responses:
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     PaginationLinks:
       type: object
@@ -712,88 +725,6 @@ components:
           type: string
           description: The base URL of the Confluence instance.
           example: example_value
-    ContentLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link for the content.
-          example: example_value
-    Version:
-      type: object
-      description: Version information for content.
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: The ISO 8601 timestamp of this version.
-          example: '2026-01-15T10:30:00Z'
-        message:
-          type: string
-          description: The message associated with this version.
-          example: example_value
-        number:
-          type: integer
-          description: The version number.
-          example: 10
-        minorEdit:
-          type: boolean
-          description: Whether this was a minor edit.
-          example: true
-        authorId:
-          type: string
-          description: The Atlassian account ID of the version author.
-          example: '500123'
-    Error:
-      type: object
-      description: Error response from the Confluence API.
-      properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
-        message:
-          type: string
-          description: A human-readable error message.
-          example: example_value
-    AttachmentBulk:
-      type: object
-      description: A paginated list of attachments.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
     Attachment:
       type: object
       description: Represents a file attachment on Confluence content.
@@ -850,30 +781,97 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/ContentLinks'
-    OptionalFieldLinks:
+    Error:
       type: object
+      description: Error response from the Confluence API.
       properties:
-        self:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
           type: string
-          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
-    Operation:
+          description: A human-readable error message.
+          example: example_value
+    Version:
       type: object
+      description: Version information for content.
       properties:
-        operation:
-          description: The type of operation.
+        createdAt:
           type: string
-        targetType:
-          description: The type of entity the operation type targets.
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
+        message:
           type: string
-    OptionalFieldMeta:
-      type: object
-      properties:
-        hasMore:
+          description: The message associated with this version.
+          example: example_value
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
           type: boolean
-          description: Indicates if there are more available results that can be fetched.
-        cursor:
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
           type: string
-          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+          description: The Atlassian account ID of the version author.
+          example: '500123'
+    ContentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link for the content.
+          example: example_value
+    AttachmentBulk:
+      type: object
+      description: A paginated list of attachments.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    AttachmentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        download:
+          type: string
+          description: Download link of the content.
     ContentProperty:
       type: object
       properties:
@@ -887,18 +885,40 @@ components:
           description: Value of the property. Must be a valid JSON value.
         version:
           $ref: '#/components/schemas/Version_2'
-    Label:
+    AttachmentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for attachments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    Operation:
       type: object
       properties:
-        id:
+        operation:
+          description: The type of operation.
           type: string
-          description: ID of the label.
-        name:
+        targetType:
+          description: The type of entity the operation type targets.
           type: string
-          description: Name of the label.
-        prefix:
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
           type: string
-          description: Prefix of the label.
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
     Version_2:
       type: object
       properties:
@@ -919,26 +939,26 @@ components:
         authorId:
           type: string
           description: The account ID of the user who created this version.
-    AttachmentLinks:
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    OptionalFieldMeta:
       type: object
       properties:
-        webui:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
           type: string
-          description: Web UI link of the content.
-        download:
-          type: string
-          description: Download link of the content.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
     AttachmentSingle:
       type: object
       properties:
@@ -1042,25 +1062,6 @@ components:
               $ref: '#/components/schemas/OptionalFieldLinks'
         _links:
           $ref: '#/components/schemas/AttachmentLinks'
-    AttachmentSortOrder:
-      enum:
-      - created-date
-      - -created-date
-      - modified-date
-      - -modified-date
-      type: string
-      description: The sort fields for attachments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    ContentStatus:
-      enum:
-      - current
-      - draft
-      - archived
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
     AttachmentBulk_2:
       type: object
       properties:
@@ -1120,19 +1121,18 @@ components:
           $ref: '#/components/schemas/Version_2'
         _links:
           $ref: '#/components/schemas/AttachmentLinks'
-  responses:
-    NotFound:
-      description: Returned if the requested resource is not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the label.
+        name:
+          type: string
+          description: Name of the label.
+        prefix:
+          type: string
+          description: Prefix of the label.
   securitySchemes:
     basicAuth:
       type: http

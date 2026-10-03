@@ -889,36 +889,64 @@ paths:
       x-atlassian-connect-scope: WRITE
 components:
   schemas:
-    GenericAccountId:
-      type:
-      - string
-      - 'null'
-      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
-
-        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
-    SpaceWatchArray:
-      required:
-      - limit
-      - results
-      - size
-      - start
+    UserDetails:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpaceWatch'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
+        business:
+          type: object
+          properties:
+            position:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+            department:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+            location:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+        personal:
+          type: object
+          properties:
+            phone:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+            im:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+            website:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
+            email:
+              type: string
+              description: 'This property has been deprecated due to privacy changes. Use the `User.email` property instead. See the
+
+                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+                for details.'
     UserWatch:
       required:
       - watching
@@ -926,6 +954,36 @@ components:
       properties:
         watching:
           type: boolean
+    GenericUserName:
+      type:
+      - string
+      - 'null'
+      description: 'This property is no longer available and will be removed from the documentation soon.
+
+        Use `accountId` instead.
+
+        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+    Icon:
+      required:
+      - height
+      - isDefault
+      - path
+      - width
+      type:
+      - object
+      - 'null'
+      properties:
+        path:
+          type: string
+        width:
+          type: integer
+          format: int32
+        height:
+          type: integer
+          format: int32
+        isDefault:
+          type: boolean
+      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
     SpaceWatch:
       required:
       - type
@@ -942,44 +1000,6 @@ components:
           type: string
         prefix:
           type: string
-    Watch:
-      required:
-      - contentId
-      - type
-      - watcher
-      type: object
-      properties:
-        type:
-          type: string
-        watcher:
-          $ref: '#/components/schemas/WatchUser'
-        contentId:
-          type: integer
-          format: int64
-    WatchArray:
-      required:
-      - _links
-      - limit
-      - results
-      - size
-      - start
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Watch'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
     WatchUser:
       required:
       - type
@@ -1041,110 +1061,6 @@ components:
       description: 'This essentially the same as the `User` object, but no `_links` property and
 
         no `_expandable` property (therefore, different required fields).'
-    GenericUserName:
-      type:
-      - string
-      - 'null'
-      description: 'This property is no longer available and will be removed from the documentation soon.
-
-        Use `accountId` instead.
-
-        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
-    UserDetails:
-      type: object
-      properties:
-        business:
-          type: object
-          properties:
-            position:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            department:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            location:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-        personal:
-          type: object
-          properties:
-            phone:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            im:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            website:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. There is no replacement. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-            email:
-              type: string
-              description: 'This property has been deprecated due to privacy changes. Use the `User.email` property instead. See the
-
-                [migration guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
-
-                for details.'
-    GenericUserKey:
-      type:
-      - string
-      - 'null'
-      description: 'This property is no longer available and will be removed from the documentation soon.
-
-        Use `accountId` instead.
-
-        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-    Icon:
-      required:
-      - height
-      - isDefault
-      - path
-      - width
-      type:
-      - object
-      - 'null'
-      properties:
-        path:
-          type: string
-        width:
-          type: integer
-          format: int32
-        height:
-          type: integer
-          format: int32
-        isDefault:
-          type: boolean
-      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
     OperationCheckResult:
       required:
       - operation
@@ -1175,7 +1091,102 @@ components:
           type: string
           description: The space or content type that the operation applies to. Could be one of- - application - page - blogpost - comment - attachment - space
       description: An operation and the target entity that it applies to, e.g. create page.
+    GenericAccountId:
+      type:
+      - string
+      - 'null'
+      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
+
+        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+    GenericUserKey:
+      type:
+      - string
+      - 'null'
+      description: 'This property is no longer available and will be removed from the documentation soon.
+
+        Use `accountId` instead.
+
+        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+    SpaceWatchArray:
+      required:
+      - limit
+      - results
+      - size
+      - start
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpaceWatch'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
+    Watch:
+      required:
+      - contentId
+      - type
+      - watcher
+      type: object
+      properties:
+        type:
+          type: string
+        watcher:
+          $ref: '#/components/schemas/WatchUser'
+        contentId:
+          type: integer
+          format: int64
+    WatchArray:
+      required:
+      - _links
+      - limit
+      - results
+      - size
+      - start
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Watch'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
   parameters:
+    userLookupKey:
+      name: key
+      in: query
+      deprecated: true
+      description: 'This parameter is no longer available and will be removed from the documentation soon.
+
+        Use `accountId` instead.
+
+        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+      schema:
+        type: string
     userLookupAccountId:
       name: accountId
       in: query
@@ -1186,17 +1197,6 @@ components:
         type: string
     userLookupUsername:
       name: username
-      in: query
-      deprecated: true
-      description: 'This parameter is no longer available and will be removed from the documentation soon.
-
-        Use `accountId` instead.
-
-        See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-      schema:
-        type: string
-    userLookupKey:
-      name: key
       in: query
       deprecated: true
       description: 'This parameter is no longer available and will be removed from the documentation soon.

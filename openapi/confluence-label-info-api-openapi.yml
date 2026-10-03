@@ -122,6 +122,21 @@ components:
         size:
           type: integer
           format: int32
+    LabeledContent:
+      required:
+      - contentId
+      - contentType
+      - title
+      type: object
+      properties:
+        contentType:
+          $ref: '#/components/schemas/LabeledContentType'
+        contentId:
+          type: integer
+          format: int64
+        title:
+          type: string
+          description: Title of the content.
     LabelDetails:
       required:
       - label
@@ -147,21 +162,6 @@ components:
           type: string
         label:
           type: string
-    LabeledContent:
-      required:
-      - contentId
-      - contentType
-      - title
-      type: object
-      properties:
-        contentType:
-          $ref: '#/components/schemas/LabeledContentType'
-        contentId:
-          type: integer
-          format: int64
-        title:
-          type: string
-          description: Title of the content.
   securitySchemes:
     basicAuth:
       type: http

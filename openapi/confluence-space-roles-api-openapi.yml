@@ -582,12 +582,21 @@ paths:
       - app-access-rule-exempt: true
 components:
   schemas:
-    DeleteSpaceRoleResponse:
+    SpaceRoleAssignment:
       type: object
       properties:
-        taskId:
+        principal:
+          $ref: '#/components/schemas/Principal'
+        roleId:
           type: string
-          description: Id of the task to update the space permissions associated with the space role
+          description: The role to which the principal is assigned.
+    PrincipalType:
+      type: string
+      description: The principal type.
+      enum:
+      - USER
+      - GROUP
+      - ACCESS_CLASS
     SpaceRole:
       type: object
       properties:
@@ -607,28 +616,6 @@ components:
           items:
             type: string
           description: The space permissions the space role is comprised of.
-    PrincipalType:
-      type: string
-      description: The principal type.
-      enum:
-      - USER
-      - GROUP
-      - ACCESS_CLASS
-    RoleType:
-      type: string
-      description: The role type.
-      enum:
-      - SYSTEM
-      - CUSTOM
-    Principal:
-      type: object
-      description: The principal of the role assignment.
-      properties:
-        principalType:
-          $ref: '#/components/schemas/PrincipalType'
-        principalId:
-          type: string
-          description: The principal ID.
     MultiEntityLinks:
       type: object
       properties:
@@ -640,14 +627,27 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    SpaceRoleAssignment:
+    Principal:
+      type: object
+      description: The principal of the role assignment.
+      properties:
+        principalType:
+          $ref: '#/components/schemas/PrincipalType'
+        principalId:
+          type: string
+          description: The principal ID.
+    DeleteSpaceRoleResponse:
       type: object
       properties:
-        principal:
-          $ref: '#/components/schemas/Principal'
-        roleId:
+        taskId:
           type: string
-          description: The role to which the principal is assigned.
+          description: Id of the task to update the space permissions associated with the space role
+    RoleType:
+      type: string
+      description: The role type.
+      enum:
+      - SYSTEM
+      - CUSTOM
     UpdateSpaceRoleResponse:
       type: object
       properties:

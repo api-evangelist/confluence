@@ -141,26 +141,6 @@ components:
           description: 'Optional human-readable reason for the redaction. Used for audit trails and compliance documentation.
 
             '
-    RedactionResponse:
-      type: object
-      properties:
-        body:
-          $ref: '#/components/schemas/RedactionSectionResponse'
-        title:
-          $ref: '#/components/schemas/RedactionSectionResponse'
-      description: 'Response containing details of all redactions that were applied to the content.
-
-        Each redaction includes a unique ID for restoration, except that code block redactions cannot be restored.
-
-        '
-    RedactionSectionResponse:
-      type: object
-      properties:
-        redactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/RedactionPointerResponse'
-          description: List of redactions that were applied to this section
     RedactionPointerResponse:
       type: object
       properties:
@@ -182,6 +162,26 @@ components:
           description: 'Unique identifier for this redaction. Can be used to restore the redacted content later.
 
             '
+    RedactionResponse:
+      type: object
+      properties:
+        body:
+          $ref: '#/components/schemas/RedactionSectionResponse'
+        title:
+          $ref: '#/components/schemas/RedactionSectionResponse'
+      description: 'Response containing details of all redactions that were applied to the content.
+
+        Each redaction includes a unique ID for restoration, except that code block redactions cannot be restored.
+
+        '
+    RedactionSectionResponse:
+      type: object
+      properties:
+        redactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedactionPointerResponse'
+          description: List of redactions that were applied to this section
   requestBodies:
     RedactionRequest:
       content:

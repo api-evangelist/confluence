@@ -223,28 +223,6 @@ paths:
       x-atlassian-data-security-policy:
       - app-access-rule-exempt: false
 components:
-  requestBodies:
-    SmartLinkCreateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - spaceId
-            properties:
-              spaceId:
-                type: string
-                description: ID of the space.
-              title:
-                type: string
-                description: Title of the Smart Link in the content tree.
-              parentId:
-                type: string
-                description: The parent content ID of the Smart Link in the content tree.
-              embedUrl:
-                type: string
-                description: The URL that the Smart Link in the content tree should be populated with.
   schemas:
     ParentContentType:
       type: string
@@ -255,12 +233,6 @@ components:
       - embed
       - folder
       description: Content type of the parent, or null if there is no parent.
-    SmartLinkLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the content.
     SmartLinkSingle:
       type: object
       properties:
@@ -306,6 +278,23 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/SmartLinkLinks'
+    ContentStatus:
+      enum:
+      - current
+      - draft
+      - archived
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    SmartLinkLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
     Version:
       type: object
       properties:
@@ -326,17 +315,28 @@ components:
         authorId:
           type: string
           description: The account ID of the user who created this version.
-    ContentStatus:
-      enum:
-      - current
-      - draft
-      - archived
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
+  requestBodies:
+    SmartLinkCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - spaceId
+            properties:
+              spaceId:
+                type: string
+                description: ID of the space.
+              title:
+                type: string
+                description: Title of the Smart Link in the content tree.
+              parentId:
+                type: string
+                description: The parent content ID of the Smart Link in the content tree.
+              embedUrl:
+                type: string
+                description: The URL that the Smart Link in the content tree should be populated with.
   securitySchemes:
     basicAuth:
       type: http

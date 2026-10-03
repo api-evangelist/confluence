@@ -390,6 +390,35 @@ paths:
       x-atlassian-connect-scope: WRITE
 components:
   schemas:
+    UserPropertyCreate:
+      required:
+      - value
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: object
+          additionalProperties: true
+          properties: {}
+          description: The value of the user property.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+    UserPropertyUpdate:
+      required:
+      - value
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: object
+          additionalProperties: true
+          properties: {}
+          description: The value of the user property.
     UserPropertyKeyArray:
       required:
       - results
@@ -413,24 +442,6 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    UserPropertyUpdate:
-      required:
-      - value
-      type: object
-      additionalProperties: false
-      properties:
-        value:
-          type: object
-          additionalProperties: true
-          properties: {}
-          description: The value of the user property.
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
     UserProperty:
       required:
       - key
@@ -460,17 +471,6 @@ components:
           description: datetime when the property was created such as `2022-01-01T12:00:00.111Z`
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    UserPropertyCreate:
-      required:
-      - value
-      type: object
-      additionalProperties: false
-      properties:
-        value:
-          type: object
-          additionalProperties: true
-          properties: {}
-          description: The value of the user property.
   securitySchemes:
     basicAuth:
       type: http

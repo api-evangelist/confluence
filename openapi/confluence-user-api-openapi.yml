@@ -177,14 +177,27 @@ paths:
       x-experimental: true
 components:
   schemas:
-    AccountStatus:
+    AccountType:
       enum:
-      - active
-      - inactive
-      - closed
+      - atlassian
+      - app
+      - customer
       - unknown
       type: string
-      description: The account status of the user.
+      description: The account type of the user.
+    Icon:
+      required:
+      - path
+      - isDefault
+      type:
+      - object
+      - 'null'
+      properties:
+        path:
+          type: string
+        isDefault:
+          type: boolean
+      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
     User:
       type: object
       properties:
@@ -217,14 +230,6 @@ components:
           description: Public name of the user.
         profilePicture:
           $ref: '#/components/schemas/Icon'
-    AccountType:
-      enum:
-      - atlassian
-      - app
-      - customer
-      - unknown
-      type: string
-      description: The account type of the user.
     MultiEntityLinks:
       type: object
       properties:
@@ -236,19 +241,14 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    Icon:
-      required:
-      - path
-      - isDefault
-      type:
-      - object
-      - 'null'
-      properties:
-        path:
-          type: string
-        isDefault:
-          type: boolean
-      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+    AccountStatus:
+      enum:
+      - active
+      - inactive
+      - closed
+      - unknown
+      type: string
+      description: The account status of the user.
   requestBodies:
     CheckAccessOrInviteByEmailRequest:
       required: true

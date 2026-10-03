@@ -99,6 +99,17 @@ paths:
           content: {}
       x-atlassian-connect-scope: INACCESSIBLE
 components:
+  schemas:
+    AdminKeyResponse:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: User identifier.
+        expirationTime:
+          type: string
+          format: date-time
+          description: Timestamp in UTC that represents when the admin key will expire. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
   requestBodies:
     AdminKeyRequest:
       required: false
@@ -112,17 +123,6 @@ components:
                 format: int32
                 description: The requested duration of admin key access in minutes, up to a maximum of 60 minutes, after which the issued admin key will automatically expire.
                 example: 60
-  schemas:
-    AdminKeyResponse:
-      type: object
-      properties:
-        accountId:
-          type: string
-          description: User identifier.
-        expirationTime:
-          type: string
-          format: date-time
-          description: Timestamp in UTC that represents when the admin key will expire. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
   securitySchemes:
     basicAuth:
       type: http

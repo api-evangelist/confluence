@@ -249,29 +249,10 @@ components:
         name:
           type: string
           description: The name of the label, which will be shown in the UI.
-    Label:
-      required:
-      - id
-      - label
-      - name
-      - prefix
-      type: object
-      properties:
-        prefix:
-          type: string
-        name:
-          type: string
-        id:
-          type: string
-        label:
-          type: string
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
+    LabelCreateArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/LabelCreate'
     LabelArray:
       required:
       - results
@@ -293,10 +274,29 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    LabelCreateArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/LabelCreate'
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+    Label:
+      required:
+      - id
+      - label
+      - name
+      - prefix
+      type: object
+      properties:
+        prefix:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
   securitySchemes:
     basicAuth:
       type: http

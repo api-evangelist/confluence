@@ -327,6 +327,15 @@ components:
       - atlas_doc_format
       type: string
       description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
     Task:
       type: object
       properties:
@@ -378,6 +387,14 @@ components:
           type: string
           format: date-time
           description: Date and time when the task was completed. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+    TaskBodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
     MultiEntityLinks:
       type: object
       properties:
@@ -389,23 +406,6 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    TaskBodySingle:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
   requestBodies:
     TaskUpdateRequest:
       required: true
