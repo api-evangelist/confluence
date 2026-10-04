@@ -1,0 +1,68 @@
+slug: confluence
+provider: Confluence
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Space Permissions
+  spec_file: confluence-space-permissions-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /wiki/rest/api/space/{spaceKey}/permission "Add new permission to space"; DELETE .../permission/{id}
+    "Remove a space permission"; schema SpacePermissionAssignment, PermissionSubject
+  reason: Granting and revoking permissions to subjects on spaces is access-control administration, mapping
+    to Identity & Access Management rather than any content or collaboration capability.
+- tag: Space Permission Transition
+  spec_file: confluence-space-permission-transition-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /space-permissions/transition/role-assignments "Bulk assign space permission roles";
+    POST /space-permissions/transition/access-removals "Bulk remove space permission access"
+  reason: Operations bulk-assign roles and remove access for principals against spaces — authorisation
+    administration, i.e. Identity & Access Management. The 'transition' wrapper and task-status endpoint
+    are just async job plumbing around the same access-control intent.
+- tag: Space Roles
+  spec_file: confluence-space-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /space-roles "Create a space role"; POST /spaces/{id}/role-assignments "Set space role
+    assignments"; schemas SpaceRoleAssignment, PrincipalType, Principal
+  reason: Role definition and assignment of principals to roles is role-based access control administration,
+    i.e. Identity & Access Management. Not HR role/job management despite the word 'role'.
+- tag: Group
+  spec_file: confluence-group-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /wiki/rest/api/group 'Create new user group'; POST /wiki/rest/api/group/userByGroupId
+    'Add member to group by groupId'; DELETE 'Remove member from group using group id'
+  reason: Creation of user groups and management of group membership is directory/access-group administration
+    underpinning permissions — identity and access management, not HR or customer data. Not a tenant-federation
+    surface (no SSO/SCIM), so the cross-industry IAM capability fits best.
+- tag: User
+  spec_file: confluence-user-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: POST /user/access/check-access-by-email "Check site access for a list of emails"; POST /user/access/invite-by-email
+    "Invite a list of emails to the site"; schemas AccountStatus, AccountType
+  reason: Checking site access and inviting users to the site is user account provisioning and access
+    administration — Identity & Access Management. Bulk lookup is supporting directory read. Not HR employee
+    records despite the 'User' noun.

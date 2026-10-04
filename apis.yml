@@ -38,6 +38,7 @@ tags:
 - Documentation
 - Knowledge Base
 - Wiki
+- Knowledge Management
 created: '2024'
 modified: '2026-06-20'
 url: https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
@@ -2796,6 +2797,9 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: CapabilityMap
+  url: capabilities/confluence-capability-edges.yml
+  name: Confluence Business Capability Map
 - type: Overlay
   url: overlays/confluence-rest-v2-overlay.yaml
 - type: Overlay
