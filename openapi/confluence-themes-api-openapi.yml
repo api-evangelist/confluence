@@ -301,20 +301,21 @@ paths:
       x-atlassian-connect-scope: DELETE
 components:
   schemas:
-    ThemeNoLinks:
+    ThemeUpdate:
       required:
       - themeKey
       type: object
       properties:
         themeKey:
           type: string
-        name:
-          type: string
-        description:
-          type: string
-        icon:
-          $ref: '#/components/schemas/Icon'
-      description: Theme object without links. Used in ThemeArray.
+          description: The key of the theme to be set as the space theme.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     ThemeArray:
       required:
       - _links
@@ -339,21 +340,6 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    Theme:
-      required:
-      - themeKey
-      type: object
-      properties:
-        themeKey:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        icon:
-          $ref: '#/components/schemas/Icon'
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
     Icon:
       required:
       - height
@@ -375,21 +361,35 @@ components:
         isDefault:
           type: boolean
       description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
-    ThemeUpdate:
+    ThemeNoLinks:
       required:
       - themeKey
       type: object
       properties:
         themeKey:
           type: string
-          description: The key of the theme to be set as the space theme.
-    GenericLinks:
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          $ref: '#/components/schemas/Icon'
+      description: Theme object without links. Used in ThemeArray.
+    Theme:
+      required:
+      - themeKey
       type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
+      properties:
+        themeKey:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        icon:
+          $ref: '#/components/schemas/Icon'
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
   securitySchemes:
     basicAuth:
       type: http

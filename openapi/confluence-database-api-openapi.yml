@@ -230,16 +230,26 @@ paths:
       x-atlassian-data-security-policy:
       - app-access-rule-exempt: false
 components:
+  requestBodies:
+    DatabaseCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - spaceId
+            properties:
+              spaceId:
+                type: string
+                description: ID of the space.
+              title:
+                type: string
+                description: Title of the database.
+              parentId:
+                type: string
+                description: The parent content ID of the database.
   schemas:
-    ParentContentType:
-      type: string
-      enum:
-      - page
-      - whiteboard
-      - database
-      - embed
-      - folder
-      description: Content type of the parent, or null if there is no parent.
     DatabaseSingle:
       type: object
       properties:
@@ -293,6 +303,15 @@ components:
       - any
       type: string
       description: The status of the content.
+    ParentContentType:
+      type: string
+      enum:
+      - page
+      - whiteboard
+      - database
+      - embed
+      - folder
+      description: Content type of the parent, or null if there is no parent.
     Version:
       type: object
       properties:
@@ -319,25 +338,6 @@ components:
         webui:
           type: string
           description: Web UI link of the content.
-  requestBodies:
-    DatabaseCreateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - spaceId
-            properties:
-              spaceId:
-                type: string
-                description: ID of the space.
-              title:
-                type: string
-                description: Title of the database.
-              parentId:
-                type: string
-                description: The parent content ID of the database.
   securitySchemes:
     basicAuth:
       type: http

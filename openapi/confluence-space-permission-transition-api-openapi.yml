@@ -287,18 +287,39 @@ paths:
       x-experimental: true
 components:
   schemas:
-    BulkTransitionSpaceTarget:
+    BulkTransitionRoleAssignment:
       type: object
       required:
-      - id
-      - key
+      - permissionCombinationId
+      - principalTypeAssignments
       properties:
-        id:
+        permissionCombinationId:
           type: string
-          description: The space ID.
-        key:
+          description: The ID of the permission combination.
+        principalTypeAssignments:
+          type: array
+          description: List of principal type assignments.
+          items:
+            $ref: '#/components/schemas/BulkTransitionPrincipalTypeAssignment'
+    BulkTransitionSpaceSelection:
+      type: object
+      required:
+      - spaceType
+      properties:
+        spaceType:
           type: string
-          description: The space key.
+          description: The space selection type.
+          enum:
+          - ALL
+          - ALL_EXCEPT_PERSONAL
+          - ALL_EXCEPT_SPECIFIC
+          - PERSONAL
+          - SPECIFIC
+        selectedSpaces:
+          type: array
+          description: List of specific spaces. Required when spaceType is SPECIFIC or ALL_EXCEPT_SPECIFIC.
+          items:
+            $ref: '#/components/schemas/BulkTransitionSpaceTarget'
     BulkTransitionTaskStatusResponse:
       type: object
       required:
@@ -320,40 +341,6 @@ components:
           - string
           - 'null'
           description: Human-readable error message describing why the task failed. Only present when status is FAILED.
-    ListSpacePermissionCombinationsResponse:
-      type: object
-      required:
-      - results
-      properties:
-        results:
-          type: array
-          description: One page of unassigned permission combinations, sorted by principalCount descending.
-          items:
-            $ref: '#/components/schemas/BulkTransitionCombinationEntry'
-        generatedAt:
-          type:
-          - string
-          - 'null'
-          description: 'ISO-8601 timestamp of the last audit run that populated the combinations table.
-
-            Absent if the audit task has never run on this tenant.'
-        cursor:
-          type:
-          - string
-          - 'null'
-          description: Opaque cursor for the next page. Absent when no further results exist.
-    BulkTransitionDecodedPermission:
-      type: object
-      required:
-      - id
-      - displayName
-      properties:
-        id:
-          type: string
-          description: The platform id of the permission (e.g. `VIEW_CONTENT`).
-        displayName:
-          type: string
-          description: Human-readable name of the permission.
     BulkTransitionTaskResponse:
       type: object
       required:
@@ -374,57 +361,6 @@ components:
         statusUrl:
           type: string
           description: URL to poll for task progress.
-    BulkAssignRolesRequest:
-      type: object
-      required:
-      - assignments
-      - spaceSelection
-      properties:
-        assignments:
-          type: array
-          description: List of role assignments to apply.
-          items:
-            $ref: '#/components/schemas/BulkTransitionRoleAssignment'
-        spaceSelection:
-          $ref: '#/components/schemas/BulkTransitionSpaceSelection'
-    BulkTransitionPrincipalTypeAssignment:
-      type: object
-      required:
-      - principalType
-      - removeAccess
-      properties:
-        principalType:
-          type: string
-          description: The type of principal.
-          enum:
-          - USER
-          - GROUP
-          - GUEST
-          - ANONYMOUS
-          - ALL_LICENSED_USERS_USER_CLASS
-          - ALL_PRODUCT_ADMINS_USER_CLASS
-          - APP
-        removeAccess:
-          type: boolean
-          description: Whether to remove access for this principal type instead of assigning a role.
-        roleId:
-          type:
-          - string
-          - 'null'
-          description: The UUID of the space role to assign. Required when removeAccess is false.
-    BulkRemoveAccessRequest:
-      type: object
-      required:
-      - permissionCombinationIds
-      - spaceSelection
-      properties:
-        permissionCombinationIds:
-          type: array
-          description: List of permission combination IDs to remove access for.
-          items:
-            type: string
-        spaceSelection:
-          $ref: '#/components/schemas/BulkTransitionSpaceSelection'
     BulkTransitionCombinationEntry:
       type: object
       required:
@@ -468,39 +404,103 @@ components:
             - ALL_PRODUCT_ADMINS_USER_CLASS
             - APP
             - TEAM
-    BulkTransitionRoleAssignment:
+    BulkTransitionDecodedPermission:
       type: object
       required:
-      - permissionCombinationId
-      - principalTypeAssignments
+      - id
+      - displayName
       properties:
-        permissionCombinationId:
+        id:
           type: string
-          description: The ID of the permission combination.
-        principalTypeAssignments:
-          type: array
-          description: List of principal type assignments.
-          items:
-            $ref: '#/components/schemas/BulkTransitionPrincipalTypeAssignment'
-    BulkTransitionSpaceSelection:
+          description: The platform id of the permission (e.g. `VIEW_CONTENT`).
+        displayName:
+          type: string
+          description: Human-readable name of the permission.
+    BulkTransitionSpaceTarget:
       type: object
       required:
-      - spaceType
+      - id
+      - key
       properties:
-        spaceType:
+        id:
           type: string
-          description: The space selection type.
+          description: The space ID.
+        key:
+          type: string
+          description: The space key.
+    BulkTransitionPrincipalTypeAssignment:
+      type: object
+      required:
+      - principalType
+      - removeAccess
+      properties:
+        principalType:
+          type: string
+          description: The type of principal.
           enum:
-          - ALL
-          - ALL_EXCEPT_PERSONAL
-          - ALL_EXCEPT_SPECIFIC
-          - PERSONAL
-          - SPECIFIC
-        selectedSpaces:
+          - USER
+          - GROUP
+          - GUEST
+          - ANONYMOUS
+          - ALL_LICENSED_USERS_USER_CLASS
+          - ALL_PRODUCT_ADMINS_USER_CLASS
+          - APP
+        removeAccess:
+          type: boolean
+          description: Whether to remove access for this principal type instead of assigning a role.
+        roleId:
+          type:
+          - string
+          - 'null'
+          description: The UUID of the space role to assign. Required when removeAccess is false.
+    BulkRemoveAccessRequest:
+      type: object
+      required:
+      - permissionCombinationIds
+      - spaceSelection
+      properties:
+        permissionCombinationIds:
           type: array
-          description: List of specific spaces. Required when spaceType is SPECIFIC or ALL_EXCEPT_SPECIFIC.
+          description: List of permission combination IDs to remove access for.
           items:
-            $ref: '#/components/schemas/BulkTransitionSpaceTarget'
+            type: string
+        spaceSelection:
+          $ref: '#/components/schemas/BulkTransitionSpaceSelection'
+    BulkAssignRolesRequest:
+      type: object
+      required:
+      - assignments
+      - spaceSelection
+      properties:
+        assignments:
+          type: array
+          description: List of role assignments to apply.
+          items:
+            $ref: '#/components/schemas/BulkTransitionRoleAssignment'
+        spaceSelection:
+          $ref: '#/components/schemas/BulkTransitionSpaceSelection'
+    ListSpacePermissionCombinationsResponse:
+      type: object
+      required:
+      - results
+      properties:
+        results:
+          type: array
+          description: One page of unassigned permission combinations, sorted by principalCount descending.
+          items:
+            $ref: '#/components/schemas/BulkTransitionCombinationEntry'
+        generatedAt:
+          type:
+          - string
+          - 'null'
+          description: 'ISO-8601 timestamp of the last audit run that populated the combinations table.
+
+            Absent if the audit task has never run on this tenant.'
+        cursor:
+          type:
+          - string
+          - 'null'
+          description: Opaque cursor for the next page. Absent when no further results exist.
   securitySchemes:
     basicAuth:
       type: http

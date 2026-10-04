@@ -327,15 +327,17 @@ components:
       - atlas_doc_format
       type: string
       description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
-    BodyType:
+    MultiEntityLinks:
       type: object
       properties:
-        representation:
+        next:
           type: string
-          description: Type of content representation used for the value field.
-        value:
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
           type: string
-          description: Body of the content, in the format found in the representation field.
+          description: Base url of the Confluence site.
     Task:
       type: object
       properties:
@@ -395,17 +397,15 @@ components:
           $ref: '#/components/schemas/BodyType'
         atlas_doc_format:
           $ref: '#/components/schemas/BodyType'
-    MultiEntityLinks:
+    BodyType:
       type: object
       properties:
-        next:
+        representation:
           type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
+          description: Type of content representation used for the value field.
+        value:
           type: string
-          description: Base url of the Confluence site.
+          description: Body of the content, in the format found in the representation field.
   requestBodies:
     TaskUpdateRequest:
       required: true

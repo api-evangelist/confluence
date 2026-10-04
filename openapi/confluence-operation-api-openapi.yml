@@ -588,6 +588,14 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
+    PermittedOperationsResponse:
+      description: The list of operations permitted on entity.
+      type: object
+      properties:
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
     Operation:
       type: object
       properties:
@@ -597,14 +605,6 @@ components:
         targetType:
           description: The type of entity the operation type targets.
           type: string
-    PermittedOperationsResponse:
-      description: The list of operations permitted on entity.
-      type: object
-      properties:
-        operations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Operation'
   securitySchemes:
     basicAuth:
       type: http

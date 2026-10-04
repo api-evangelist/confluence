@@ -528,93 +528,43 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
-  parameters:
-    StatusFilter:
-      name: status
-      in: query
-      description: Filter by content status.
-      schema:
-        type: string
-        enum:
-        - current
-        - archived
-        - draft
-        - trashed
-    SpaceIdFilter:
-      name: space-id
-      in: query
-      description: Filter by space ID. Multiple IDs can be specified.
-      schema:
-        type: array
-        items:
-          type: integer
-          format: int64
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
-    TitleFilter:
-      name: title
-      in: query
-      description: Filter by content title. Supports exact match.
-      schema:
-        type: string
-    BodyFormatParam:
-      name: body-format
-      in: query
-      description: The representation format for the content body.
-      schema:
-        type: string
-        enum:
-        - storage
-        - atlas_doc_format
-        - view
-        - export_view
-        - anonymous_export_view
-        - editor
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    VersionParam:
-      name: version
-      in: query
-      description: The version number of the content to retrieve.
-      schema:
-        type: integer
-        format: int32
-    SortParam:
-      name: sort
-      in: query
-      description: Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.
-      schema:
-        type: string
-        enum:
-        - id
-        - -id
-        - title
-        - -title
-        - created-date
-        - -created-date
-        - modified-date
-        - -modified-date
   schemas:
+    VersionWrite:
+      type: object
+      required:
+      - number
+      properties:
+        number:
+          type: integer
+          description: The new version number. Must be incremented by 1.
+          example: 10
+        message:
+          type: string
+          description: An optional message associated with this version.
+          example: example_value
+    BodyRepresentation:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: The name of the representation format.
+          example: example_value
+        value:
+          type: string
+          description: The body content in this representation.
+          example: example_value
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
     BlogPostCreateRequest:
       type: object
       required:
@@ -640,36 +590,77 @@ components:
           example: Example Title
         body:
           $ref: '#/components/schemas/BodyWrite'
-    PaginationLinks:
+    Error:
       type: object
-      description: Pagination links for cursor-based pagination.
+      description: Error response from the Confluence API.
       properties:
-        next:
-          type: string
-          description: URL for the next page of results. Contains the cursor parameter.
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
           example: example_value
-        base:
+        message:
           type: string
-          description: The base URL of the Confluence instance.
+          description: A human-readable error message.
           example: example_value
-    BodyWrite:
+    Body:
       type: object
-      required:
-      - representation
-      - value
+      description: The body content in various representations.
       properties:
-        representation:
+        storage:
+          $ref: '#/components/schemas/BodyRepresentation'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyRepresentation'
+        view:
+          $ref: '#/components/schemas/BodyRepresentation'
+    ContentLinks:
+      type: object
+      properties:
+        webui:
           type: string
-          description: The representation format of the body content.
-          enum:
-          - storage
-          - atlas_doc_format
-          - wiki
-          - editor
-          example: storage
-        value:
+          description: Web UI link for the content.
+          example: example_value
+    Label:
+      type: object
+      description: Represents a label applied to Confluence content.
+      properties:
+        id:
           type: string
-          description: The body content in the specified representation.
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
           example: example_value
     BlogPost:
       type: object
@@ -712,138 +703,6 @@ components:
           $ref: '#/components/schemas/LabelArray'
         _links:
           $ref: '#/components/schemas/ContentLinks'
-    ContentLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link for the content.
-          example: example_value
-    BodyRepresentation:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: The name of the representation format.
-          example: example_value
-        value:
-          type: string
-          description: The body content in this representation.
-          example: example_value
-    BlogPostBulk:
-      type: object
-      description: A paginated list of blog posts.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BlogPost'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
-    Body:
-      type: object
-      description: The body content in various representations.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyRepresentation'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyRepresentation'
-        view:
-          $ref: '#/components/schemas/BodyRepresentation'
-    Version:
-      type: object
-      description: Version information for content.
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: The ISO 8601 timestamp of this version.
-          example: '2026-01-15T10:30:00Z'
-        message:
-          type: string
-          description: The message associated with this version.
-          example: example_value
-        number:
-          type: integer
-          description: The version number.
-          example: 10
-        minorEdit:
-          type: boolean
-          description: Whether this was a minor edit.
-          example: true
-        authorId:
-          type: string
-          description: The Atlassian account ID of the version author.
-          example: '500123'
-    Error:
-      type: object
-      description: Error response from the Confluence API.
-      properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
-        message:
-          type: string
-          description: A human-readable error message.
-          example: example_value
-    VersionWrite:
-      type: object
-      required:
-      - number
-      properties:
-        number:
-          type: integer
-          description: The new version number. Must be incremented by 1.
-          example: 10
-        message:
-          type: string
-          description: An optional message associated with this version.
-          example: example_value
-    Label:
-      type: object
-      description: Represents a label applied to Confluence content.
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the label.
-          example: abc123
-        name:
-          type: string
-          description: The name of the label.
-          example: Example Title
-        prefix:
-          type: string
-          description: The prefix of the label (global, my, team).
-          example: example_value
     BlogPostUpdateRequest:
       type: object
       required:
@@ -872,6 +731,61 @@ components:
           $ref: '#/components/schemas/BodyWrite'
         version:
           $ref: '#/components/schemas/VersionWrite'
+    BodyWrite:
+      type: object
+      required:
+      - representation
+      - value
+      properties:
+        representation:
+          type: string
+          description: The representation format of the body content.
+          enum:
+          - storage
+          - atlas_doc_format
+          - wiki
+          - editor
+          example: storage
+        value:
+          type: string
+          description: The body content in the specified representation.
+          example: example_value
+    BlogPostBulk:
+      type: object
+      description: A paginated list of blog posts.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogPost'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Version:
+      type: object
+      description: Version information for content.
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of this version.
+          example: '2026-01-15T10:30:00Z'
+        message:
+          type: string
+          description: The message associated with this version.
+          example: example_value
+        number:
+          type: integer
+          description: The version number.
+          example: 10
+        minorEdit:
+          type: boolean
+          description: Whether this was a minor edit.
+          example: true
+        authorId:
+          type: string
+          description: The Atlassian account ID of the version author.
+          example: '500123'
     LabelArray:
       type: object
       description: A list of labels.
@@ -883,6 +797,25 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Account ID.
+    BlogPostBodyWrite:
+      type: object
+      properties:
+        representation:
+          enum:
+          - storage
+          - atlas_doc_format
+          - wiki
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the blog post, in the format found in the representation field.
     BodyBulk:
       type: object
       description: Contains fields for each representation type requested.
@@ -891,19 +824,6 @@ components:
           $ref: '#/components/schemas/BodyType'
         atlas_doc_format:
           $ref: '#/components/schemas/BodyType'
-    ContentProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the property
-        key:
-          type: string
-          description: Key of the property
-        value:
-          description: Value of the property. Must be a valid JSON value.
-        version:
-          $ref: '#/components/schemas/Version_2'
     BlogPostNestedBodyWrite:
       type: object
       description: 'Body of the blog post. Only one body format should be specified as the property
@@ -916,92 +836,15 @@ components:
           $ref: '#/components/schemas/BlogPostBodyWrite'
         wiki:
           $ref: '#/components/schemas/BlogPostBodyWrite'
-    PrimaryBodyRepresentation:
-      enum:
-      - storage
-      - atlas_doc_format
-      type: string
-      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
-    BlogPostBulk_2:
+    Operation:
       type: object
       properties:
-        id:
+        operation:
+          description: The type of operation.
           type: string
-          description: ID of the blog post.
-        status:
-          $ref: '#/components/schemas/BlogPostContentStatus'
-        title:
+        targetType:
+          description: The type of entity the operation type targets.
           type: string
-          description: Title of the blog post.
-        spaceId:
-          type: string
-          description: ID of the space the blog post is in.
-        authorId:
-          type: string
-          description: The account ID of the user who created this blog post originally.
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the blog post was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        version:
-          $ref: '#/components/schemas/Version_2'
-        body:
-          $ref: '#/components/schemas/BodyBulk'
-        _links:
-          $ref: '#/components/schemas/AbstractPageLinks'
-    BlogPostSortOrder:
-      enum:
-      - id
-      - -id
-      - created-date
-      - -created-date
-      - modified-date
-      - -modified-date
-      type: string
-      description: The sort fields for blog posts. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    Version_2:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        message:
-          type: string
-          description: Message associated with the current version.
-        number:
-          format: int32
-          type: integer
-          description: The version number.
-        minorEdit:
-          type: boolean
-          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
-        authorId:
-          type: string
-          description: The account ID of the user who created this version.
-    PrimaryBodyRepresentationSingle:
-      enum:
-      - storage
-      - atlas_doc_format
-      - view
-      - export_view
-      - anonymous_export_view
-      - styled_view
-      - editor
-      type: string
-      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
-    AbstractPageLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the content.
-        editui:
-          type: string
-          description: Edit UI link of the content.
-        tinyui:
-          type: string
-          description: Web UI link of the content.
     MultiEntityLinks:
       type: object
       properties:
@@ -1019,12 +862,63 @@ components:
         self:
           type: string
           description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
-    Like:
+    BodySingle:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        storage:
+          $ref: '#/components/schemas/BodyType'
+        atlas_doc_format:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    BlogPostContentStatus:
+      enum:
+      - current
+      - draft
+      - historical
+      - trashed
+      - deleted
+      - any
+      type: string
+      description: The status of the content.
+    Label_2:
       type: object
       properties:
-        accountId:
+        id:
           type: string
-          description: Account ID.
+          description: ID of the label.
+        name:
+          type: string
+          description: Name of the label.
+        prefix:
+          type: string
+          description: Prefix of the label.
+    BlogPostSortOrder:
+      enum:
+      - id
+      - -id
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for blog posts. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    PrimaryBodyRepresentation:
+      enum:
+      - storage
+      - atlas_doc_format
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
     BlogPostSingle:
       type: object
       properties:
@@ -1110,37 +1004,56 @@ components:
           description: Whether the blog post has been favorited by the current user.
         _links:
           $ref: '#/components/schemas/AbstractPageLinks'
-    OptionalFieldMeta:
-      type: object
-      properties:
-        hasMore:
-          type: boolean
-          description: Indicates if there are more available results that can be fetched.
-        cursor:
-          type: string
-          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
-    Label_2:
+    PrimaryBodyRepresentationSingle:
+      enum:
+      - storage
+      - atlas_doc_format
+      - view
+      - export_view
+      - anonymous_export_view
+      - styled_view
+      - editor
+      type: string
+      description: The primary formats a body can be represented as. A subset of BodyRepresentation. These formats are the only allowed formats in certain use cases.
+    BlogPostBulk_2:
       type: object
       properties:
         id:
           type: string
-          description: ID of the label.
-        name:
+          description: ID of the blog post.
+        status:
+          $ref: '#/components/schemas/BlogPostContentStatus'
+        title:
           type: string
-          description: Name of the label.
-        prefix:
+          description: Title of the blog post.
+        spaceId:
           type: string
-          description: Prefix of the label.
-    BlogPostContentStatus:
-      enum:
-      - current
-      - draft
-      - historical
-      - trashed
-      - deleted
-      - any
-      type: string
-      description: The status of the content.
+          description: ID of the space the blog post is in.
+        authorId:
+          type: string
+          description: The account ID of the user who created this blog post originally.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the blog post was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        version:
+          $ref: '#/components/schemas/Version_2'
+        body:
+          $ref: '#/components/schemas/BodyBulk'
+        _links:
+          $ref: '#/components/schemas/AbstractPageLinks'
+    AbstractPageLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        editui:
+          type: string
+          description: Edit UI link of the content.
+        tinyui:
+          type: string
+          description: Web UI link of the content.
     BodyType:
       type: object
       properties:
@@ -1150,39 +1063,132 @@ components:
         value:
           type: string
           description: Body of the content, in the format found in the representation field.
-    BlogPostBodyWrite:
+    Version_2:
       type: object
       properties:
-        representation:
-          enum:
-          - storage
-          - atlas_doc_format
-          - wiki
+        createdAt:
           type: string
-          description: Type of content representation used for the value field.
+          format: date-time
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
+          type: string
+          description: Message associated with the current version.
+        number:
+          format: int32
+          type: integer
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
+          type: string
+          description: The account ID of the user who created this version.
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
         value:
-          type: string
-          description: Body of the blog post, in the format found in the representation field.
-    Operation:
-      type: object
-      properties:
-        operation:
-          description: The type of operation.
-          type: string
-        targetType:
-          description: The type of entity the operation type targets.
-          type: string
-    BodySingle:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        storage:
-          $ref: '#/components/schemas/BodyType'
-        atlas_doc_format:
-          $ref: '#/components/schemas/BodyType'
-        view:
-          $ref: '#/components/schemas/BodyType'
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version_2'
+  parameters:
+    StatusFilter:
+      name: status
+      in: query
+      description: Filter by content status.
+      schema:
+        type: string
+        enum:
+        - current
+        - archived
+        - draft
+        - trashed
+    BodyFormatParam:
+      name: body-format
+      in: query
+      description: The representation format for the content body.
+      schema:
+        type: string
+        enum:
+        - storage
+        - atlas_doc_format
+        - view
+        - export_view
+        - anonymous_export_view
+        - editor
+    SortParam:
+      name: sort
+      in: query
+      description: Sort order for results. Prefix with - for descending order. Supported fields include id, title, created-date, and modified-date.
+      schema:
+        type: string
+        enum:
+        - id
+        - -id
+        - title
+        - -title
+        - created-date
+        - -created-date
+        - modified-date
+        - -modified-date
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    SpaceIdFilter:
+      name: space-id
+      in: query
+      description: Filter by space ID. Multiple IDs can be specified.
+      schema:
+        type: array
+        items:
+          type: integer
+          format: int64
+    VersionParam:
+      name: version
+      in: query
+      description: The version number of the content to retrieve.
+      schema:
+        type: integer
+        format: int32
+    TitleFilter:
+      name: title
+      in: query
+      description: Filter by content title. Supports exact match.
+      schema:
+        type: string
   responses:
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Returned if the request is malformed or contains invalid parameters.
       content:
@@ -1191,12 +1197,6 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Returned if the requested resource is not found.
       content:
         application/json:
           schema:

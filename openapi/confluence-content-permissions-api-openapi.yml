@@ -96,21 +96,24 @@ paths:
       x-atlassian-connect-scope: READ
 components:
   schemas:
-    Message:
+    PermissionSubjectWithGroupId:
       required:
-      - args
+      - identifier
+      - type
       type: object
-      additionalProperties: true
       properties:
-        translation:
+        type:
           type: string
-        args:
-          type: array
-          items:
-            oneOf:
-            - type: string
-            - type: object
-              additionalProperties: true
+          enum:
+          - user
+          - group
+        identifier:
+          type: string
+          description: 'for `type=user`, identifier should be user''s accountId or `anonymous` for anonymous users
+
+
+            for `type=group`, identifier should be ID of the group'
+      description: The user or group that the permission applies to.
     PermissionCheckResponse:
       required:
       - hasPermission
@@ -144,24 +147,6 @@ components:
         - Anonymous user does not have permission to the space
 
         - Anonymous user does not have permission to the content'
-    PermissionSubjectWithGroupId:
-      required:
-      - identifier
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - user
-          - group
-        identifier:
-          type: string
-          description: 'for `type=user`, identifier should be user''s accountId or `anonymous` for anonymous users
-
-
-            for `type=group`, identifier should be ID of the group'
-      description: The user or group that the permission applies to.
     GenericLinks:
       type: object
       additionalProperties:
@@ -185,6 +170,21 @@ components:
           - update
           - delete
       description: This object represents the request for the content permission check API.
+    Message:
+      required:
+      - args
+      type: object
+      additionalProperties: true
+      properties:
+        translation:
+          type: string
+        args:
+          type: array
+          items:
+            oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
   securitySchemes:
     basicAuth:
       type: http

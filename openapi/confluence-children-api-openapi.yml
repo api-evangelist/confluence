@@ -805,25 +805,7 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    OnlyArchivedAndCurrentContentStatus:
-      enum:
-      - current
-      - archived
-      type: string
-      description: The status of the content.
-    ChildPageSortOrder:
-      enum:
-      - created-date
-      - -created-date
-      - id
-      - -id
-      - child-position
-      - -child-position
-      - modified-date
-      - -modified-date
-      type: string
-      description: The sort fields for child pages. The default sort direction is ascending by child-position. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    ContentSortOrder:
+    ChildCustomContentSortOrder:
       enum:
       - created-date
       - -created-date
@@ -831,12 +813,8 @@ components:
       - -id
       - modified-date
       - -modified-date
-      - child-position
-      - -child-position
-      - title
-      - -title
       type: string
-      description: The sort fields for hierarchical content types. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+      description: The sort fields for child custom content. The default sort direction is ascending by id. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
     ChildPage:
       type: object
       properties:
@@ -857,6 +835,52 @@ components:
           - integer
           - 'null'
           description: Position of child page within the given parent page tree.
+    ChildCustomContent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the child custom content.
+        status:
+          $ref: '#/components/schemas/OnlyArchivedAndCurrentContentStatus'
+        title:
+          type: string
+          description: Title of the custom content.
+        type:
+          type: string
+          description: Custom content type.
+        spaceId:
+          type: string
+          description: ID of the space the custom content is in.
+    OnlyArchivedAndCurrentContentStatus:
+      enum:
+      - current
+      - archived
+      type: string
+      description: The status of the content.
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    ChildPageSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - id
+      - -id
+      - child-position
+      - -child-position
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for child pages. The default sort direction is ascending by child-position. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
     ChildrenResponse:
       type: object
       properties:
@@ -882,35 +906,7 @@ components:
           description: 'Numerical value indicating position of the content relative to its siblings (with the same parentId) within the content tree.
 
             If the content is sorted by childPosition, it will reflect the default content ordering within the content tree.'
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    ChildCustomContent:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the child custom content.
-        status:
-          $ref: '#/components/schemas/OnlyArchivedAndCurrentContentStatus'
-        title:
-          type: string
-          description: Title of the custom content.
-        type:
-          type: string
-          description: Custom content type.
-        spaceId:
-          type: string
-          description: ID of the space the custom content is in.
-    ChildCustomContentSortOrder:
+    ContentSortOrder:
       enum:
       - created-date
       - -created-date
@@ -918,8 +914,12 @@ components:
       - -id
       - modified-date
       - -modified-date
+      - child-position
+      - -child-position
+      - title
+      - -title
       type: string
-      description: The sort fields for child custom content. The default sort direction is ascending by id. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+      description: The sort fields for hierarchical content types. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
   securitySchemes:
     basicAuth:
       type: http

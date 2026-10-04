@@ -778,36 +778,21 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
-  responses:
-    NotFound:
-      description: Returned if the requested resource is not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Returned if the authentication credentials are missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
     CursorParam:
       name: cursor
       in: query
       description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
       schema:
         type: string
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
     LabelPrefixParam:
       name: prefix
       in: query
@@ -818,26 +803,32 @@ components:
         - global
         - my
         - team
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
       schema:
         type: integer
-        format: int64
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
   schemas:
-    PaginationLinks:
+    Label:
       type: object
-      description: Pagination links for cursor-based pagination.
+      description: Represents a label applied to Confluence content.
       properties:
-        next:
+        id:
           type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
-        base:
+          description: The unique identifier of the label.
+          example: abc123
+        name:
           type: string
-          description: The base URL of the Confluence instance.
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
           example: example_value
     LabelArray:
       type: object
@@ -850,6 +841,18 @@ components:
           example: []
         _links:
           $ref: '#/components/schemas/PaginationLinks'
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
     Error:
       type: object
       description: Error response from the Confluence API.
@@ -889,22 +892,18 @@ components:
           type: string
           description: A human-readable error message.
           example: example_value
-    Label:
+    Label_2:
       type: object
-      description: Represents a label applied to Confluence content.
       properties:
         id:
           type: string
-          description: The unique identifier of the label.
-          example: abc123
+          description: ID of the label.
         name:
           type: string
-          description: The name of the label.
-          example: Example Title
+          description: Name of the label.
         prefix:
           type: string
-          description: The prefix of the label (global, my, team).
-          example: example_value
+          description: Prefix of the label.
     MultiEntityLinks:
       type: object
       properties:
@@ -926,18 +925,19 @@ components:
       - -name
       type: string
       description: The sort fields for labels. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-    Label_2:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the label.
-        name:
-          type: string
-          description: Name of the label.
-        prefix:
-          type: string
-          description: Prefix of the label.
+  responses:
+    NotFound:
+      description: Returned if the requested resource is not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Returned if the authentication credentials are missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     basicAuth:
       type: http

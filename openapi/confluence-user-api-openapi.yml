@@ -176,28 +176,40 @@ paths:
       - app-access-rule-exempt: true
       x-experimental: true
 components:
+  requestBodies:
+    BulkUsersRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - accountIds
+            properties:
+              accountIds:
+                description: List of accountIds to retrieve user info for.
+                type: array
+                minItems: 1
+                maxItems: 250
+                items:
+                  type: string
+    CheckAccessOrInviteByEmailRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - emails
+            properties:
+              emails:
+                description: List of emails to check access to site.
+                type: array
+                minItems: 1
+                maxItems: 100
+                items:
+                  type: string
   schemas:
-    AccountType:
-      enum:
-      - atlassian
-      - app
-      - customer
-      - unknown
-      type: string
-      description: The account type of the user.
-    Icon:
-      required:
-      - path
-      - isDefault
-      type:
-      - object
-      - 'null'
-      properties:
-        path:
-          type: string
-        isDefault:
-          type: boolean
-      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
     User:
       type: object
       properties:
@@ -241,6 +253,27 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
+    Icon:
+      required:
+      - path
+      - isDefault
+      type:
+      - object
+      - 'null'
+      properties:
+        path:
+          type: string
+        isDefault:
+          type: boolean
+      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+    AccountType:
+      enum:
+      - atlassian
+      - app
+      - customer
+      - unknown
+      type: string
+      description: The account type of the user.
     AccountStatus:
       enum:
       - active
@@ -249,39 +282,6 @@ components:
       - unknown
       type: string
       description: The account status of the user.
-  requestBodies:
-    CheckAccessOrInviteByEmailRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - emails
-            properties:
-              emails:
-                description: List of emails to check access to site.
-                type: array
-                minItems: 1
-                maxItems: 100
-                items:
-                  type: string
-    BulkUsersRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - accountIds
-            properties:
-              accountIds:
-                description: List of accountIds to retrieve user info for.
-                type: array
-                minItems: 1
-                maxItems: 250
-                items:
-                  type: string
   securitySchemes:
     basicAuth:
       type: http

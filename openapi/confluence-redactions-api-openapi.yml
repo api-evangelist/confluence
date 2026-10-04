@@ -112,6 +112,35 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
+    RedactionPointerResponse:
+      type: object
+      properties:
+        pointer:
+          type: string
+          description: JSON pointer indicating where the redaction was applied
+        from:
+          type: integer
+          description: Starting character index where redaction was applied
+        to:
+          type: integer
+          description: Ending character index where redaction was applied
+        reason:
+          type: string
+          description: Reason for the redaction
+        redactionId:
+          type: string
+          format: uuid
+          description: 'Unique identifier for this redaction. Can be used to restore the redacted content later.
+
+            '
+    RedactionSectionResponse:
+      type: object
+      properties:
+        redactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedactionPointerResponse'
+          description: List of redactions that were applied to this section
     RedactionPointer:
       type: object
       required:
@@ -141,27 +170,6 @@ components:
           description: 'Optional human-readable reason for the redaction. Used for audit trails and compliance documentation.
 
             '
-    RedactionPointerResponse:
-      type: object
-      properties:
-        pointer:
-          type: string
-          description: JSON pointer indicating where the redaction was applied
-        from:
-          type: integer
-          description: Starting character index where redaction was applied
-        to:
-          type: integer
-          description: Ending character index where redaction was applied
-        reason:
-          type: string
-          description: Reason for the redaction
-        redactionId:
-          type: string
-          format: uuid
-          description: 'Unique identifier for this redaction. Can be used to restore the redacted content later.
-
-            '
     RedactionResponse:
       type: object
       properties:
@@ -174,14 +182,6 @@ components:
         Each redaction includes a unique ID for restoration, except that code block redactions cannot be restored.
 
         '
-    RedactionSectionResponse:
-      type: object
-      properties:
-        redactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/RedactionPointerResponse'
-          description: List of redactions that were applied to this section
   requestBodies:
     RedactionRequest:
       content:

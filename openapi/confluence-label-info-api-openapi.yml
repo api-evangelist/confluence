@@ -96,47 +96,6 @@ paths:
       x-atlassian-connect-scope: READ
 components:
   schemas:
-    LabeledContentType:
-      type: string
-      enum:
-      - page
-      - blogpost
-      - attachment
-      - page_template
-    LabeledContentPageResponse:
-      required:
-      - results
-      - size
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/LabeledContent'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-    LabeledContent:
-      required:
-      - contentId
-      - contentType
-      - title
-      type: object
-      properties:
-        contentType:
-          $ref: '#/components/schemas/LabeledContentType'
-        contentId:
-          type: integer
-          format: int64
-        title:
-          type: string
-          description: Title of the content.
     LabelDetails:
       required:
       - label
@@ -162,6 +121,47 @@ components:
           type: string
         label:
           type: string
+    LabeledContentType:
+      type: string
+      enum:
+      - page
+      - blogpost
+      - attachment
+      - page_template
+    LabeledContent:
+      required:
+      - contentId
+      - contentType
+      - title
+      type: object
+      properties:
+        contentType:
+          $ref: '#/components/schemas/LabeledContentType'
+        contentId:
+          type: integer
+          format: int64
+        title:
+          type: string
+          description: Title of the content.
+    LabeledContentPageResponse:
+      required:
+      - results
+      - size
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabeledContent'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
   securitySchemes:
     basicAuth:
       type: http

@@ -346,6 +346,13 @@ components:
         name:
           type: string
           description: The name of the label, which will be shown in the UI.
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     LabelArray:
       required:
       - results
@@ -367,13 +374,22 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    GenericLinks:
+    Label:
+      required:
+      - id
+      - label
+      - name
+      - prefix
       type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
+      properties:
+        prefix:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
     LongTask:
       required:
       - id
@@ -393,22 +409,6 @@ components:
             status:
               type: string
               description: The URL to retrive status of long task.
-    Label:
-      required:
-      - id
-      - label
-      - name
-      - prefix
-      type: object
-      properties:
-        prefix:
-          type: string
-        name:
-          type: string
-        id:
-          type: string
-        label:
-          type: string
   securitySchemes:
     basicAuth:
       type: http

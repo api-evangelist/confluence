@@ -406,47 +406,6 @@ paths:
       x-atlassian-connect-scope: INACCESSIBLE
 components:
   schemas:
-    AuditRecordArray:
-      required:
-      - _links
-      - limit
-      - results
-      - size
-      - start
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditRecord'
-        start:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        _links:
-          $ref: '#/components/schemas/GenericLinks'
-    ChangedValue:
-      required:
-      - name
-      - newValue
-      - oldValue
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: string
-        hiddenOldValue:
-          type: string
-        newValue:
-          type: string
-        hiddenNewValue:
-          type: string
     GenericUserName:
       type:
       - string
@@ -456,85 +415,6 @@ components:
         Use `accountId` instead.
 
         See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
-    AuditRecord:
-      required:
-      - affectedObject
-      - associatedObjects
-      - author
-      - category
-      - changedValues
-      - creationDate
-      - description
-      - remoteAddress
-      - summary
-      - sysAdmin
-      type: object
-      properties:
-        author:
-          required:
-          - displayName
-          - type
-          type: object
-          properties:
-            type:
-              type: string
-              default: user
-              enum:
-              - user
-            displayName:
-              type: string
-            operations:
-              type:
-              - array
-              - 'null'
-              items:
-                $ref: '#/components/schemas/OperationCheckResult'
-            username:
-              $ref: '#/components/schemas/GenericUserName'
-            userKey:
-              $ref: '#/components/schemas/GenericUserKey'
-            accountId:
-              $ref: '#/components/schemas/GenericAccountId'
-            accountType:
-              type: string
-            externalCollaborator:
-              type: boolean
-              description: This is deprecated. Use `isGuest` instead.
-            isExternalCollaborator:
-              type: boolean
-              description: This is deprecated. Use `isGuest` instead. Whether the user is an external collaborator user
-            isGuest:
-              type: boolean
-              description: Whether the user is a guest user
-            publicName:
-              type: string
-              description: The public name or nickname of the user. Will always contain a value.
-        remoteAddress:
-          type: string
-        creationDate:
-          type: integer
-          description: The creation date-time of the audit record, as a timestamp.
-          format: int64
-        summary:
-          type: string
-        description:
-          type: string
-        category:
-          type: string
-        sysAdmin:
-          type: boolean
-        superAdmin:
-          type: boolean
-        affectedObject:
-          $ref: '#/components/schemas/AffectedObject'
-        changedValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangedValue'
-        associatedObjects:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffectedObject'
     OperationCheckResult:
       required:
       - operation
@@ -565,20 +445,23 @@ components:
           type: string
           description: The space or content type that the operation applies to. Could be one of- - application - page - blogpost - comment - attachment - space
       description: An operation and the target entity that it applies to, e.g. create page.
-    GenericAccountId:
-      type:
-      - string
-      - 'null'
-      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
-
-        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
-    GenericLinks:
+    ChangedValue:
+      required:
+      - name
+      - newValue
+      - oldValue
       type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: string
+        hiddenOldValue:
+          type: string
+        newValue:
+          type: string
+        hiddenNewValue:
+          type: string
     RetentionPeriod:
       required:
       - number
@@ -609,6 +492,13 @@ components:
           - MILLENNIA
           - ERAS
           - FOREVER
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     GenericUserKey:
       type:
       - string
@@ -618,6 +508,13 @@ components:
         Use `accountId` instead.
 
         See the [deprecation notice](/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/) for details.'
+    GenericAccountId:
+      type:
+      - string
+      - 'null'
+      description: 'The account ID of the user, which uniquely identifies the user across all Atlassian products.
+
+        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.'
     AuditRecordCreate:
       required:
       - remoteAddress
@@ -697,6 +594,85 @@ components:
             space.'
           items:
             $ref: '#/components/schemas/AffectedObject'
+    AuditRecord:
+      required:
+      - affectedObject
+      - associatedObjects
+      - author
+      - category
+      - changedValues
+      - creationDate
+      - description
+      - remoteAddress
+      - summary
+      - sysAdmin
+      type: object
+      properties:
+        author:
+          required:
+          - displayName
+          - type
+          type: object
+          properties:
+            type:
+              type: string
+              default: user
+              enum:
+              - user
+            displayName:
+              type: string
+            operations:
+              type:
+              - array
+              - 'null'
+              items:
+                $ref: '#/components/schemas/OperationCheckResult'
+            username:
+              $ref: '#/components/schemas/GenericUserName'
+            userKey:
+              $ref: '#/components/schemas/GenericUserKey'
+            accountId:
+              $ref: '#/components/schemas/GenericAccountId'
+            accountType:
+              type: string
+            externalCollaborator:
+              type: boolean
+              description: This is deprecated. Use `isGuest` instead.
+            isExternalCollaborator:
+              type: boolean
+              description: This is deprecated. Use `isGuest` instead. Whether the user is an external collaborator user
+            isGuest:
+              type: boolean
+              description: Whether the user is a guest user
+            publicName:
+              type: string
+              description: The public name or nickname of the user. Will always contain a value.
+        remoteAddress:
+          type: string
+        creationDate:
+          type: integer
+          description: The creation date-time of the audit record, as a timestamp.
+          format: int64
+        summary:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        sysAdmin:
+          type: boolean
+        superAdmin:
+          type: boolean
+        affectedObject:
+          $ref: '#/components/schemas/AffectedObject'
+        changedValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangedValue'
+        associatedObjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffectedObject'
     AffectedObject:
       required:
       - name
@@ -707,6 +683,30 @@ components:
           type: string
         objectType:
           type: string
+    AuditRecordArray:
+      required:
+      - _links
+      - limit
+      - results
+      - size
+      - start
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        start:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        _links:
+          $ref: '#/components/schemas/GenericLinks'
   securitySchemes:
     basicAuth:
       type: http

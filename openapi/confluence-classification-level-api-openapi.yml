@@ -955,18 +955,6 @@ components:
                 - current
                 type: string
                 description: Status of the content.
-    SpaceDefaultClassificationLevelUpdateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - id
-            properties:
-              id:
-                type: string
-                description: The ID of the classification level.
     ContentClassificationLevelUpdateRequest:
       required: true
       content:
@@ -1015,7 +1003,39 @@ components:
                 - draft
                 type: string
                 description: Status of the content.
+    SpaceDefaultClassificationLevelUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - id
+            properties:
+              id:
+                type: string
+                description: The ID of the classification level.
   schemas:
+    ClassificationLevelColor:
+      type: string
+      enum:
+      - RED
+      - RED_BOLD
+      - ORANGE
+      - YELLOW
+      - GREEN
+      - BLUE
+      - NAVY
+      - TEAL
+      - PURPLE
+      - GREY
+      - LIME
+    ClassificationLevelStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PUBLISHED
+      - ARCHIVED
     ClassificationLevel:
       title: ClassificationLevel
       type: object
@@ -1044,26 +1064,6 @@ components:
           type: object
           description: The color of the classification level object.
           $ref: '#/components/schemas/ClassificationLevelColor'
-    ClassificationLevelColor:
-      type: string
-      enum:
-      - RED
-      - RED_BOLD
-      - ORANGE
-      - YELLOW
-      - GREEN
-      - BLUE
-      - NAVY
-      - TEAL
-      - PURPLE
-      - GREY
-      - LIME
-    ClassificationLevelStatus:
-      type: string
-      enum:
-      - DRAFT
-      - PUBLISHED
-      - ARCHIVED
   securitySchemes:
     basicAuth:
       type: http

@@ -231,24 +231,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    ParentContentType:
-      type: string
-      enum:
-      - page
-      - whiteboard
-      - database
-      - embed
-      - folder
-      description: Content type of the parent, or null if there is no parent.
-    WhiteboardLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the content.
-        editui:
-          type: string
-          description: Edit UI link of the content.
     WhiteboardSingle:
       type: object
       properties:
@@ -291,6 +273,15 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/WhiteboardLinks'
+    WhiteboardLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        editui:
+          type: string
+          description: Edit UI link of the content.
     ContentStatus:
       enum:
       - current
@@ -302,6 +293,15 @@ components:
       - any
       type: string
       description: The status of the content.
+    ParentContentType:
+      type: string
+      enum:
+      - page
+      - whiteboard
+      - database
+      - embed
+      - folder
+      description: Content type of the parent, or null if there is no parent.
     Version:
       type: object
       properties:

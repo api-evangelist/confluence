@@ -253,6 +253,13 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/LabelCreate'
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
     LabelArray:
       required:
       - results
@@ -274,13 +281,6 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
     Label:
       required:
       - id

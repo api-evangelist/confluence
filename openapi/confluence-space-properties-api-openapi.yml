@@ -364,6 +364,33 @@ paths:
       - app-access-rule-exempt: true
 components:
   schemas:
+    SpacePropertyUpdateRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of the space property
+        value:
+          description: Value of the space property.
+        version:
+          type: object
+          description: New version number and associated message
+          properties:
+            number:
+              type: integer
+              format: int32
+              description: Version number of the new version. Should be 1 more than the current version number.
+            message:
+              type: string
+              description: Message to be associated with the new version.
+    SpacePropertyCreateRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of the space property
+        value:
+          description: Value of the space property.
     SpaceProperty:
       type: object
       properties:
@@ -399,25 +426,6 @@ components:
               type: integer
               format: int32
               description: The space property's current version number.
-    SpacePropertyUpdateRequest:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Key of the space property
-        value:
-          description: Value of the space property.
-        version:
-          type: object
-          description: New version number and associated message
-          properties:
-            number:
-              type: integer
-              format: int32
-              description: Version number of the new version. Should be 1 more than the current version number.
-            message:
-              type: string
-              description: Message to be associated with the new version.
     MultiEntityLinks:
       type: object
       properties:
@@ -429,14 +437,6 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    SpacePropertyCreateRequest:
-      type: object
-      properties:
-        key:
-          type: string
-          description: Key of the space property
-        value:
-          description: Value of the space property.
   securitySchemes:
     basicAuth:
       type: http

@@ -405,31 +405,39 @@ paths:
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
   schemas:
-    PermissionSubject:
+    SpacePermissionCustomContent:
       required:
-      - identifier
-      - type
+      - operations
+      - subject
       type: object
       properties:
-        type:
-          type: string
-          enum:
-          - user
-          - group
-        identifier:
-          type: string
-          description: 'for `type=user`, identifier should be user''s accountId or `anonymous` for anonymous users
+        subject:
+          $ref: '#/components/schemas/PermissionSubject'
+        operations:
+          type: array
+          items:
+            required:
+            - access
+            - key
+            - target
+            type: object
+            properties:
+              key:
+                type: string
+                description: The operation type
+                enum:
+                - read
+                - create
+                - delete
+              target:
+                type: string
+                description: The custom content type
+              access:
+                type: boolean
+                description: Grant or restrict access
+      description: 'This object represents a list of space permissions for custom content type for an individual user. Permissions consist of
 
-
-            for `type=group`, identifier should be the groupId.'
-      description: The user or group that the permission applies to.
-    GenericLinks:
-      type: object
-      additionalProperties:
-        oneOf:
-        - type: object
-          additionalProperties: true
-        - type: string
+        a subjects object and a list with at least one operation object.'
     SpacePermissionRequest:
       required:
       - subject
@@ -474,6 +482,31 @@ components:
         _links:
           $ref: '#/components/schemas/GenericLinks'
       description: "This object represents the request for the single space permission. Permissions consist of\none operation object with an accompanying subjects object.\n\nThe following combinations of `operation.key` and `operation.target` values are\nvalid for the `operation` object:\n``` bash\n'create': 'page', 'blogpost', 'comment', 'attachment'\n'read': 'space'\n'delete': 'page', 'blogpost', 'comment', 'attachment', 'space'\n'export': 'space'\n'administer': 'space'\n'archive': 'page'\n'restrict_content': 'space'\n```\n\nFor example, to enable Delete Own permission, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"delete\",\n    \"target\": \"space\"\n}\n```\nTo enable Add/Delete Restrictions permissions, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"restrict_content\",\n    \"target\": \"space\"\n}\n```"
+    GenericLinks:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          additionalProperties: true
+        - type: string
+    PermissionSubject:
+      required:
+      - identifier
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - user
+          - group
+        identifier:
+          type: string
+          description: 'for `type=user`, identifier should be user''s accountId or `anonymous` for anonymous users
+
+
+            for `type=group`, identifier should be the groupId.'
+      description: The user or group that the permission applies to.
     SpacePermissionV2:
       required:
       - id
@@ -521,39 +554,17 @@ components:
         _links:
           $ref: '#/components/schemas/GenericLinks'
       description: "This object represents a single space permission. Permissions consist of\nat least one operation object with an accompanying subjects object.\n\nThe following combinations of `operation.key` and `operation.target` values are\nvalid for the `operation` object:\n``` bash\n'create': 'page', 'blogpost', 'comment', 'attachment'\n'read': 'space'\n'delete': 'page', 'blogpost', 'comment', 'attachment', 'space'\n'export': 'space'\n'administer': 'space'\n'archive': 'page'\n'restrict_content': 'space'\n```\n\nFor example, to enable Delete Own permission, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"delete\",\n    \"target\": \"space\"\n}\n```\nTo enable Add/Delete Restrictions permissions, set the `operation` object to the following:\n```\n\"operation\": {\n    \"key\": \"restrict_content\",\n    \"target\": \"space\"\n}\n```"
-    SpacePermissionCustomContent:
-      required:
-      - operations
-      - subject
+    MultiEntityLinks:
       type: object
       properties:
-        subject:
-          $ref: '#/components/schemas/PermissionSubject'
-        operations:
-          type: array
-          items:
-            required:
-            - access
-            - key
-            - target
-            type: object
-            properties:
-              key:
-                type: string
-                description: The operation type
-                enum:
-                - read
-                - create
-                - delete
-              target:
-                type: string
-                description: The custom content type
-              access:
-                type: boolean
-                description: Grant or restrict access
-      description: 'This object represents a list of space permissions for custom content type for an individual user. Permissions consist of
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
 
-        a subjects object and a list with at least one operation object.'
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
     SpacePermission:
       type: object
       properties:
@@ -571,17 +582,6 @@ components:
           items:
             type: string
           description: The permissions required for this permission to be enabled.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
     SpacePermissionAssignment:
       type: object
       properties:

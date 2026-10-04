@@ -390,17 +390,6 @@ paths:
       x-atlassian-connect-scope: WRITE
 components:
   schemas:
-    UserPropertyCreate:
-      required:
-      - value
-      type: object
-      additionalProperties: false
-      properties:
-        value:
-          type: object
-          additionalProperties: true
-          properties: {}
-          description: The value of the user property.
     GenericLinks:
       type: object
       additionalProperties:
@@ -442,6 +431,17 @@ components:
           format: int32
         _links:
           $ref: '#/components/schemas/GenericLinks'
+    UserPropertyCreate:
+      required:
+      - value
+      type: object
+      additionalProperties: false
+      properties:
+        value:
+          type: object
+          additionalProperties: true
+          properties: {}
+          description: The value of the user property.
     UserProperty:
       required:
       - key

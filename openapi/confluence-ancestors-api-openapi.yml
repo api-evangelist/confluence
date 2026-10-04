@@ -401,6 +401,17 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
     AncestorType:
       enum:
       - page
@@ -418,17 +429,6 @@ components:
           description: ID of the ancestor
         type:
           $ref: '#/components/schemas/AncestorType'
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
   securitySchemes:
     basicAuth:
       type: http

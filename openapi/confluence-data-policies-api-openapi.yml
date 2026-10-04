@@ -180,23 +180,27 @@ components:
           $ref: '#/components/schemas/SpaceIcon'
         _links:
           $ref: '#/components/schemas/SpaceLinks'
-    BodyType:
+    MultiEntityLinks:
       type: object
       properties:
-        representation:
+        next:
           type: string
-          description: Type of content representation used for the value field.
-        value:
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
           type: string
-          description: Body of the content, in the format found in the representation field.
-    SpaceDescription:
-      type: object
-      description: Contains fields for each representation type requested.
-      properties:
-        plain:
-          $ref: '#/components/schemas/BodyType'
-        view:
-          $ref: '#/components/schemas/BodyType'
+          description: Base url of the Confluence site.
+    SpaceSortOrder:
+      enum:
+      - id
+      - -id
+      - key
+      - -key
+      - name
+      - -name
+      type: string
+      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
     SpaceIcon:
       type: object
       description: The icon of the space
@@ -214,17 +218,29 @@ components:
             Currently this field is only returned for `global` spaces and not `personal` spaces.
 
             '
-    MultiEntityLinks:
+    SpaceLinks:
       type: object
       properties:
-        next:
+        webui:
           type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
+          description: Web UI link of the space.
+    SpaceDescription:
+      type: object
+      description: Contains fields for each representation type requested.
+      properties:
+        plain:
+          $ref: '#/components/schemas/BodyType'
+        view:
+          $ref: '#/components/schemas/BodyType'
+    BodyType:
+      type: object
+      properties:
+        representation:
           type: string
-          description: Base url of the Confluence site.
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
     DataPolicyMetadata:
       type: object
       properties:
@@ -236,22 +252,6 @@ components:
       description: Details about data policies.
       xml:
         name: datapolicy
-    SpaceLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the space.
-    SpaceSortOrder:
-      enum:
-      - id
-      - -id
-      - key
-      - -key
-      - name
-      - -name
-      type: string
-      description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
   securitySchemes:
     basicAuth:
       type: http
