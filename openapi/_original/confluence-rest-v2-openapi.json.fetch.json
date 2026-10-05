@@ -1,0 +1,12 @@
+{
+ "url": "https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.127",
+ "requested_url": "https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.127",
+ "status": 200,
+ "content_type": "text/plain; charset=utf-8",
+ "bytes": 614311,
+ "sha256": "edb639bbc700ee451a996acd2568e51db4ceab954449427537df30f0ce20ca08",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
