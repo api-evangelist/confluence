@@ -105,44 +105,6 @@ components:
           $ref: '#/components/schemas/Label'
         associatedContents:
           $ref: '#/components/schemas/LabeledContentPageResponse'
-    Label:
-      required:
-      - id
-      - label
-      - name
-      - prefix
-      type: object
-      properties:
-        prefix:
-          type: string
-        name:
-          type: string
-        id:
-          type: string
-        label:
-          type: string
-    LabeledContentType:
-      type: string
-      enum:
-      - page
-      - blogpost
-      - attachment
-      - page_template
-    LabeledContent:
-      required:
-      - contentId
-      - contentType
-      - title
-      type: object
-      properties:
-        contentType:
-          $ref: '#/components/schemas/LabeledContentType'
-        contentId:
-          type: integer
-          format: int64
-        title:
-          type: string
-          description: Title of the content.
     LabeledContentPageResponse:
       required:
       - results
@@ -162,6 +124,44 @@ components:
         size:
           type: integer
           format: int32
+    Label:
+      required:
+      - id
+      - label
+      - name
+      - prefix
+      type: object
+      properties:
+        prefix:
+          type: string
+        name:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+    LabeledContent:
+      required:
+      - contentId
+      - contentType
+      - title
+      type: object
+      properties:
+        contentType:
+          $ref: '#/components/schemas/LabeledContentType'
+        contentId:
+          type: integer
+          format: int64
+        title:
+          type: string
+          description: Title of the content.
+    LabeledContentType:
+      type: string
+      enum:
+      - page
+      - blogpost
+      - attachment
+      - page_template
   securitySchemes:
     basicAuth:
       type: http

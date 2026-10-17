@@ -568,12 +568,6 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    Like:
-      type: object
-      properties:
-        accountId:
-          type: string
-          description: Account ID.
     MultiEntityLinks:
       type: object
       properties:
@@ -585,6 +579,12 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
+    Like:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Account ID.
   securitySchemes:
     basicAuth:
       type: http

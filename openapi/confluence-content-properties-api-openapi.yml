@@ -3047,19 +3047,12 @@ paths:
       - app-access-rule-exempt: false
 components:
   schemas:
-    ContentProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the property
-        key:
-          type: string
-          description: Key of the property
-        value:
-          description: Value of the property. Must be a valid JSON value.
-        version:
-          $ref: '#/components/schemas/Version'
+    ContentPropertySortOrder:
+      type: string
+      description: The sort fields for content properties. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+      enum:
+      - key
+      - -key
     MultiEntityLinks:
       type: object
       properties:
@@ -3098,12 +3091,19 @@ components:
           description: Key of the content property
         value:
           description: Value of the content property.
-    ContentPropertySortOrder:
-      type: string
-      description: The sort fields for content properties. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
-      enum:
-      - key
-      - -key
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version'
     Version:
       type: object
       properties:

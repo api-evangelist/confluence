@@ -674,32 +674,46 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
-  parameters:
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
   schemas:
+    Error:
+      type: object
+      description: Error response from the Confluence API.
+      properties:
+        statusCode:
+          type: integer
+          description: The HTTP status code.
+          example: 10
+        data:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+            valid:
+              type: boolean
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      args:
+                        type: array
+                        items:
+                          type: string
+                      translation:
+                        type: string
+            successful:
+              type: boolean
+          description: Details about the error.
+          example: example_value
+        message:
+          type: string
+          description: A human-readable error message.
+          example: example_value
     Attachment:
       type: object
       description: Represents a file attachment on Confluence content.
@@ -756,13 +770,6 @@ components:
           $ref: '#/components/schemas/Version'
         _links:
           $ref: '#/components/schemas/ContentLinks'
-    ContentLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link for the content.
-          example: example_value
     PaginationLinks:
       type: object
       description: Pagination links for cursor-based pagination.
@@ -775,17 +782,13 @@ components:
           type: string
           description: The base URL of the Confluence instance.
           example: example_value
-    AttachmentBulk:
+    ContentLinks:
       type: object
-      description: A paginated list of attachments.
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
+        webui:
+          type: string
+          description: Web UI link for the content.
+          example: example_value
     Version:
       type: object
       description: Version information for content.
@@ -811,88 +814,25 @@ components:
           type: string
           description: The Atlassian account ID of the version author.
           example: '500123'
-    Error:
+    AttachmentBulk:
       type: object
-      description: Error response from the Confluence API.
+      description: A paginated list of attachments.
       properties:
-        statusCode:
-          type: integer
-          description: The HTTP status code.
-          example: 10
-        data:
-          type: object
-          properties:
-            authorized:
-              type: boolean
-            valid:
-              type: boolean
-            errors:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      args:
-                        type: array
-                        items:
-                          type: string
-                      translation:
-                        type: string
-            successful:
-              type: boolean
-          description: Details about the error.
-          example: example_value
-        message:
-          type: string
-          description: A human-readable error message.
-          example: example_value
-    ContentProperty:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the property
-        key:
-          type: string
-          description: Key of the property
-        value:
-          description: Value of the property. Must be a valid JSON value.
-        version:
-          $ref: '#/components/schemas/Version_2'
-    OptionalFieldMeta:
-      type: object
-      properties:
-        hasMore:
-          type: boolean
-          description: Indicates if there are more available results that can be fetched.
-        cursor:
-          type: string
-          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
-    Operation:
-      type: object
-      properties:
-        operation:
-          description: The type of operation.
-          type: string
-        targetType:
-          description: The type of entity the operation type targets.
-          type: string
-    Label:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID of the label.
-        name:
-          type: string
-          description: Name of the label.
-        prefix:
-          type: string
-          description: Prefix of the label.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    AttachmentSortOrder:
+      enum:
+      - created-date
+      - -created-date
+      - modified-date
+      - -modified-date
+      type: string
+      description: The sort fields for attachments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
     MultiEntityLinks:
       type: object
       properties:
@@ -904,79 +844,35 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
-    AttachmentBulk_2:
+    Version_2:
       type: object
       properties:
-        id:
-          type: string
-          description: ID of the attachment.
-        status:
-          $ref: '#/components/schemas/ContentStatus'
-        title:
-          type: string
-          description: Title of the comment.
         createdAt:
           type: string
           format: date-time
-          description: Date and time when the attachment was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        pageId:
+          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        message:
           type: string
-          description: 'ID of the containing page.
-
-
-            Note: This is only returned if the attachment has a container that is a page.'
-        blogPostId:
-          type: string
-          description: 'ID of the containing blog post.
-
-
-            Note: This is only returned if the attachment has a container that is a blog post.'
-        customContentId:
-          type: string
-          description: 'ID of the containing custom content.
-
-
-            Note: This is only returned if the attachment has a container that is custom content.'
-        mediaType:
-          type: string
-          description: Media Type for the attachment.
-        mediaTypeDescription:
-          type: string
-          description: Media Type description for the attachment.
-        comment:
-          type: string
-          description: Comment for the attachment.
-        fileId:
-          type: string
-          description: File ID of the attachment. This is the ID referenced in `atlas_doc_format` bodies and is distinct from the attachment ID.
-        fileSize:
-          format: int64
+          description: Message associated with the current version.
+        number:
+          format: int32
           type: integer
-          description: File size of the attachment.
-        webuiLink:
+          description: The version number.
+        minorEdit:
+          type: boolean
+          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
+        authorId:
           type: string
-          description: WebUI link of the attachment.
-        downloadLink:
-          type: string
-          description: Download link of the attachment.
-        version:
-          $ref: '#/components/schemas/Version_2'
-        _links:
-          $ref: '#/components/schemas/AttachmentLinks'
-    OptionalFieldLinks:
+          description: The account ID of the user who created this version.
+    Operation:
       type: object
       properties:
-        self:
+        operation:
+          description: The type of operation.
           type: string
-          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
-    AttachmentSortOrder:
-      enum:
-      - created-date
-      - -created-date
-      - modified-date
-      - -modified-date
-      type: string
-      description: The sort fields for attachments. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+        targetType:
+          description: The type of entity the operation type targets.
+          type: string
     AttachmentSingle:
       type: object
       properties:
@@ -1080,6 +976,55 @@ components:
               $ref: '#/components/schemas/OptionalFieldLinks'
         _links:
           $ref: '#/components/schemas/AttachmentLinks'
+    OptionalFieldMeta:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          description: Indicates if there are more available results that can be fetched.
+        cursor:
+          type: string
+          description: A token that can be used in the query parameter of the endpoint returned in the `_links` property to retrieve the next set of results.
+    OptionalFieldLinks:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A relative URL that can be used to fetch results beyond what this include parameter retrieves.
+    ContentProperty:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the property
+        key:
+          type: string
+          description: Key of the property
+        value:
+          description: Value of the property. Must be a valid JSON value.
+        version:
+          $ref: '#/components/schemas/Version_2'
+    AttachmentLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the content.
+        download:
+          type: string
+          description: Download link of the content.
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the label.
+        name:
+          type: string
+          description: Name of the label.
+        prefix:
+          type: string
+          description: Prefix of the label.
     ContentStatus:
       enum:
       - current
@@ -1091,35 +1036,65 @@ components:
       - any
       type: string
       description: The status of the content.
-    Version_2:
+    AttachmentBulk_2:
       type: object
       properties:
+        id:
+          type: string
+          description: ID of the attachment.
+        status:
+          $ref: '#/components/schemas/ContentStatus'
+        title:
+          type: string
+          description: Title of the comment.
         createdAt:
           type: string
           format: date-time
-          description: Date and time when the version was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
-        message:
+          description: Date and time when the attachment was created. In format "YYYY-MM-DDTHH:mm:ss.sssZ".
+        pageId:
           type: string
-          description: Message associated with the current version.
-        number:
-          format: int32
+          description: 'ID of the containing page.
+
+
+            Note: This is only returned if the attachment has a container that is a page.'
+        blogPostId:
+          type: string
+          description: 'ID of the containing blog post.
+
+
+            Note: This is only returned if the attachment has a container that is a blog post.'
+        customContentId:
+          type: string
+          description: 'ID of the containing custom content.
+
+
+            Note: This is only returned if the attachment has a container that is custom content.'
+        mediaType:
+          type: string
+          description: Media Type for the attachment.
+        mediaTypeDescription:
+          type: string
+          description: Media Type description for the attachment.
+        comment:
+          type: string
+          description: Comment for the attachment.
+        fileId:
+          type: string
+          description: File ID of the attachment. This is the ID referenced in `atlas_doc_format` bodies and is distinct from the attachment ID.
+        fileSize:
+          format: int64
           type: integer
-          description: The version number.
-        minorEdit:
-          type: boolean
-          description: Describes if this version is a minor version. Email notifications and activity stream updates are not created for minor versions.
-        authorId:
+          description: File size of the attachment.
+        webuiLink:
           type: string
-          description: The account ID of the user who created this version.
-    AttachmentLinks:
-      type: object
-      properties:
-        webui:
+          description: WebUI link of the attachment.
+        downloadLink:
           type: string
-          description: Web UI link of the content.
-        download:
-          type: string
-          description: Download link of the content.
+          description: Download link of the attachment.
+        version:
+          $ref: '#/components/schemas/Version_2'
+        _links:
+          $ref: '#/components/schemas/AttachmentLinks'
   responses:
     NotFound:
       description: Returned if the requested resource is not found.
@@ -1133,6 +1108,31 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
   securitySchemes:
     basicAuth:
       type: http

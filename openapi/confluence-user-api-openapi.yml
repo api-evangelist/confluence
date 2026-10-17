@@ -176,6 +176,79 @@ paths:
       - app-access-rule-exempt: true
       x-experimental: true
 components:
+  schemas:
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
+    AccountType:
+      enum:
+      - atlassian
+      - app
+      - customer
+      - unknown
+      type: string
+      description: The account type of the user.
+    User:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: Display name of the user.
+        timeZone:
+          type: string
+          description: 'Time zone of the user. Depending on the user''s privacy
+
+            setting, this may return null.'
+        personalSpaceId:
+          type: string
+          description: Space ID of the user's personal space. Returns null, if no personal space for the user.
+        isExternalCollaborator:
+          type: boolean
+          description: Whether the user is an external collaborator.
+        accountStatus:
+          $ref: '#/components/schemas/AccountStatus'
+        accountId:
+          type: string
+          description: Account ID of the user.
+        email:
+          type: string
+          description: The email address of the user. Depending on the user's privacy setting, this may return an empty string.
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        publicName:
+          type: string
+          description: Public name of the user.
+        profilePicture:
+          $ref: '#/components/schemas/Icon'
+    Icon:
+      required:
+      - path
+      - isDefault
+      type:
+      - object
+      - 'null'
+      properties:
+        path:
+          type: string
+        isDefault:
+          type: boolean
+      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
+    AccountStatus:
+      enum:
+      - active
+      - inactive
+      - closed
+      - unknown
+      type: string
+      description: The account status of the user.
   requestBodies:
     BulkUsersRequest:
       required: true
@@ -209,79 +282,6 @@ components:
                 maxItems: 100
                 items:
                   type: string
-  schemas:
-    User:
-      type: object
-      properties:
-        displayName:
-          type: string
-          description: Display name of the user.
-        timeZone:
-          type: string
-          description: 'Time zone of the user. Depending on the user''s privacy
-
-            setting, this may return null.'
-        personalSpaceId:
-          type: string
-          description: Space ID of the user's personal space. Returns null, if no personal space for the user.
-        isExternalCollaborator:
-          type: boolean
-          description: Whether the user is an external collaborator.
-        accountStatus:
-          $ref: '#/components/schemas/AccountStatus'
-        accountId:
-          type: string
-          description: Account ID of the user.
-        email:
-          type: string
-          description: The email address of the user. Depending on the user's privacy setting, this may return an empty string.
-        accountType:
-          $ref: '#/components/schemas/AccountType'
-        publicName:
-          type: string
-          description: Public name of the user.
-        profilePicture:
-          $ref: '#/components/schemas/Icon'
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
-    Icon:
-      required:
-      - path
-      - isDefault
-      type:
-      - object
-      - 'null'
-      properties:
-        path:
-          type: string
-        isDefault:
-          type: boolean
-      description: This object represents an icon. If used as a profilePicture, this may be returned as null, depending on the user's privacy setting.
-    AccountType:
-      enum:
-      - atlassian
-      - app
-      - customer
-      - unknown
-      type: string
-      description: The account type of the user.
-    AccountStatus:
-      enum:
-      - active
-      - inactive
-      - closed
-      - unknown
-      type: string
-      description: The account status of the user.
   securitySchemes:
     basicAuth:
       type: http

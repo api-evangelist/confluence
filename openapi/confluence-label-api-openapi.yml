@@ -778,81 +778,7 @@ paths:
           default: no-default
           description: Specific domain of the Confluence site being used. Must be provided.
 components:
-  parameters:
-    CursorParam:
-      name: cursor
-      in: query
-      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
-      schema:
-        type: string
-    ContentIdPath:
-      name: id
-      in: path
-      required: true
-      description: The ID of the content.
-      schema:
-        type: integer
-        format: int64
-    LabelPrefixParam:
-      name: prefix
-      in: query
-      description: Filter labels by prefix (global, my, team).
-      schema:
-        type: string
-        enum:
-        - global
-        - my
-        - team
-    LimitParam:
-      name: limit
-      in: query
-      description: Maximum number of results to return.
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-        default: 25
   schemas:
-    Label:
-      type: object
-      description: Represents a label applied to Confluence content.
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the label.
-          example: abc123
-        name:
-          type: string
-          description: The name of the label.
-          example: Example Title
-        prefix:
-          type: string
-          description: The prefix of the label (global, my, team).
-          example: example_value
-    LabelArray:
-      type: object
-      description: A list of labels.
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-          example: []
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
-    PaginationLinks:
-      type: object
-      description: Pagination links for cursor-based pagination.
-      properties:
-        next:
-          type: string
-          description: URL for the next page of results. Contains the cursor parameter.
-          example: example_value
-        base:
-          type: string
-          description: The base URL of the Confluence instance.
-          example: example_value
     Error:
       type: object
       description: Error response from the Confluence API.
@@ -892,6 +818,56 @@ components:
           type: string
           description: A human-readable error message.
           example: example_value
+    PaginationLinks:
+      type: object
+      description: Pagination links for cursor-based pagination.
+      properties:
+        next:
+          type: string
+          description: URL for the next page of results. Contains the cursor parameter.
+          example: example_value
+        base:
+          type: string
+          description: The base URL of the Confluence instance.
+          example: example_value
+    LabelArray:
+      type: object
+      description: A list of labels.
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+          example: []
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    Label:
+      type: object
+      description: Represents a label applied to Confluence content.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the label.
+          example: abc123
+        name:
+          type: string
+          description: The name of the label.
+          example: Example Title
+        prefix:
+          type: string
+          description: The prefix of the label (global, my, team).
+          example: example_value
+    MultiEntityLinks:
+      type: object
+      properties:
+        next:
+          type: string
+          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
+
+            This property will not be present if there is no additional data available.'
+        base:
+          type: string
+          description: Base url of the Confluence site.
     Label_2:
       type: object
       properties:
@@ -904,17 +880,6 @@ components:
         prefix:
           type: string
           description: Prefix of the label.
-    MultiEntityLinks:
-      type: object
-      properties:
-        next:
-          type: string
-          description: 'Used for pagination. Contains the relative URL for the next set of results, using a cursor query parameter.
-
-            This property will not be present if there is no additional data available.'
-        base:
-          type: string
-          description: Base url of the Confluence site.
     LabelSortOrder:
       enum:
       - created-date
@@ -938,6 +903,41 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    ContentIdPath:
+      name: id
+      in: path
+      required: true
+      description: The ID of the content.
+      schema:
+        type: integer
+        format: int64
+    CursorParam:
+      name: cursor
+      in: query
+      description: Used for pagination. The cursor value is returned in the response _links.next when there are more results.
+      schema:
+        type: string
+    LimitParam:
+      name: limit
+      in: query
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+        default: 25
+    LabelPrefixParam:
+      name: prefix
+      in: query
+      description: Filter labels by prefix (global, my, team).
+      schema:
+        type: string
+        enum:
+        - global
+        - my
+        - team
   securitySchemes:
     basicAuth:
       type: http

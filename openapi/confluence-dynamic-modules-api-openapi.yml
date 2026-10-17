@@ -131,17 +131,6 @@ paths:
       x-atlassian-connect-scope: NONE
 components:
   schemas:
-    ConnectModule:
-      type: object
-      description: 'A [Connect module](https://developer.atlassian.com/cloud/confluence/modules/admin-page/) in the same format as in the
-
-        [app descriptor](https://developer.atlassian.com/cloud/confluence/app-descriptor/).'
-      example:
-        key: my-webitem
-        location: system.admin/globalsettings
-        url: /my-web-item
-        name:
-          value: My Web Item
     DynamicModulesErrorMessage:
       required:
       - message
@@ -176,6 +165,17 @@ components:
           name:
             value: My Admin Page
           url: /my-admin-page
+    ConnectModule:
+      type: object
+      description: 'A [Connect module](https://developer.atlassian.com/cloud/confluence/modules/admin-page/) in the same format as in the
+
+        [app descriptor](https://developer.atlassian.com/cloud/confluence/app-descriptor/).'
+      example:
+        key: my-webitem
+        location: system.admin/globalsettings
+        url: /my-web-item
+        name:
+          value: My Web Item
   securitySchemes:
     basicAuth:
       type: http

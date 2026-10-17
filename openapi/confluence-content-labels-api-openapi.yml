@@ -236,19 +236,6 @@ paths:
       x-atlassian-connect-scope: WRITE
 components:
   schemas:
-    LabelCreate:
-      required:
-      - name
-      - prefix
-      type: object
-      additionalProperties: true
-      properties:
-        prefix:
-          type: string
-          description: The prefix for the label. `global`, `my` `team`, etc.
-        name:
-          type: string
-          description: The name of the label, which will be shown in the UI.
     LabelCreateArray:
       type: array
       items:
@@ -297,6 +284,19 @@ components:
           type: string
         label:
           type: string
+    LabelCreate:
+      required:
+      - name
+      - prefix
+      type: object
+      additionalProperties: true
+      properties:
+        prefix:
+          type: string
+          description: The prefix for the label. `global`, `my` `team`, etc.
+        name:
+          type: string
+          description: The name of the label, which will be shown in the UI.
   securitySchemes:
     basicAuth:
       type: http

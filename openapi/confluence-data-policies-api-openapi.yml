@@ -155,6 +155,17 @@ paths:
       x-experimental: true
 components:
   schemas:
+    DataPolicyMetadata:
+      type: object
+      properties:
+        anyContentBlocked:
+          type: boolean
+          description: Whether the workspace contains any content blocked for (inaccessible to) the requesting client application.
+          readOnly: true
+      additionalProperties: false
+      description: Details about data policies.
+      xml:
+        name: datapolicy
     DataPolicySpace:
       type: object
       properties:
@@ -191,6 +202,12 @@ components:
         base:
           type: string
           description: Base url of the Confluence site.
+    SpaceLinks:
+      type: object
+      properties:
+        webui:
+          type: string
+          description: Web UI link of the space.
     SpaceSortOrder:
       enum:
       - id
@@ -201,6 +218,15 @@ components:
       - -name
       type: string
       description: The sort fields for spaces. The default sort direction is ascending. To sort in descending order, append a `-` character before the sort field. For example, `fieldName` or `-fieldName`.
+    BodyType:
+      type: object
+      properties:
+        representation:
+          type: string
+          description: Type of content representation used for the value field.
+        value:
+          type: string
+          description: Body of the content, in the format found in the representation field.
     SpaceIcon:
       type: object
       description: The icon of the space
@@ -218,12 +244,6 @@ components:
             Currently this field is only returned for `global` spaces and not `personal` spaces.
 
             '
-    SpaceLinks:
-      type: object
-      properties:
-        webui:
-          type: string
-          description: Web UI link of the space.
     SpaceDescription:
       type: object
       description: Contains fields for each representation type requested.
@@ -232,26 +252,6 @@ components:
           $ref: '#/components/schemas/BodyType'
         view:
           $ref: '#/components/schemas/BodyType'
-    BodyType:
-      type: object
-      properties:
-        representation:
-          type: string
-          description: Type of content representation used for the value field.
-        value:
-          type: string
-          description: Body of the content, in the format found in the representation field.
-    DataPolicyMetadata:
-      type: object
-      properties:
-        anyContentBlocked:
-          type: boolean
-          description: Whether the workspace contains any content blocked for (inaccessible to) the requesting client application.
-          readOnly: true
-      additionalProperties: false
-      description: Details about data policies.
-      xml:
-        name: datapolicy
   securitySchemes:
     basicAuth:
       type: http
