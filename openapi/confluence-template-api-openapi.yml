@@ -1119,3 +1119,9 @@ x-atlassian-narrative:
 
 
       **CQL:** The Confluence Query Language (CQL) allows you to perform complex searches for content using an SQL-like syntax in the `search` resource. To learn more, see [Advanced searching using CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).'
+x-provenance:
+  method: harvested
+  publisher: Confluence
+  source: https://dac-static.atlassian.com/cloud/confluence/swagger.v3.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

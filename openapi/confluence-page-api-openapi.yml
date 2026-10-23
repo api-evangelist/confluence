@@ -1759,3 +1759,9 @@ components:
 x-refined-from:
 - confluence-cloud-v2.yml
 - confluence-rest-v2-openapi.json
+x-provenance:
+  method: harvested
+  publisher: Confluence
+  source: https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.127
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
